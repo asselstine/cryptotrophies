@@ -8,9 +8,13 @@ contract CryptoTrophies {
   mapping(address => uint256) trophyCount;
   address[] trophyOwners;
 
+  event BoughtTrophy(address indexed buyer, uint256 indexed trophyId);
+
   function buyTrophy () external payable {
     trophyCount[msg.sender] += 1;
-    trophyOwners.push(msg.sender);
+    var index = trophyOwners.push(msg.sender);
+
+    BoughtTrophy(msg.sender, index);
   }
 
   function myTrophies () external view returns (uint256[]) {

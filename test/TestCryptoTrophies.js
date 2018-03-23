@@ -5,7 +5,7 @@ const CryptoTrophies = artifacts.require('CryptoTrophies')
 contract('CryptoTrophies', function (accounts) {
   var ct
 
-  var user = accounts[1]
+  var user = accounts[0]
 
   beforeEach(async function () {
     await CryptoTrophies.new().then(function (instance) {
@@ -15,15 +15,20 @@ contract('CryptoTrophies', function (accounts) {
 
   describe('buyTrophy', () => {
     it('should return 0 when no trophy', async () => {
-      assert(await ct.myTrophies(), 0)
+      assert.equal((await ct.myTrophies()).length, 0)
+    })
+    it('should emit the bought event', async () => {
+      var transaction = await ct.buyTrophy()
+      assert.equal(transaction.logs.length, 1)
+      assert.equal(transaction.logs[0].event, 'BoughtTrophy')
     })
     it('should count trophies properly!', async () => {
       await ct.buyTrophy()
       var trophies = await ct.myTrophies()
-      assert(trophies.length, 1)
+      assert.equal(trophies.length, 1)
 
       await ct.buyTrophy()
-      assert(await ct.myTrophies(), 2)
+      assert.equal((await ct.myTrophies()).length, 2)
     })
   })
 })

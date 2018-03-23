@@ -7,6 +7,8 @@ import {
   Switch
 } from 'react-router-dom'
 
+import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+
 import BuyTrophy from './buy-trophy'
 import TrophyList from './trophy-list'
 
@@ -21,7 +23,27 @@ export class Application extends Component {
   }
 
   onBuy () {
-    this.setState({ trophies: ['hello'] })
+    this.refreshTrophyList()
+  }
+
+  refreshTrophyList() {
+    CryptoTrophies().deployed().then((instance) => {
+
+      instance.myTrophies().then((result) => {
+
+        this.setState({ trophies: result })
+
+      }).catch((error) => {
+        console.error(error)
+      })
+
+    }).catch((error) => {
+      console.error(error)
+    })
+  }
+
+  componentDidMount() {
+    this.refreshTrophyList()
   }
 
   render (){

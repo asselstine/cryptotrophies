@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react'
 
-import CryptoTrophies from '@/contracts/cryptotrophies-contract'
+import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
 export default class extends Component {
   // onClick () {
@@ -23,7 +23,11 @@ export default class extends Component {
     return (
       <section className='section'>
         <div className='container'>
-
+          {
+            this.props.trophies.map(
+              trophy => `${trophy}`
+            )
+          }
         </div>
       </section>
     )
