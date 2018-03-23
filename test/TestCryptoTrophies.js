@@ -18,17 +18,28 @@ contract('CryptoTrophies', function (accounts) {
       assert.equal((await ct.myTrophies()).length, 0)
     })
     it('should emit the bought event', async () => {
-      var transaction = await ct.buyTrophy()
+      var transaction = await ct.buyTrophy(2)
+
       assert.equal(transaction.logs.length, 1)
       assert.equal(transaction.logs[0].event, 'BoughtTrophy')
+      assert.equal(transaction.logs[0].args.trophyId.toString(), '0')
     })
     it('should count trophies properly!', async () => {
-      await ct.buyTrophy()
+      await ct.buyTrophy(3)
       var trophies = await ct.myTrophies()
       assert.equal(trophies.length, 1)
 
-      await ct.buyTrophy()
+      await ct.buyTrophy(1)
       assert.equal((await ct.myTrophies()).length, 2)
+    })
+  })
+
+  describe('getTrophyType', () => {
+    it('should return the type of the trophy', async () => {
+      await ct.buyTrophy(3)
+      var trophies = await ct.myTrophies()
+      var trophyType = await ct.getTrophyType(0)
+      assert.equal(trophyType.toString(), '3')
     })
   })
 })

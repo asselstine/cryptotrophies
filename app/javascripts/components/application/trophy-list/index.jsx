@@ -3,6 +3,7 @@ import React, {
 } from 'react'
 
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import TrophyListItem from './trophy-list-item'
 
 export default class extends Component {
   // onClick () {
@@ -25,7 +26,7 @@ export default class extends Component {
         <div className='container'>
           {
             this.props.trophies.map(
-              trophy => `${trophy}`
+              trophy => <TrophyListItem key={trophy} trophyId={trophy} />
             )
           }
         </div>

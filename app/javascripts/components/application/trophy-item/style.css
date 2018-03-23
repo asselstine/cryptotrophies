@@ -1,0 +1,11 @@
+.trophy-item {
+  border: 1px solid transparent;
+}
+
+.trophy-item.selected {
+  border: 1px solid black;
+}
+
+.trophy-item__img {
+  width: 150px;
+}
