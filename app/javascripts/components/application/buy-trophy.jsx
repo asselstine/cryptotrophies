@@ -7,9 +7,7 @@ import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 export default class extends Component {
   componentDidMount () {
     CryptoTrophies().deployed().then((instance) => {
-      // var boughtTrophy = ct.BoughtTrophy({ buyer: user }, {fromBlock: 0, toBlock: 'latest'})
       this.boughtTrophy = instance.BoughtTrophy({ buyer: web3.eth.accounts[0] })
-
       this.boughtTrophy.watch((error, result) => {
         if (!error) {
           this.props.onBuy()
@@ -28,9 +26,7 @@ export default class extends Component {
   onClick () {
     CryptoTrophies().deployed().then((instance) => {
       instance.buyTrophy().then((result) => {
-
-        // show pending trophy being purchased
-
+        console.log(result)
       }).catch((error) => {
         console.error(error)
       })
