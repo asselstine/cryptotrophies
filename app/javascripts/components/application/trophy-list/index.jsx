@@ -24,11 +24,19 @@ export default class extends Component {
     return (
       <section className='section'>
         <div className='container'>
-          {
-            this.props.trophies.map(
-              trophy => <TrophyListItem key={trophy} trophyId={trophy} />
-            )
-          }
+          <div className="columns">
+              {
+                this.props.trophies.map(
+                  trophy => {
+                    return (
+                      <div key={trophy} className="column">
+                        <TrophyListItem trophyId={trophy} />
+                      </div>
+                    )
+                  }
+                )
+              }
+          </div>
         </div>
       </section>
     )
