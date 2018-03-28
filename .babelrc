@@ -1,9 +1,15 @@
 {
-  "presets": ["env", "react"],
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
   "plugins": [
-    ["babel-plugin-root-import", {
-      "rootPathSuffix": "app/javascripts",
-      "rootPathPrefix": "@"
-    }]
+    [
+      "babel-plugin-root-import",
+      {
+        "rootPathSuffix": "app/javascripts",
+        "rootPathPrefix": "@"
+      }
+    ]
   ]
 }

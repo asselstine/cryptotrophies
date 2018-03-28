@@ -1,11 +1,11 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
-require("babel-core/register")
-require("babel-polyfill")
+require("@babel/register")
+require("@babel/polyfill")
 
 module.exports = {
-  entry: ['babel-polyfill', './app/javascripts/app.js'],
+  entry: ['@babel/polyfill', './app/javascripts/app.js'],
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'app.js'
@@ -22,7 +22,6 @@ module.exports = {
        test: /\.css$/,
        use: [ 'style-loader', 'css-loader' ]
       },
-      { test: /\.json$/, use: 'json-loader' },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -31,7 +30,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.css', '.js', '.jsx'],
+    extensions: ['.css', '.js', '.jsx', '.json'],
   },
   devServer: {
     historyApiFallback: true
