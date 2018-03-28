@@ -4,8 +4,8 @@
   "description": "Frontend example using truffle v3",
   "scripts": {
     "lint": "eslint ./",
-    "build": "webpack -p --config webpack.prod.js",
-    "dev": "webpack-dev-server --config webpack.dev.js"
+    "build": "webpack --mode production --config webpack.prod.js",
+    "dev": "webpack-dev-server --config webpack.dev.js --mode development"
   },
   "author": "Douglas von Kohorn",
   "license": "MIT",
@@ -23,7 +23,7 @@
     "babel-loader": "^8.0.0-beta.0",
     "babel-node-modules": "0.0.1",
     "babel-plugin-root-import": "^5.1.0",
-    "copy-webpack-plugin": "^4.0.1",
+    "copy-webpack-plugin": "^4.5.1",
     "css-loader": "^0.26.1",
     "eslint": "^3.14.0",
     "eslint-config-standard": "^6.0.0",
@@ -31,16 +31,19 @@
     "eslint-plugin-mocha": "^4.8.0",
     "eslint-plugin-promise": "^3.0.0",
     "eslint-plugin-standard": "^2.0.0",
-    "html-webpack-plugin": "^2.28.0",
     "json-loader": "^0.5.4",
     "netlify-lambda": "^1.0.0-babel-7-beta",
+    "schema-utils": "^0.4.5",
+    "raw-loader": "^0.5.1",
     "style-loader": "^0.13.1",
     "truffle": "^4.0.6",
     "truffle-contract": "^1.1.11",
-    "uglifyjs-webpack-plugin": "^1.1.8",
+    "uglifyjs-webpack-plugin": "^1.2.4",
     "web3": "^0.20.0",
-    "webpack": "^2.2.1",
-    "webpack-merge": "^4.1.1"
+    "webpack": "^4.3.0",
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.1",
+    "webpack-merge": "^4.1.2"
   },
   "dependencies": {
     "bulma": "^0.6.2",
