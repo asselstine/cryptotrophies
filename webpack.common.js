@@ -1,11 +1,11 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const webpack = require('webpack')
-require("babel-core/register")
-require("babel-polyfill")
+require("@babel/register")
+require("@babel/polyfill")
 
 module.exports = {
-  entry: ['babel-polyfill', './app/javascripts/app.js'],
+  entry: ['@babel/polyfill', './app/javascripts/app.js'],
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'app.js'

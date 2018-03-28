@@ -1,6 +1,6 @@
 // Allows us to use ES6 in our migrations and tests.
-require('babel-register')
-require('babel-polyfill')
+require('@babel/register')
+require('@babel/polyfill')
 require('babel-node-modules')([
   'zeppelin-solidity'
 ])
@@ -15,7 +15,7 @@ module.exports = {
       provider: new HDWalletProvider(mnemonic, process.env.ROPSTEN_PROVIDER_URL),
       network_id: 3,
       gas: 4612388,
-      gasPrice: 10000000000
+      gasPrice: 100000000000
     },
 
     development: {
