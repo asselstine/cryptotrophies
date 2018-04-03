@@ -37,10 +37,18 @@ exports.handler = function(event, context, callback) {
             .then((armsImage) => {
               bodyImage.composite(armsImage, 0, 0)
               bodyImage.getBuffer( Jimp.MIME_PNG, (error, outputBuffer) => {
-                let response = {
-                  statusCode: 200,
-                  headers: {'Content-type' : 'image/png'},
-                  body: outputBuffer
+                let response
+                if (error) {
+                  response = {
+                    statusCode: 500,
+                    body: error
+                  }
+                } else {
+                  response = {
+                    statusCode: 200,
+                    headers: {'Content-type' : 'image/png'},
+                    body: outputBuffer
+                  }
                 }
                 callback(null, response)
               })
