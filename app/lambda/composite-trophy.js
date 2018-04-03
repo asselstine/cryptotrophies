@@ -11,6 +11,8 @@ function log(string) {
 exports.handler = function(event, context, callback) {
   log(`Entry`)
 
+  var outputFile = tmp.fileSync()
+
   var bodyUrl = `${process.env.IMAGES_URL}/cup-default-pink.png`
   var armsUrl = `${process.env.IMAGES_URL}/arms-default-pink.png`
 
@@ -29,6 +31,8 @@ exports.handler = function(event, context, callback) {
           bodyImage.composite(armsImage, 0, 0)
 
           log(`composited`)
+
+          bodyImage.write(outputFile.name)
 
           callback(null, {
             statusCode: 200,
