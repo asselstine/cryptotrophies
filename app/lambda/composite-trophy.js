@@ -1,8 +1,60 @@
+import download from './lib/download'
+import tmp from 'tmp'
+var sharp = require('sharp')
+
 exports.handler = function(event, context, callback) {
-  console.log(event)
-  console.log(context)
-  callback(null, {
-    statusCode: 200,
-    body: `Hello! ${process.env.IMAGES_URL}`
-  });
+  var bodyFile = tmp.fileSync()
+  var armsFile = tmp.fileSync()
+
+  var bodyUrl = `${process.env.IMAGES_URL}/cup-default-pink.png`
+  var armsUrl = `${process.env.IMAGES_URL}/arms-default-pink.png`
+
+  var bodyPromise = new Promise((resolve, reject) => {
+    download(bodyUrl, bodyFile.name, (error) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve()
+      }
+    })
+  })
+
+  var armsPromise = new Promise((resolve, reject) => {
+    download(armsUrl, armsFile.name, (error) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve()
+      }
+    })
+  })
+
+  Promise.all([bodyPromise, armsPromise])
+    .then(res => {
+      sharp(bodyFile.name)
+        .overlayWith(armsFile.name, { gravity: sharp.gravity.center })
+        .png()
+        .toBuffer()
+        .then((outputBuffer) => {
+          let response = {
+            statusCode: 200,
+            headers: {'Content-type' : 'image/png'},
+            body: outputBuffer
+          }
+          callback(null, response)
+        })
+        .catch(error => {
+          callback(null, {
+            statusCode: 500,
+            body: `Was unable to composite trophy: ${error}`
+          })
+        })
+    })
+    .catch(error => {
+      callback(null, {
+        statusCode: 500,
+        body: `Was unable to create trophy: ${error}`
+      })
+    })
+
 }

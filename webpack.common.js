@@ -6,6 +6,9 @@ require("@babel/polyfill")
 
 module.exports = {
   entry: ['@babel/polyfill', './app/javascripts/app.js'],
+  externals: {
+    sharp: 'commonjs sharp'
+  },
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'app.js'
@@ -13,7 +16,8 @@ module.exports = {
   plugins: [
     // Copy our app's index.html to the build folder.
     new CopyWebpackPlugin([
-      { from: './app/*.html', flatten: true }
+      { from: './app/*.html', flatten: true },
+      { from: './app/images', to: 'images/' }
     ]),
     new webpack.EnvironmentPlugin(['IMAGES_URL'])
   ],
@@ -28,6 +32,10 @@ module.exports = {
         exclude: /node_modules/,
         use: 'babel-loader'
       },
+      {
+        test: /\.node$/,
+        use: 'node-loader'
+      }
     ]
   },
   resolve: {
