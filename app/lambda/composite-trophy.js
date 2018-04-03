@@ -49,16 +49,21 @@ exports.handler = function(event, context, callback) {
 
           log(`Read body image`)
 
-          callback(null, {
-            statusCode: 200,
-            body: 'Hello'
-          })
-
-          /*
-
           Jimp.read(armsFile.name)
             .then((armsImage) => {
+
+              log(`Read arms image`)
+
               bodyImage.composite(armsImage, 0, 0)
+
+              log(`comopsited`)
+
+              callback(null, {
+                statusCode: 200,
+                body: 'Hello'
+              })
+
+              /*
               bodyImage.getBuffer( Jimp.MIME_PNG, (error, outputBuffer) => {
                 let response
                 if (error) {
@@ -75,19 +80,19 @@ exports.handler = function(event, context, callback) {
                 }
                 callback(null, response)
               })
+              */
             })
             .catch(error => {
               callback(null, {
                 statusCode: 500,
-                body: `Was unable to composite trophy: ${error}`
+                body: `Was unable to read arms image: ${error}`
               })
             })
-            */
         })
         .catch(error => {
           callback(null, {
             statusCode: 500,
-            body: `Could not read bodyImage: ${error}`
+            body: `Could not read body image: ${error}`
           })
         })
     })
