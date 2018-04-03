@@ -14,7 +14,8 @@ module.exports = {
     // Copy our app's index.html to the build folder.
     new CopyWebpackPlugin([
       { from: './app/*.html', flatten: true }
-    ])
+    ]),
+    new webpack.EnvironmentPlugin(['IMAGES_URL'])
   ],
   module: {
     rules: [
