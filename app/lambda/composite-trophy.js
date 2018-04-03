@@ -30,6 +30,11 @@ exports.handler = function(event, context, callback) {
 
           log(`composited`)
 
+          callback(null, {
+            statusCode: 200,
+            body: `Composite result: ${bodyImage.bitmap.data.length}`
+          })
+          /*
           bodyImage.getBuffer( Jimp.MIME_PNG, (error, outputBuffer) => {
             let response
             if (error) {
@@ -46,6 +51,7 @@ exports.handler = function(event, context, callback) {
             }
             callback(null, response)
           })
+          */
         })
         .catch(error => {
           callback(null, {
