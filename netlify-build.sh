@@ -1,6 +1,6 @@
 #! /bin/sh
 
-netlify-lambda build app/lambda && \
+./lambda-build.sh && \
 truffle compile && \
 truffle migrate --network ropsten --reset && \
 npm run-script build
