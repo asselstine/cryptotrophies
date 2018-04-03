@@ -2,9 +2,19 @@ import download from './lib/download'
 import tmp from 'tmp'
 import Jimp from 'jimp'
 
+var LOG_ID = 'CompositeTrophy'
+
+function log(string) {
+  console.log(`${LOG_ID}: ${string}`)
+}
+
 exports.handler = function(event, context, callback) {
+  log(`Entry`)
+
   var bodyFile = tmp.fileSync()
   var armsFile = tmp.fileSync()
+
+  log(`Created tmp files ${bodyFile.name} and ${armsFile.name}`)
 
   var bodyUrl = `${process.env.IMAGES_URL}/cup-default-pink.png`
   var armsUrl = `${process.env.IMAGES_URL}/arms-default-pink.png`
@@ -31,6 +41,15 @@ exports.handler = function(event, context, callback) {
 
   Promise.all([bodyPromise, armsPromise])
     .then(res => {
+
+      log(`Downloaded images`)
+
+      callback(null, {
+        statusCode: 200,
+        body: 'Hello'
+      })
+      
+      /*
       Jimp.read(bodyFile.name)
         .then((bodyImage) => {
           Jimp.read(armsFile.name)
@@ -60,6 +79,7 @@ exports.handler = function(event, context, callback) {
               })
             })
         })
+        */
     })
     .catch(error => {
       callback(null, {
