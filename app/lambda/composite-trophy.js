@@ -1,6 +1,7 @@
 import download from './lib/download'
 import tmp from 'tmp'
 import Jimp from 'jimp'
+import fs from 'fs'
 
 var LOG_ID = 'CompositeTrophy'
 
@@ -11,7 +12,7 @@ function log(string) {
 exports.handler = function(event, context, callback) {
   log(`Entry`)
 
-  var outputFile = tmp.fileSync()
+  var outputFile = tmp.fileSync({postfix: '.png'})
 
   var bodyUrl = `${process.env.IMAGES_URL}/cup-default-pink.png`
   var armsUrl = `${process.env.IMAGES_URL}/arms-default-pink.png`
@@ -32,13 +33,6 @@ exports.handler = function(event, context, callback) {
 
           log(`composited`)
 
-          bodyImage.write(outputFile.name)
-
-          callback(null, {
-            statusCode: 200,
-            body: `Composite result: ${bodyImage.bitmap.data.length}`
-          })
-          /*
           bodyImage.getBuffer( Jimp.MIME_PNG, (error, outputBuffer) => {
             let response
             if (error) {
@@ -55,7 +49,6 @@ exports.handler = function(event, context, callback) {
             }
             callback(null, response)
           })
-          */
         })
         .catch(error => {
           callback(null, {
