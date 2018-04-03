@@ -2,5 +2,5 @@
 
 ./lambda-build.sh && \
 truffle compile && \
-truffle migrate --network ropsten --reset && \
+truffle migrate --network ropsten && \
 npm run-script build

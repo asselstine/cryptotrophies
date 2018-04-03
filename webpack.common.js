@@ -18,8 +18,7 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './app/*.html', flatten: true },
       { from: './app/images', to: 'images/' }
-    ]),
-    new webpack.EnvironmentPlugin(['IMAGES_URL'])
+    ])
   ],
   module: {
     rules: [
