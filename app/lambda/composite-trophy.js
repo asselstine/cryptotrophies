@@ -13,6 +13,7 @@ exports.handler = function(event, context, callback) {
 
   var bodyFile = tmp.fileSync()
   var armsFile = tmp.fileSync()
+  var outputFile = tmp.fileSync()
 
   log(`Created tmp files ${bodyFile.name} and ${armsFile.name}`)
 
@@ -56,13 +57,16 @@ exports.handler = function(event, context, callback) {
 
               bodyImage.composite(armsImage, 0, 0)
 
-              log(`comopsited`)
+              log(`composited`)
+
+              bodyImage.write(outputFile.name)
+
+              log(`wrote composite image to file`)
 
               callback(null, {
                 statusCode: 200,
                 body: 'Hello'
               })
-
               /*
               bodyImage.getBuffer( Jimp.MIME_PNG, (error, outputBuffer) => {
                 let response
