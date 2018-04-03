@@ -11,99 +11,53 @@ function log(string) {
 exports.handler = function(event, context, callback) {
   log(`Entry`)
 
-  var bodyFile = tmp.fileSync()
-  var armsFile = tmp.fileSync()
-  var outputFile = tmp.fileSync()
-
-  log(`Created tmp files ${bodyFile.name} and ${armsFile.name}`)
-
   var bodyUrl = `${process.env.IMAGES_URL}/cup-default-pink.png`
   var armsUrl = `${process.env.IMAGES_URL}/arms-default-pink.png`
 
-  var bodyPromise = new Promise((resolve, reject) => {
-    download(bodyUrl, bodyFile.name, (error) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve()
-      }
-    })
-  })
+  log(`Downloaded images`)
 
-  var armsPromise = new Promise((resolve, reject) => {
-    download(armsUrl, armsFile.name, (error) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve()
-      }
-    })
-  })
+  Jimp.read(bodyUrl)
+    .then((bodyImage) => {
 
-  Promise.all([bodyPromise, armsPromise])
-    .then(res => {
+      log(`Read body image`)
 
-      log(`Downloaded images`)
+      Jimp.read(armsUrl)
+        .then((armsImage) => {
 
-      Jimp.read(bodyFile.name)
-        .then((bodyImage) => {
+          log(`Read arms image`)
 
-          log(`Read body image`)
+          bodyImage.composite(armsImage, 0, 0)
 
-          Jimp.read(armsFile.name)
-            .then((armsImage) => {
+          log(`composited`)
 
-              log(`Read arms image`)
-
-              bodyImage.composite(armsImage, 0, 0)
-
-              log(`composited`)
-
-              bodyImage.write(outputFile.name)
-
-              log(`wrote composite image to file`)
-
-              callback(null, {
-                statusCode: 200,
-                body: 'Hello'
-              })
-              /*
-              bodyImage.getBuffer( Jimp.MIME_PNG, (error, outputBuffer) => {
-                let response
-                if (error) {
-                  response = {
-                    statusCode: 500,
-                    body: error
-                  }
-                } else {
-                  response = {
-                    statusCode: 200,
-                    headers: {'Content-type' : 'image/png'},
-                    body: outputBuffer
-                  }
-                }
-                callback(null, response)
-              })
-              */
-            })
-            .catch(error => {
-              callback(null, {
+          bodyImage.getBuffer( Jimp.MIME_PNG, (error, outputBuffer) => {
+            let response
+            if (error) {
+              response = {
                 statusCode: 500,
-                body: `Was unable to read arms image: ${error}`
-              })
-            })
+                body: error
+              }
+            } else {
+              response = {
+                statusCode: 200,
+                headers: {'Content-type' : 'image/png'},
+                body: outputBuffer
+              }
+            }
+            callback(null, response)
+          })
         })
         .catch(error => {
           callback(null, {
             statusCode: 500,
-            body: `Could not read body image: ${error}`
+            body: `Was unable to read arms image: ${error}`
           })
         })
     })
     .catch(error => {
       callback(null, {
         statusCode: 500,
-        body: `Was unable to create trophy: ${error}`
+        body: `Could not read body image: ${error}`
       })
     })
 }
