@@ -1,6 +1,7 @@
 #! /bin/sh
 
-./lambda-build.sh # && \
+./lambda-build.sh && \
+npm run build
+
 # truffle compile && \
 # truffle migrate --network ropsten && \
-# npm run-script build
