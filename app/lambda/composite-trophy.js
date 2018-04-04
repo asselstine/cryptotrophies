@@ -43,9 +43,8 @@ exports.handler = function(event, context, callback) {
             } else {
               response = {
                 statusCode: 200,
-                body: 'Hello GO'
-                // headers: {'Content-type' : 'image/png'},
-                // body: outputBuffer
+                headers: {'Content-Type' : 'image/png'},
+                body: outputBuffer
               }
             }
             callback(null, response)
