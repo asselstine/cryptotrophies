@@ -15,17 +15,17 @@ export default class extends Component {
 
   componentDidMount () {
     CryptoTrophiesFactory().deployed().then((instance) => {
-      instance.getTrophyType(this.props.trophyId).then((response) => {
+      instance.getAwardType(this.props.trophyId).then((response) => {
         var trophyType = parseInt(response.toString())
         this.setState({type: trophyType})
       })
 
-      instance.getTrophyTitle(this.props.trophyId).then((response) => {
+      instance.getAwardTitle(this.props.trophyId).then((response) => {
         var trophyTitle = response.toString()
         this.setState({title: trophyTitle})
       })
 
-      instance.getTrophyInscription(this.props.trophyId).then((response) => {
+      instance.getAwardInscription(this.props.trophyId).then((response) => {
         var trophyInscription = response.toString()
         this.setState({inscription: trophyInscription})
       })

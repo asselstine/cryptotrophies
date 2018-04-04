@@ -29,7 +29,7 @@ export class Application extends Component {
   refreshTrophyList() {
     CryptoTrophies().deployed().then((instance) => {
 
-      instance.myTrophies().then((result) => {
+      instance.myAwards().then((result) => {
 
         this.setState({ trophies: result })
 

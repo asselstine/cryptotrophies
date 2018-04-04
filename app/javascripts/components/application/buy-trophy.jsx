@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 import _ from 'lodash'
 
-import BoughtTrophySubscriber from '@/subscribers/bought-trophy-subscriber'
+import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
 import buyAward from '@/services/buy-award'
 
 import { TROPHY_URLS, TrophyImage } from '@/components/trophy-image'
@@ -19,7 +19,7 @@ export default class extends Component {
       selectedTrophy: null
     }
     this.onClickTrophy = this.onClickTrophy.bind(this)
-    this.boughtTrophySubscriber = new BoughtTrophySubscriber(() => this.props.onBuy())
+    this.boughtTrophySubscriber = new BoughtAwardSubscriber(() => this.props.onBuy())
   }
 
   componentWillUnmount() {

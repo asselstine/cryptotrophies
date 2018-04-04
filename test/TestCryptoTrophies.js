@@ -17,60 +17,60 @@ contract('CryptoTrophies', function (accounts) {
     })
   })
 
-  describe('buyTrophy', () => {
+  describe('buyAward', () => {
     it('should fail when the title is bigger than the max size', () => {
-      assertRevert(ct.buyTrophy(2, _.range(65).join(''), inscription))
+      assertRevert(ct.buyAward(2, _.range(65).join(''), inscription))
     })
 
     it('should fail when the title is smaller than the min size', () => {
-      assertRevert(ct.buyTrophy(2, 'a', inscription))
+      assertRevert(ct.buyAward(2, 'a', inscription))
     })
 
     it('should fail when the inscription is bigger than the max size', () => {
-      assertRevert(ct.buyTrophy(2, 'sasldk', _.range(257).join('')))
+      assertRevert(ct.buyAward(2, 'sasldk', _.range(257).join('')))
     })
 
     it('should return 0 when no trophy', async () => {
-      assert.equal((await ct.myTrophies()).length, 0)
+      assert.equal((await ct.myAwards()).length, 0)
     })
 
     it('should emit the bought event', async () => {
-      var transaction = await ct.buyTrophy(2, title, inscription)
+      var transaction = await ct.buyAward(2, title, inscription)
 
       assert.equal(transaction.logs.length, 1)
-      assert.equal(transaction.logs[0].event, 'BoughtTrophy')
+      assert.equal(transaction.logs[0].event, 'BoughtAward')
       assert.equal(transaction.logs[0].args.trophyId.toString(), '0')
     })
 
     it('should count trophies properly!', async () => {
-      await ct.buyTrophy(3, title, inscription)
-      var trophies = await ct.myTrophies()
+      await ct.buyAward(3, title, inscription)
+      var trophies = await ct.myAwards()
       assert.equal(trophies.length, 1)
 
-      await ct.buyTrophy(1, title, inscription)
-      assert.equal((await ct.myTrophies()).length, 2)
+      await ct.buyAward(1, title, inscription)
+      assert.equal((await ct.myAwards()).length, 2)
     })
   })
 
-  describe('getTrophyType', () => {
+  describe('getAwardType', () => {
     it('should return the type of the trophy', async () => {
-      await ct.buyTrophy(3, title, inscription)
-      var trophyType = await ct.getTrophyType(0)
+      await ct.buyAward(3, title, inscription)
+      var trophyType = await ct.getAwardType(0)
       assert.equal(trophyType.toString(), '3')
     })
   })
 
-  describe('getTrophyTitle', () => {
+  describe('getAwardTitle', () => {
     it('should return the title', async () => {
-      await ct.buyTrophy(3, title, inscription)
-      assert.equal((await ct.getTrophyTitle(0)), title)
+      await ct.buyAward(3, title, inscription)
+      assert.equal((await ct.getAwardTitle(0)), title)
     })
   })
 
-  describe('getTrophyInscription', () => {
+  describe('getAwardInscription', () => {
     it('should return the inscription', async () => {
-      await ct.buyTrophy(3, title, inscription)
-      assert.equal((await ct.getTrophyInscription(0)), inscription)
+      await ct.buyAward(3, title, inscription)
+      assert.equal((await ct.getAwardInscription(0)), inscription)
     })
   })
 })

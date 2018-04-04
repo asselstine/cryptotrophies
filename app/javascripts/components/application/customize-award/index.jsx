@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 import _ from 'lodash'
 
-import BoughtTrophySubscriber from '@/subscribers/bought-trophy-subscriber'
+import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
 import buyAward from '@/services/buy-award'
 import AwardType from '../award-type'
 import awardUrl from '@/services/award-url'
@@ -17,7 +17,7 @@ export default class extends Component {
       title: '',
       inscription: ''
     }
-    this.boughtTrophySubscriber = new BoughtTrophySubscriber(() => this.props.onBuy())
+    this.boughtTrophySubscriber = new BoughtAwardSubscriber(() => this.props.onBuy())
   }
 
   componentWillUnmount() {

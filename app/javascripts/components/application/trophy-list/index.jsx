@@ -9,7 +9,7 @@ export default class extends Component {
   // onClick () {
   //   CryptoTrophies().deployed().then((instance) => {
   //
-  //     instance.buyTrophy().then((result) => {
+  //     instance.buyAward().then((result) => {
   //
   //     }).catch((error) => {
   //       console.error(error)
