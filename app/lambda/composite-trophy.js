@@ -44,7 +44,8 @@ exports.handler = function(event, context, callback) {
               response = {
                 statusCode: 200,
                 headers: {'Content-Type' : 'image/png'},
-                body: outputBuffer
+                body: outputBuffer.toString('base64'),
+                isBase64Encoded: true
               }
             }
             callback(null, response)
