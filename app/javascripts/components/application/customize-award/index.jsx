@@ -49,7 +49,7 @@ export default class extends Component {
                 {_.range(2).map(index => {
                   var selected = this.state.selectedAwardType === index
                   return (
-                    <div key={index} className="column">
+                    <div key={index} className="column is-one-third-tablet is-one-quarter-desktop">
                       <AwardType
                         url={awardUrl(index, 'small')}
                         onClick={() => this.onClickAwardType(index)}

@@ -1,12 +1,15 @@
 .award-type {
-  border: 1px solid transparent;
+  border: 1px solid #ccc;
   cursor: pointer;
+  border-radius: 2px;
+  line-height: 0;
 }
 
 .award-type.selected {
-  border: 1px solid black;
+  border: 1px solid #666;
 }
 
 .award-type__img {
-  width: 150px;
+  width: 100%;
+  max-width: 128px;
 }
