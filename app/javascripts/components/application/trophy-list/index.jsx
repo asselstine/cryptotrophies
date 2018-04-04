@@ -29,7 +29,7 @@ export default class extends Component {
                 this.props.trophies.map(
                   trophy => {
                     return (
-                      <div key={trophy} className="column">
+                      <div key={trophy} className="column is-half-desktop">
                         <TrophyListItem trophyId={trophy} />
                       </div>
                     )

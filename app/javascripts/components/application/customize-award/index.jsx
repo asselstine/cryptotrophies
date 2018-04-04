@@ -6,7 +6,7 @@ import _ from 'lodash'
 import BoughtTrophySubscriber from '@/subscribers/bought-trophy-subscriber'
 import buyAward from '@/services/buy-award'
 import AwardType from '../award-type'
-import AWARD_TYPE_IMAGE_URLS from '@/award-type-image-urls'
+import awardUrl from '@/services/award-url'
 import style from './style'
 
 export default class extends Component {
@@ -35,7 +35,9 @@ export default class extends Component {
   render () {
     if (this.state.selectedAwardType !== null) {
       var selectedAwardType =
-        <img src={AWARD_TYPE_IMAGE_URLS[this.state.selectedAwardType]} className='customize-award__img' />
+        <img
+          src={awardUrl(this.state.selectedAwardType)}
+          className='customize-award__img' />
     }
 
     return (
@@ -44,13 +46,12 @@ export default class extends Component {
           <div className='columns'>
             <div className='column is-one-third'>
               <div className="columns">
-                {_.range(AWARD_TYPE_IMAGE_URLS.length).map(index => {
-                  var url = AWARD_TYPE_IMAGE_URLS[index]
+                {_.range(2).map(index => {
                   var selected = this.state.selectedAwardType === index
                   return (
                     <div key={index} className="column">
                       <AwardType
-                        url={url}
+                        url={awardUrl(index, 'small')}
                         onClick={() => this.onClickAwardType(index)}
                         selected={selected} />
                     </div>

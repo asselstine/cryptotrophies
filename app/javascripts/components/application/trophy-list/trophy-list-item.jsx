@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react'
 
-import { TROPHY_URLS } from '@/components/trophy-image'
+import awardUrl from '@/services/award-url'
 import CryptoTrophiesFactory from '@/contracts/cryptotrophies-factory'
 
 export default class extends Component {
@@ -39,7 +39,7 @@ export default class extends Component {
         <div className="card">
           <div className="card-image">
             <figure className="image is-4by3">
-              <img src={TROPHY_URLS[this.state.type]} />
+              <img src={awardUrl(this.state.type)} />
             </figure>
           </div>
           <div className="card-content">
