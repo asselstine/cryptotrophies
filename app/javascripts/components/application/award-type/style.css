@@ -1,0 +1,12 @@
+.award-type {
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.award-type.selected {
+  border: 1px solid black;
+}
+
+.award-type__img {
+  width: 150px;
+}

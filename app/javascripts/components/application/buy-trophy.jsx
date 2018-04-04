@@ -2,7 +2,9 @@ import React, {
   Component
 } from 'react'
 import _ from 'lodash'
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+
+import BoughtTrophySubscriber from '@/subscribers/bought-trophy-subscriber'
+import buyAward from '@/services/buy-award'
 
 import { TROPHY_URLS, TrophyImage } from '@/components/trophy-image'
 
@@ -17,37 +19,15 @@ export default class extends Component {
       selectedTrophy: null
     }
     this.onClickTrophy = this.onClickTrophy.bind(this)
-  }
-
-  componentDidMount () {
-    CryptoTrophies().deployed().then((instance) => {
-      this.boughtTrophy = instance.BoughtTrophy({ buyer: web3.eth.accounts[0] })
-      this.boughtTrophy.watch((error, result) => {
-        if (!error) {
-          this.props.onBuy()
-          console.log(result)
-        } else {
-          console.error(error)
-        }
-      })
-    })
+    this.boughtTrophySubscriber = new BoughtTrophySubscriber(() => this.props.onBuy())
   }
 
   componentWillUnmount() {
-    this.boughtTrophy.stopWatching()
+    this.boughtTrophySubscriber.stop()
   }
 
   onClickBuy () {
-    CryptoTrophies().deployed().then((instance) => {
-      instance.buyTrophy(this.state.selectedTrophy, this.state.title, this.state.inscription).then((result) => {
-        console.log(result)
-      }).catch((error) => {
-        console.error(error)
-      })
-
-    }).catch((error) => {
-      console.error(error)
-    })
+    buyAward(this.state.selectedTrophy, this.state.title, this.state.inscription)
   }
 
   onClickTrophy (index) {

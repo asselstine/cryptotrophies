@@ -9,7 +9,7 @@ import {
 
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
-import BuyTrophy from './buy-trophy'
+import CustomizeAward from './customize-award'
 import TrophyList from './trophy-list'
 
 export class Application extends Component {
@@ -62,7 +62,7 @@ export class Application extends Component {
               </div>
             </div>
           </section>
-          <BuyTrophy onBuy={() => this.onBuy()} />
+          <CustomizeAward onBuy={() => this.onBuy()} />
           <TrophyList trophies={this.state.trophies} />
         </div>
 
