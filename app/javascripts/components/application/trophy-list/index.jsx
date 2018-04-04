@@ -7,7 +7,7 @@ import TrophyListItem from './trophy-list-item'
 
 export default class extends Component {
   // onClick () {
-  //   CryptoTrophies().deployed().then((instance) => {
+  //   CryptoTrophies().then((instance) => {
   //
   //     instance.buyAward().then((result) => {
   //

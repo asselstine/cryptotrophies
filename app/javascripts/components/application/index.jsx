@@ -27,7 +27,7 @@ export class Application extends Component {
   }
 
   refreshTrophyList() {
-    CryptoTrophies().deployed().then((instance) => {
+    CryptoTrophies().then((instance) => {
 
       instance.myAwards().then((result) => {
 

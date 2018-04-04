@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 
 import awardUrl from '@/services/award-url'
-import CryptoTrophiesFactory from '@/contracts/cryptotrophies-factory'
+import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
 export default class extends Component {
   constructor (props) {
@@ -14,7 +14,7 @@ export default class extends Component {
   }
 
   componentDidMount () {
-    CryptoTrophiesFactory().deployed().then((instance) => {
+    CryptoTrophies().then((instance) => {
       instance.getAwardType(this.props.trophyId).then((response) => {
         var trophyType = parseInt(response.toString())
         this.setState({type: trophyType})
