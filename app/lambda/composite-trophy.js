@@ -38,7 +38,7 @@ exports.handler = function(event, context, callback) {
             if (error) {
               response = {
                 statusCode: 500,
-                body: error
+                body: `Error: ${error.toString()}`
               }
             } else {
               response = {
