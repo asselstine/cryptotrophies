@@ -19,11 +19,11 @@ module.exports = {
       { from: './app/*.html', flatten: true },
       { from: './app/images', to: 'images/' }
     ]),
-    new webpack.EnvironmentPlugin([
-      'CRYPTOTROPHY_CONTRACT_ADDRESS_FOR_NETWORK_1',
-      'CRYPTOTROPHY_CONTRACT_ADDRESS_FOR_NETWORK_3',
-      'CRYPTOTROPHY_CONTRACT_ADDRESS_FOR_NETWORK_1234'
-    ])
+    new webpack.EnvironmentPlugin({
+      CRYPTOTROPHY_CONTRACT_ADDRESS_FOR_NETWORK_1: '',
+      CRYPTOTROPHY_CONTRACT_ADDRESS_FOR_NETWORK_3: '',
+      CRYPTOTROPHY_CONTRACT_ADDRESS_FOR_NETWORK_1234: ''
+    })
   ],
   module: {
     rules: [
