@@ -1,4 +1,4 @@
-import assertRevert from 'zeppelin-solidity/test/helpers/assertRevert'
+import assertRevert from './support/assert-revert'
 import BigNumber from 'bignumber.js'
 import _ from 'lodash'
 const CryptoTrophies = artifacts.require('CryptoTrophies')

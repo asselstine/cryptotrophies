@@ -1,13 +1,9 @@
-# Introduction
+# Setup
 
-These contracts allow users to combine stakes into staking pool
+To run the project locally run the commands:
 
-# Behavior
-
-Operator service creates a new Operator
-User 1 transfers X ether to Operator
-User 2 transfers X ether to Operator
-
-When contract is fulfilled, the Operator initiates the casper deposit
-the Operator logs out of Casper
-the Operator triggers a withdrawal of the funds from Casper
+```
+./ganache.sh
+./lambda-serve.sh
+npm run dev
+```

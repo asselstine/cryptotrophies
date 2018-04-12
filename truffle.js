@@ -1,9 +1,9 @@
 // Allows us to use ES6 in our migrations and tests.
 require('@babel/register')
 require('@babel/polyfill')
-require('babel-node-modules')([
-  'zeppelin-solidity'
-])
+// require('babel-node-modules')([
+//   'zeppelin-solidity'
+// ])
 
 var HDWalletProvider = require('truffle-hdwallet-provider')
 

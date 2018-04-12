@@ -5,3 +5,4 @@ config/*.json
 .ganache
 secrets
 functions
+networks/1234.json
