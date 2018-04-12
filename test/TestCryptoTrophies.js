@@ -39,7 +39,7 @@ contract('CryptoTrophies', function (accounts) {
 
       assert.equal(transaction.logs.length, 1)
       assert.equal(transaction.logs[0].event, 'BoughtAward')
-      assert.equal(transaction.logs[0].args.trophyId.toString(), '0')
+      assert.equal(transaction.logs[0].args.awardId.toString(), '0')
     })
 
     it('should count trophies properly!', async () => {
