@@ -1,6 +1,6 @@
 const AWARD_TYPE_IMAGE_URLS = [
   '/images/trophy-images/icons-trophy--1024-1024.png',
-  '/images/trophy-images/badge-icon--1024-1024.png'
+  '/images/trophy-images/icons-badge--1024-1024.png'
 ]
 
 const AWARD_TYPE_IMAGE_URLS_SMALL = [
