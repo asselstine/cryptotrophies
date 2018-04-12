@@ -43,7 +43,6 @@
     "style-loader": "^0.13.1",
     "truffle": "^4.0.6",
     "truffle-contract": "^1.1.11",
-    "truffle-migrate-off-chain": "^0.1.1",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "web3": "^0.20.0",
     "webpack": "^4.3.0",
@@ -64,6 +63,7 @@
     "redux": "^3.7.2",
     "request": "^2.85.0",
     "tmp": "0.0.33",
-    "truffle-hdwallet-provider": "0.0.3"
+    "truffle-hdwallet-provider": "0.0.3",
+    "truffle-migrate-off-chain": "^0.1.2"
   }
 }
