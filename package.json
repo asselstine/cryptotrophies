@@ -1,14 +1,14 @@
 {
-  "name": "truffle-init-webpack",
-  "version": "0.0.2",
-  "description": "Frontend example using truffle v3",
+  "name": "CryptoTrophies",
+  "version": "0.0.1",
+  "description": "Gift-giving on the Ethereum blockchain",
   "scripts": {
     "lint": "eslint ./",
     "build": "webpack --mode production --config webpack.prod.js",
     "dev": "webpack-dev-server --config webpack.dev.js --mode development",
     "test": "babel-node spec/support/run.js"
   },
-  "author": "Douglas von Kohorn",
+  "author": "Brendan Asselstine, Chuck Bergeron",
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.40",
