@@ -1,6 +1,6 @@
 import assertRevert from './support/assert-revert'
 import BigNumber from 'bignumber.js'
-import _ from 'lodash'
+import range from 'lodash.range'
 const CryptoTrophies = artifacts.require('CryptoTrophies')
 
 contract('CryptoTrophies', function (accounts) {
@@ -20,7 +20,7 @@ contract('CryptoTrophies', function (accounts) {
 
   describe('buyAward', () => {
     it('should fail when the title is bigger than the max size', () => {
-      assertRevert(ct.buyAward(2, _.range(65).join(''), inscription, recipient))
+      assertRevert(ct.buyAward(2, range(65).join(''), inscription, recipient))
     })
 
     it('should fail when the title is smaller than the min size', () => {
@@ -28,11 +28,11 @@ contract('CryptoTrophies', function (accounts) {
     })
 
     it('should fail when the inscription is bigger than the max size', () => {
-      assertRevert(ct.buyAward(2, 'sasldk', _.range(257).join(''), recipient))
+      assertRevert(ct.buyAward(2, 'sasldk', range(257).join(''), recipient))
     })
 
     it('should fail when the recipient is zero', () => {
-      assertRevert(ct.buyAward(2, 'aslfkejafea', _.range(257).join(''), 0))
+      assertRevert(ct.buyAward(2, 'aslfkejafea', range(257).join(''), 0))
     })
 
     it('should return 0 when no trophy', async () => {

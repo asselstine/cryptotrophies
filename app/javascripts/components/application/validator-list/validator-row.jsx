@@ -1,7 +1,7 @@
 import React, {
   Component
 } from 'react'
-import _ from 'lodash'
+import get from 'lodash.get'
 import PropTypes from 'prop-types'
 import retrieveValidator from '../../../services/retrieve-validator'
 import { connect } from 'react-redux'
@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 export const ValidatorRow = connect(
   (state, ownProps) => {
     return {
-      validator: _.get(state, `validators.validators[${ownProps.index}]`)
+      validator: get(state, `validators.validators[${ownProps.index}]`)
     }
   }
 )(class extends Component {

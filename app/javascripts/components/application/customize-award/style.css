@@ -1,3 +1,8 @@
 .customize-award__img {
   width: 100%;
 }
+
+.customize-award__scan {
+  height: 300px;
+  width: 300px;
+}

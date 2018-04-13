@@ -3,7 +3,8 @@ import React, {
 } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
+import range from 'lodash.range'
+import get from 'lodash.get'
 import { Link } from 'react-router-dom'
 import { NewValidatorForm } from './new-validator-form'
 import polystakeContract from '../../../contracts/polystake-contract'
@@ -17,7 +18,7 @@ import { Address } from '../../address'
 export const ValidatorList = connect(
   (state, ownProps) => {
     return {
-      validatorCount: _.get(state, 'validators.count') || []
+      validatorCount: get(state, 'validators.count') || []
     }
   }
 )(class extends Component {
@@ -61,7 +62,7 @@ export const ValidatorList = connect(
             </thead>
             <tbody>
               {
-                _.range(this.props.validatorCount).map(
+                range(this.props.validatorCount).map(
                   index => <ValidatorRow index={index} key={index} />
                 )
               }

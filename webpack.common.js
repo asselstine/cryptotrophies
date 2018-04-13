@@ -9,6 +9,9 @@ module.exports = {
   externals: {
     sharp: 'commonjs sharp'
   },
+  node: {
+    fs: "empty"
+  },
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'app.js'
@@ -16,6 +19,7 @@ module.exports = {
   plugins: [
     // Copy our app's index.html to the build folder.
     new CopyWebpackPlugin([
+      { from: './app/_redirects' },
       { from: './app/*.html', flatten: true },
       { from: './app/images', to: 'images/' }
     ]),
@@ -33,7 +37,7 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules/, // /node_modules\/(?!(instascan)\/).*/,
         use: 'babel-loader'
       },
       {

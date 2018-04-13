@@ -1,7 +1,7 @@
 import React, {
   Component
 } from 'react'
-import _ from 'lodash'
+import range from 'lodash.range'
 import classnames from 'classnames'
 
 import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
@@ -9,6 +9,7 @@ import buyAward from '@/services/buy-award'
 import AwardType from '../award-type'
 import awardUrl from '@/services/award-url'
 import style from './style'
+import QrReader from './qr-reader'
 
 export default class extends Component {
   constructor (props) {
@@ -58,7 +59,7 @@ export default class extends Component {
           <div className='columns'>
             <div className='column is-one-third-desktop'>
               <div className="columns is-mobile">
-                {_.range(2).map(index => {
+                {range(2).map(index => {
                   var selected = this.state.selectedAwardType === index
                   return (
                     <div key={index} className="column rotate-in-center is-one-third-mobile is-one-third-tablet is-one-quarter-desktop">
@@ -105,6 +106,9 @@ export default class extends Component {
                     onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
                 </div>
                 {recipientError}
+                <div className='control'>
+                  <QrReader />
+                </div>
               </div>
 
               <br />
