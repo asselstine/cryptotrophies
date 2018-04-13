@@ -3,6 +3,7 @@
 import React, {
   Component
 } from 'react'
+import reactMixin from 'react-mixin'
 import PropTypes from 'prop-types'
 import jsQR from "jsqr"
 
@@ -21,12 +22,19 @@ class QrReader extends Component {
     this.videoElement = ref
     if (ref === null) return
     window.navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then((stream) => {
-      console.log(this.videoElement)
       this.videoElement.srcObject = stream;
       this.videoElement.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
       this.videoElement.play();
       requestAnimationFrame(this.tick)
     })
+  }
+
+  componentWillUnmount () {
+    if (this.videoElement) {
+      this.videoElement.srcObject.getTracks().forEach((track) => {
+        track.stop()
+      })
+    }
   }
 
   drawLine (begin, end, color) {

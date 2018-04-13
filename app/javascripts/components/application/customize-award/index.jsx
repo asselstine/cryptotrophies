@@ -53,6 +53,13 @@ export default class extends Component {
         <p className="help is-danger">{this.state.recipientError}</p>
     }
 
+    if (this.state.address) {
+      var qrReader = this.state.address
+    } else {
+      qrReader =
+        <QrReader onAddress={(address) => { this.setState({address: address})}}/>
+    }
+
     return (
       <section className='section'>
         <div className='container'>
@@ -107,7 +114,7 @@ export default class extends Component {
                 </div>
                 {recipientError}
                 <div className='control'>
-                  <QrReader />
+                  {qrReader}
                 </div>
               </div>
 
