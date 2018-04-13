@@ -56,12 +56,12 @@ export default class extends Component {
       <section className='section'>
         <div className='container'>
           <div className='columns'>
-            <div className='column is-one-third'>
-              <div className="columns">
+            <div className='column is-one-third-desktop'>
+              <div className="columns is-mobile">
                 {_.range(2).map(index => {
                   var selected = this.state.selectedAwardType === index
                   return (
-                    <div key={index} className="column is-one-third-tablet is-one-quarter-desktop">
+                    <div key={index} className="column rotate-in-center is-one-third-mobile is-one-third-tablet is-one-quarter-desktop">
                       <AwardType
                         url={awardUrl(index, 'small')}
                         onClick={() => this.onClickAwardType(index)}
@@ -116,7 +116,7 @@ export default class extends Component {
               </button>
             </div>
 
-            <div className='column'>
+            <div className='column is-one-third'>
               {selectedAwardType}
             </div>
           </div>
