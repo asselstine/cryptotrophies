@@ -52,7 +52,7 @@ class QrReader extends Component {
       requestAnimationFrame(this.tick);
       return
     }
-    this.setState({ loadingMessage: '' })
+    this.setState({ loadingMessage: 'Point camera at QR code' })
     this.canvasElement.height = this.videoElement.videoHeight;
     this.canvasElement.width = this.videoElement.videoWidth;
     this.canvas.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
