@@ -7,6 +7,7 @@ contract('CryptoTrophies', function (accounts) {
   var ct
 
   var user = accounts[0]
+  var recipient = accounts[1]
 
   var title = 'I am a title'
   var inscription = 'i Mamm ni inscip'
@@ -19,15 +20,19 @@ contract('CryptoTrophies', function (accounts) {
 
   describe('buyAward', () => {
     it('should fail when the title is bigger than the max size', () => {
-      assertRevert(ct.buyAward(2, _.range(65).join(''), inscription))
+      assertRevert(ct.buyAward(2, _.range(65).join(''), inscription, recipient))
     })
 
     it('should fail when the title is smaller than the min size', () => {
-      assertRevert(ct.buyAward(2, 'a', inscription))
+      assertRevert(ct.buyAward(2, 'a', inscription, recipient))
     })
 
     it('should fail when the inscription is bigger than the max size', () => {
-      assertRevert(ct.buyAward(2, 'sasldk', _.range(257).join('')))
+      assertRevert(ct.buyAward(2, 'sasldk', _.range(257).join(''), recipient))
+    })
+
+    it('should fail when the recipient is zero', () => {
+      assertRevert(ct.buyAward(2, 'aslfkejafea', _.range(257).join(''), 0))
     })
 
     it('should return 0 when no trophy', async () => {
@@ -35,7 +40,7 @@ contract('CryptoTrophies', function (accounts) {
     })
 
     it('should emit the bought event', async () => {
-      var transaction = await ct.buyAward(2, title, inscription)
+      var transaction = await ct.buyAward(2, title, inscription, recipient)
 
       assert.equal(transaction.logs.length, 1)
       assert.equal(transaction.logs[0].event, 'BoughtAward')
@@ -43,18 +48,18 @@ contract('CryptoTrophies', function (accounts) {
     })
 
     it('should count trophies properly!', async () => {
-      await ct.buyAward(3, title, inscription)
+      await ct.buyAward(3, title, inscription, recipient)
       var trophies = await ct.myAwards()
       assert.equal(trophies.length, 1)
 
-      await ct.buyAward(1, title, inscription)
+      await ct.buyAward(1, title, inscription, recipient)
       assert.equal((await ct.myAwards()).length, 2)
     })
   })
 
   describe('getAwardType', () => {
     it('should return the type of the trophy', async () => {
-      await ct.buyAward(3, title, inscription)
+      await ct.buyAward(3, title, inscription, recipient)
       var trophyType = await ct.getAwardType(0)
       assert.equal(trophyType.toString(), '3')
     })
@@ -62,15 +67,22 @@ contract('CryptoTrophies', function (accounts) {
 
   describe('getAwardTitle', () => {
     it('should return the title', async () => {
-      await ct.buyAward(3, title, inscription)
+      await ct.buyAward(3, title, inscription, recipient)
       assert.equal((await ct.getAwardTitle(0)), title)
     })
   })
 
   describe('getAwardInscription', () => {
     it('should return the inscription', async () => {
-      await ct.buyAward(3, title, inscription)
+      await ct.buyAward(3, title, inscription, recipient)
       assert.equal((await ct.getAwardInscription(0)), inscription)
+    })
+  })
+
+  describe('getAwardRecipient', () => {
+    it('should return the recipient', async () => {
+      await ct.buyAward(3, title, inscription, recipient)
+      assert.equal((await ct.getAwardRecipient(0)), recipient)
     })
   })
 })

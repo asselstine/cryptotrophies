@@ -49,8 +49,3 @@ module.exports = {
     historyApiFallback: true
   }
 }
-
-
-// query: {
-//   plugins: ['transform-runtime']
-// }

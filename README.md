@@ -26,9 +26,15 @@ Create a directory for Ganache to store in:
 
 `truffle compile`
 
+### Migrate the Contracts
+
+This project is using a different migration tool:
+
+`truffle-migrate-off-chain`
+
 # Run the Project
 
-To run the project locally run the commands:
+Make sure the truffle contracts are compiled and migrated. Then to run the project locally run the commands:
 
 ./ganache.sh
 ./lambda-serve.sh

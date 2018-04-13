@@ -12,7 +12,7 @@ import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 import SiteHeader from './layout/site-header'
 
 import CustomizeAward from './customize-award'
-import TrophyList from './trophy-list'
+import AwardList from './award-list'
 
 export class Application extends Component {
 
@@ -20,20 +20,20 @@ export class Application extends Component {
     super(props)
 
     this.state = {
-      trophies: []
+      awards: []
     }
   }
 
   onBuy () {
-    this.refreshTrophyList()
+    this.refreshAwardList()
   }
 
-  refreshTrophyList() {
+  refreshAwardList() {
     CryptoTrophies().then((instance) => {
 
       instance.myAwards().then((result) => {
 
-        this.setState({ trophies: result })
+        this.setState({ awards: result })
 
       }).catch((error) => {
         console.error(error)
@@ -45,7 +45,7 @@ export class Application extends Component {
   }
 
   componentDidMount() {
-    this.refreshTrophyList()
+    this.refreshAwardList()
   }
 
   render (){
@@ -57,7 +57,7 @@ export class Application extends Component {
         <div>
           <SiteHeader />
           <CustomizeAward onBuy={() => this.onBuy()} />
-          <TrophyList trophies={this.state.trophies} />
+          <AwardList awards={this.state.awards} />
         </div>
 
       } else if (window.web3) {

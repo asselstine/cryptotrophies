@@ -15,19 +15,25 @@ export default class extends Component {
 
   componentDidMount () {
     CryptoTrophies().then((instance) => {
-      instance.getAwardType(this.props.trophyId).then((response) => {
-        var trophyType = parseInt(response.toString())
-        this.setState({type: trophyType})
+      instance.getAwardType(this.props.awardId).then((response) => {
+        var awardType = parseInt(response.toString())
+        this.setState({type: awardType})
       })
 
-      instance.getAwardTitle(this.props.trophyId).then((response) => {
-        var trophyTitle = response.toString()
-        this.setState({title: trophyTitle})
+      instance.getAwardTitle(this.props.awardId).then((response) => {
+        var awardTitle = response.toString()
+        this.setState({title: awardTitle})
       })
 
-      instance.getAwardInscription(this.props.trophyId).then((response) => {
-        var trophyInscription = response.toString()
-        this.setState({inscription: trophyInscription})
+      instance.getAwardInscription(this.props.awardId).then((response) => {
+        var awardInscription = response.toString()
+        this.setState({inscription: awardInscription})
+      })
+
+      instance.getAwardRecipient(this.props.awardId).then((response) => {
+        console.log(response)
+        var awardRecipient = response.toString()
+        this.setState({recipient: awardRecipient})
       })
     })
   }
@@ -50,17 +56,19 @@ export default class extends Component {
             </div>
 
             <div className="content">
-              {this.state.inscription}
-              <a href="#">#css</a> <a href="#">#responsive</a>
-              <br />
-              <time dateTime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+              <p>
+                {this.state.inscription}
+              </p>
+              <p>
+                Recipient: <a href="#">{this.state.recipient}</a>
+              </p>
             </div>
           </div>
         </div>
       )
 
     } else {
-      img = <span>{this.props.trophyId.toString()}</span>
+      img = <span>{this.props.awardId.toString()}</span>
     }
 
     return (
