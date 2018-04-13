@@ -3,6 +3,7 @@ import React, {
 } from 'react'
 import range from 'lodash.range'
 import classnames from 'classnames'
+import FontAwesome from 'react-fontawesome'
 
 import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
 import buyAward from '@/services/buy-award'
@@ -19,7 +20,8 @@ export default class extends Component {
       title: '',
       inscription: '',
       recipient: '',
-      recipientError: null
+      recipientError: null,
+      showReader: false
     }
     this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.props.onBuy())
   }
@@ -56,8 +58,22 @@ export default class extends Component {
     if (this.state.address) {
       var qrReader = this.state.address
     } else {
+
+    }
+
+    if (this.state.showReader) {
+      var qrReader =
+        <QrReader onAddress={(address) => {
+            address = address.slice(address.indexOf('0x'))
+            this.setState({recipient: address, showReader: false})
+        }}/>
+    } else {
       qrReader =
-        <QrReader onAddress={(address) => { this.setState({address: address})}}/>
+        <button className='button is-primary' onClick={() => this.setState({showReader: true})}><FontAwesome name='camera' /></button>
+    }
+
+    if (this.state.address) {
+      var address = <div>{this.state.address}</div>
     }
 
     return (
