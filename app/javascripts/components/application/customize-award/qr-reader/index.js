@@ -53,7 +53,6 @@ class QrReader extends Component {
       return
     }
     this.setState({ loadingMessage: '' })
-    this.canvasElement.hidden = false;
     this.canvasElement.height = this.videoElement.videoHeight;
     this.canvasElement.width = this.videoElement.videoWidth;
     this.canvas.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
