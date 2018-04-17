@@ -45,7 +45,7 @@ class CustomizeAward extends Component {
   onCode (address) {
     if (address.indexOf('0x') !== -1) {
       address = address.slice(address.indexOf('0x'))
-      this.setState({recipient: address, recipientError: ''})
+      this.setState({recipient: address, recipientError: '', showVideo: false})
     }
   }
 
