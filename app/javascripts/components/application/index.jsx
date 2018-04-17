@@ -11,8 +11,8 @@ import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
 import SiteHeader from './layout/site-header'
 
-import Dashboard from './dashboard'
-import CreateAward from './create-award'
+import { Dashboard } from './dashboard'
+import { CreateAward } from './create-award'
 
 export class Application extends Component {
 
@@ -25,8 +25,12 @@ export class Application extends Component {
           <div>
             <SiteHeader />
 
-            <Route exact path='/' component={Dashboard}/>
-            <Route path='/create_award' component={CreateAward}/>
+            <Route exact path='/'>
+              <Dashboard />
+            </Route>
+            <Route path='/create_award'>
+              <CreateAward />
+            </Route>
           </div>
         )
 
