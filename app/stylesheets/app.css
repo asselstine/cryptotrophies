@@ -1,0 +1,67 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Josefin Sans', sans-serif !important;
+}
+
+/* Need to find a way to override Bulma properly (ie no !importanté) */
+.navbar-item img {
+  max-height: 4rem !important;
+}
+
+/* Need to find a way to override Bulma properly (ie no !importanté) */
+.button.is-primary {
+  background-color: #00b1c2 !important;
+}
+
+/* Need to find a way to override Bulma properly (ie no !importanté) */
+.section {
+  padding: 1rem 1.5rem !important;
+}
+
+.button {
+  font-family: "futura-pt";
+}
+
+.label {
+  font-family: "futura-pt";
+  letter-spacing: 1px;
+}
+
+.input {
+  font-family: "futura-pt";
+  letter-spacing: 1px;
+}
+
+.input, .textarea {
+  border-radius: 0;
+}
+
+/* Need to find a way to override Bulma properly (ie no !importanté) */
+.textarea:not([rows]) {
+  max-height: 600px !important;
+  min-height: 70px !important;
+}
+
+.ivy-form {
+    background: #fcfcfc;
+    align-items: stretch;
+    /*border: 3px solid #f5f5f5;*/
+    /*border-radius: 3px;*/
+    /*border-top-left-radius: 0;*/
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.ivy-form:not(:last-child) {
+    margin-bottom: 1.5rem;
+}
+
+.ivy-form--wrapper {
+  padding: 2rem 0;
+  width: 90%;
+}

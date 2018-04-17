@@ -4,7 +4,6 @@ import React, {
 import range from 'lodash.range'
 import classnames from 'classnames'
 import FontAwesome from 'react-fontawesome'
-
 import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
 import buyAward from '@/services/buy-award'
 import AwardType from '../award-type'
@@ -80,67 +79,74 @@ export default class extends Component {
       <section className='section'>
         <div className='container'>
           <div className='columns'>
-            <div className='column is-one-third-desktop'>
-              <div className="columns is-mobile">
-                {range(2).map(index => {
-                  var selected = this.state.selectedAwardType === index
-                  return (
-                    <div key={index} className="column rotate-in-center is-one-third-mobile is-one-third-tablet is-one-quarter-desktop">
-                      <AwardType
-                        url={awardUrl(index, 'small')}
-                        onClick={() => this.onClickAwardType(index)}
-                        selected={selected} />
+            <div className='column is-one-half-desktop'>
+
+              <div className="ivy-form">
+                <div className="ivy-form--wrapper">
+
+                  <div className="columns is-mobile">
+                    {range(2).map(index => {
+                      var selected = this.state.selectedAwardType === index
+                      return (
+                        <div key={index} className="column rotate-in-center is-one-third-mobile is-one-third-tablet is-one-quarter-desktop">
+                          <AwardType
+                            url={awardUrl(index, 'small')}
+                            onClick={() => this.onClickAwardType(index)}
+                            selected={selected} />
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  <div className="field">
+                    <label className="label">Title</label>
+                    <div className="control">
+                      <input
+                        placeholder="What this award's for (ie. Vancity Hackathon 2018)"
+                        className="input"
+                        value={this.state.title}
+                        onChange={(e) => this.setState({ title: e.target.value })} />
                     </div>
-                  )
-                })}
-              </div>
+                  </div>
 
-              <div className="field">
-                <label className="label">Title</label>
-                <div className="control">
-                  <input
-                    placeholder="Write the trophy title here"
-                    className="input"
-                    value={this.state.title}
-                    onChange={(e) => this.setState({ title: e.target.value })} />
-                </div>
-              </div>
+                  <div className="field">
+                    <label className="label">Inscription</label>
+                    <div className="control">
+                      <textarea
+                        placeholder="If you know the winner(s), write their name and pertinent info here"
+                        className="textarea"
+                        value={this.state.inscription}
+                        onChange={(e) => this.setState({ inscription: e.target.value })} />
+                    </div>
+                  </div>
 
-              <div className="field">
-                <label className="label">Inscription</label>
-                <div className="control">
-                  <textarea
-                    placeholder="Write the trophy inscription here"
-                    className="textarea"
-                    value={this.state.inscription}
-                    onChange={(e) => this.setState({ inscription: e.target.value })} />
-                </div>
-              </div>
+                  <div className="field">
+                    <label className="label">Recipient</label>
+                    <div className="control">
+                      <input
+                        placeholder="0xffffffffffffffffffffffffffffffff"
+                        type='text'
+                        maxLength='42'
+                        className={classnames("input", { 'is-danger': !!recipientError })}
+                        value={this.state.recipient}
+                        onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
+                    </div>
+                    {recipientError}
+                  </div>
 
-              <div className="field">
-                <label className="label">Recipient</label>
-                <div className="control">
-                  <input
-                    placeholder="0xffffffffffffffffffffffffffffffff"
-                    type='text'
-                    maxLength='42'
-                    className={classnames("input", { 'is-danger': !!recipientError })}
-                    value={this.state.recipient}
-                    onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
+                  <br />
+                  <button
+                    disabled={this.state.selectedTrophy === null}
+                    className='button is-primary is-medium'
+                    onClick={(e) => this.onClickBuy()}>
+                    Buy Award
+                  </button>
                 </div>
                 {recipientError}
                 <div className='control'>
                   {qrReader}
                 </div>
               </div>
-
-              <br />
-              <button
-                disabled={this.state.selectedTrophy === null}
-                className='button is-primary'
-                onClick={(e) => this.onClickBuy()}>
-                Buy Award
-              </button>
             </div>
 
             <div className='column is-one-third'>

@@ -2,7 +2,8 @@ import React, {
   Component
 } from 'react'
 
-require('./site-header.css')
+import '@/../stylesheets/app.css';
+import './site-header.css';
 
 export default class extends Component {
   render () {
@@ -13,18 +14,22 @@ export default class extends Component {
 
         <div className="container">
           <div className="navbar-brand">
-            <a className="navbar-item" href="https://ivyblockchainawards.com">
-              <img src="/images/logos/ivy--symbol.png" />
-              <img src="/images/logos/ivy--logo.png" />
+            <a className="navbar-item" href="/">
+              <img src="/images/logos/ivy--logo-and-wordmark.png" />
             </a>
+          </div>
 
-            <div id="navbarBurger" className="navbar-burger burger" data-target="navMenuDocumentation">
-              <span></span>
-              <span></span>
-              <span></span>
+          <div className="navbar-menu">
+            <div className="navbar-end">
+              <div className="navbar-item">
+                <a className="button is-dark navbar-item" href="/create_award">
+                  <span>Create a new Award</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+
       </nav>
     )
   }
