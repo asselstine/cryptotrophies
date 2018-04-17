@@ -2,12 +2,16 @@ import React, {
   Component
 } from 'react'
 
-export class Dashboard extends Component {
+export default class extends Component {
 
   render () {
     return (
       <div>
-        <h1>This is the dashboard</h1>
+        <section className='section'>
+          <div className='container'>
+            <h1>This is the dashboard</h1>
+          </div>
+        </section>
       </div>
     )
   }

@@ -11,8 +11,8 @@ import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
 import SiteHeader from './layout/site-header'
 
-import { Dashboard } from './dashboard'
-import { CreateAward } from './create-award'
+import Dashboard from './dashboard'
+import CreateAward from './create-award'
 
 export class Application extends Component {
 
@@ -24,8 +24,10 @@ export class Application extends Component {
       contents =
         <div>
           <SiteHeader />
-          <Route exact={true} path='/create_award' component={CreateAward} />
-          <Route exact={true} path='/' component={Dashboard} />
+          <Switch>
+            <Route exact={true} path='/create_award' component={CreateAward} />
+            <Route exact={true} path='/' component={Dashboard} />
+          </Switch>
         </div>
 
     } else if (window.web3) {

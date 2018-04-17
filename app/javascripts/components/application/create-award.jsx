@@ -6,7 +6,7 @@ import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 import CustomizeAward from './customize-award'
 import AwardList from './award-list'
 
-export class CreateAward extends Component {
+export default class extends Component {
 
   constructor (props) {
     super(props)
@@ -43,9 +43,6 @@ export class CreateAward extends Component {
   render () {
     return (
       <div>
-        <h1>
-          Hello!
-        </h1>
         <CustomizeAward onBuy={() => this.onBuy()} />
         <AwardList awards={this.state.awards} />
       </div>
