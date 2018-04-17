@@ -1,5 +1,6 @@
 {
-  "name": "Ivy -- Awards on the Blockchain",
+  "name": "ivy",
+  "private": true,
   "version": "0.0.1",
   "description": "Gift-giving on the Ethereum blockchain",
   "scripts": {
