@@ -3,9 +3,10 @@
 import React, {
   Component
 } from 'react'
-import reactMixin from 'react-mixin'
 import PropTypes from 'prop-types'
 import jsQR from "jsqr"
+
+require('./style')
 
 class QrReaderWebrtc extends Component {
   constructor (props) {
@@ -30,7 +31,7 @@ class QrReaderWebrtc extends Component {
   }
 
   componentWillUnmount () {
-    if (this.videoElement) {
+    if (this.videoElement && this.videoElement.srcObject) {
       this.videoElement.srcObject.getTracks().forEach((track) => {
         track.stop()
       })
@@ -52,7 +53,7 @@ class QrReaderWebrtc extends Component {
       requestAnimationFrame(this.tick);
       return
     }
-    this.setState({ loadingMessage: 'Point camera at QR code' })
+    this.setState({ loadingMessage: '' })
     this.canvasElement.height = this.videoElement.videoHeight;
     this.canvasElement.width = this.videoElement.videoWidth;
     this.canvas.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
@@ -64,14 +65,9 @@ class QrReaderWebrtc extends Component {
       this.drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
       this.drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
       this.drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
-      if (code.data.indexOf('0x') !== -1) {
-        this.props.onAddress(code.data)
-      } else {
-        requestAnimationFrame(this.tick);
-      }
-    } else {
-      requestAnimationFrame(this.tick);
+      this.props.onCode(code.data)
     }
+    requestAnimationFrame(this.tick);
   }
 
   render () {
@@ -88,7 +84,9 @@ class QrReaderWebrtc extends Component {
       <div className='qr-reader'>
         <video ref={this.videoRef} hidden />
         {loadingMessage}
-        <canvas ref={(ref) => {
+        <canvas
+          className='qr-reader-webrtc__canvas'
+          ref={(ref) => {
           if (ref !== null) {
             this.canvasElement = ref
             this.canvas = ref.getContext('2d')
@@ -96,7 +94,7 @@ class QrReaderWebrtc extends Component {
             this.canvasElement = null
             this.canvas = null
           }
-        }} hidden></canvas>
+        }}></canvas>
         {outputMessage}
       </div>
     )
@@ -104,7 +102,7 @@ class QrReaderWebrtc extends Component {
 }
 
 QrReaderWebrtc.propTypes = {
-  onAddress: PropTypes.func.isRequired
+  onCode: PropTypes.func.isRequired
 }
 
 export default QrReaderWebrtc

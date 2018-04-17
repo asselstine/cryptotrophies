@@ -1,6 +1,8 @@
 import React, {
   Component
 } from 'react'
+import reactMixin from 'react-mixin'
+import TimerMixin from 'react-timer-mixin'
 import range from 'lodash.range'
 import classnames from 'classnames'
 import FontAwesome from 'react-fontawesome'
@@ -9,11 +11,11 @@ import buyAward from '@/services/buy-award'
 import AwardType from '../award-type'
 import awardUrl from '@/services/award-url'
 import style from './style'
-import QrReaderWebrtc from './qr-reader/qr-reader-webrtc'
-import QrReaderImage from './qr-reader/qr-reader-image'
-import QrReader from './qr-reader'
+import QrReaderWebrtc from './qr-reader-webrtc'
+import QrReaderImage from './qr-reader-image'
+import canUseVideo from '@/services/can-use-video'
 
-export default class extends Component {
+class CustomizeAward extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -21,19 +23,30 @@ export default class extends Component {
       title: '',
       inscription: '',
       recipient: '',
-      recipientError: null
+      recipientError: null,
+      canUseVideo: null,
+      showVideo: false,
+      showQrDropdown: false
     }
-    this.onAddress = this.onAddress.bind(this)
+    this.onCode = this.onCode.bind(this)
     this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.props.onBuy())
+  }
+
+  componentDidMount () {
+    canUseVideo().then((result) => {
+      this.setState({ canUseVideo: result })
+    })
   }
 
   componentWillUnmount() {
     this.boughtAwardSubscriber.stop()
   }
 
-  onAddress (address) {
-    address = address.slice(address.indexOf('0x'))
-    this.setState({recipient: address })
+  onCode (address) {
+    if (address.indexOf('0x') !== -1) {
+      address = address.slice(address.indexOf('0x'))
+      this.setState({recipient: address, recipientError: ''})
+    }
   }
 
   onClickBuy () {
@@ -61,17 +74,63 @@ export default class extends Component {
         <p className="help is-danger">{this.state.recipientError}</p>
     }
 
-    if (this.state.address) {
-      var qrReader = this.state.address
-    } else {
+    var qrReaderButton =
+      <button className='button is-primary' disabled>
+        <FontAwesome name='qrcode' />
+      </button>
 
+    if (this.state.canUseVideo === true) {
+      qrReaderButton =
+        <div className={classnames('dropdown', { 'is-active': this.state.showQrDropdown })}>
+          <div className="dropdown-trigger">
+            <button
+              className='button is-primary'
+              onClick={() => this.setState({ showQrDropdown: !this.state.showQrDropdown })}
+              onBlur={() => this.setTimeout(() => this.setState({showQrDropdown: false}), 100)}>
+              <FontAwesome name='qrcode' />&nbsp;<FontAwesome name='angle-down' />
+            </button>
+          </div>
+          <div className="dropdown-menu" id="dropdown-menu" role="menu">
+            <div className="dropdown-content">
+              <a href="#" className="dropdown-item" onClick={() => this.setState({ showVideo: true, showQrDropdown: false, recipientError: '' })}>
+                <FontAwesome name='video' /> Video
+              </a>
+              <QrReaderImage
+                onStart={() => this.setState({ showQrDropdown: false, recipientError: '' })}
+                onCode={this.onCode}
+                onError={(error) => this.setState({ recipientError: error})}
+                isError={!!this.state.recipientError}>
+                <a className="dropdown-item">
+                  <FontAwesome name='camera' /> Photo
+                </a>
+              </QrReaderImage>
+            </div>
+          </div>
+        </div>
+
+    } else if (this.state.canUseVideo === false) {
+      qrReaderButton =
+        <QrReaderImage
+          onStart={() => this.setState({ recipientError: '' })}
+          onCode={this.onCode}
+          onError={(error) => this.setState({ recipientError: error})}
+          isError={!!this.state.recipientError} />
     }
 
-    var qrReader =
-      <QrReader onAddress={this.onAddress} />
-
-    if (this.state.address) {
-      var address = <div>{this.state.address}</div>
+    if (this.state.showVideo === true) {
+      var qrReaderWebrtc =
+        <div className="card">
+          <header className='card-header'>
+            <p className="card-header-title">
+            </p>
+            <a className='card-header-icon' onClick={() => this.setState({ showVideo: false })}>
+              <FontAwesome name='times' />
+            </a>
+          </header>
+          <div className='card-content'>
+            <QrReaderWebrtc onCode={this.onCode} />
+          </div>
+        </div>
     }
 
     return (
@@ -82,7 +141,6 @@ export default class extends Component {
 
               <div className="ivy-form">
                 <div className="ivy-form--wrapper">
-
                   <div className="columns is-mobile">
                     {range(2).map(index => {
                       var selected = this.state.selectedAwardType === index
@@ -122,20 +180,26 @@ export default class extends Component {
                   <div className="field">
                     <label className="label">Recipient</label>
                     <div className="control">
-                      <input
-                        placeholder="0xffffffffffffffffffffffffffffffff"
-                        type='text'
-                        maxLength='42'
-                        className={classnames("input", { 'is-danger': !!recipientError })}
-                        value={this.state.recipient}
-                        onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
+                      <div className="field has-addons">
+                        <div className='control is-expanded'>
+                          <input
+                            placeholder="0xffffffffffffffffffffffffffffffff"
+                            type='text'
+                            maxLength='42'
+                            size='64'
+                            className={classnames("input", { 'is-danger': !!recipientError })}
+                            value={this.state.recipient}
+                            onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
+                        </div>
+                        <div className='control'>
+                          {qrReaderButton}
+                        </div>
+                      </div>
                     </div>
                     {recipientError}
-
-                    <div className='control'>
-                      {qrReader}
-                    </div>
                   </div>
+
+                  {qrReaderWebrtc}
 
                   <br />
                   <button
@@ -157,3 +221,7 @@ export default class extends Component {
     )
   }
 }
+
+reactMixin(CustomizeAward.prototype, TimerMixin)
+
+export default CustomizeAward
