@@ -16,6 +16,8 @@ export default class {
   }
 
   stop () {
-    this.boughtTrophyEvent.stopWatching()
+    // Remove this and fix the racist condition ;)
+    if (this.boughtTrophyEvent !== undefined)
+      this.boughtTrophyEvent.stopWatching()
   }
 }

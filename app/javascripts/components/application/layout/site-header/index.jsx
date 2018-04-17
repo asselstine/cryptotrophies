@@ -1,6 +1,7 @@
 import React, {
   Component
 } from 'react'
+import { Link } from 'react-router-dom'
 
 import '@/../stylesheets/app.css';
 import './site-header.css';
@@ -14,17 +15,17 @@ export default class extends Component {
 
         <div className="container">
           <div className="navbar-brand">
-            <a className="navbar-item" href="/">
+            <Link to="/" className="navbar-item">
               <img src="/images/logos/ivy--logo-and-wordmark.png" />
-            </a>
+            </Link>
           </div>
 
           <div className="navbar-menu">
             <div className="navbar-end">
               <div className="navbar-item">
-                <a className="button is-dark navbar-item" href="/create_award">
+                <Link to="/create_award" className="button is-dark navbar-item">
                   <span>Create a new Award</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
