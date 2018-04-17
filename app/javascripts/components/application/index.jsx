@@ -11,54 +11,24 @@ import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
 import SiteHeader from './layout/site-header'
 
-import CustomizeAward from './customize-award'
-import AwardList from './award-list'
+import Dashboard from './dashboard'
+import CreateAward from './create-award'
 
 export class Application extends Component {
-
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      awards: []
-    }
-  }
-
-  onBuy () {
-    this.refreshAwardList()
-  }
-
-  refreshAwardList() {
-    CryptoTrophies().then((instance) => {
-
-      instance.myAwards().then((result) => {
-
-        this.setState({ awards: result })
-
-      }).catch((error) => {
-        console.error(error)
-      })
-
-    }).catch((error) => {
-      console.error(error)
-    })
-  }
-
-  componentDidMount() {
-    this.refreshAwardList()
-  }
 
   render (){
     var contents
 
     if (window.web3 && web3.eth.accounts.length) {
 
-      contents =
-        <div>
-          <SiteHeader />
-          <CustomizeAward onBuy={() => this.onBuy()} />
-          <AwardList awards={this.state.awards} />
-        </div>
+      return (
+          <div>
+            <SiteHeader />
+
+            <Route exact path='/' component={Dashboard}/>
+            <Route path='/create_award' component={CreateAward}/>
+          </div>
+        )
 
       } else if (window.web3) {
         contents =
