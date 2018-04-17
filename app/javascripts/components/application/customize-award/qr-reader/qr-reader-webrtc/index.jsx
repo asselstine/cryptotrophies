@@ -7,7 +7,7 @@ import reactMixin from 'react-mixin'
 import PropTypes from 'prop-types'
 import jsQR from "jsqr"
 
-class QrReader extends Component {
+class QrReaderWebrtc extends Component {
   constructor (props) {
     super(props)
     this.tick = this.tick.bind(this)
@@ -64,7 +64,7 @@ class QrReader extends Component {
       this.drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
       this.drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
       this.drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
-      if (code.data.indexOf('ethereum') !== -1) {
+      if (code.data.indexOf('0x') !== -1) {
         this.props.onAddress(code.data)
       } else {
         requestAnimationFrame(this.tick);
@@ -103,8 +103,8 @@ class QrReader extends Component {
   }
 }
 
-QrReader.propTypes = {
+QrReaderWebrtc.propTypes = {
   onAddress: PropTypes.func.isRequired
 }
 
-export default QrReader
+export default QrReaderWebrtc

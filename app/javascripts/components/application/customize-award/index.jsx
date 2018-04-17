@@ -9,6 +9,8 @@ import buyAward from '@/services/buy-award'
 import AwardType from '../award-type'
 import awardUrl from '@/services/award-url'
 import style from './style'
+import QrReaderWebrtc from './qr-reader/qr-reader-webrtc'
+import QrReaderImage from './qr-reader/qr-reader-image'
 import QrReader from './qr-reader'
 
 export default class extends Component {
@@ -19,14 +21,19 @@ export default class extends Component {
       title: '',
       inscription: '',
       recipient: '',
-      recipientError: null,
-      showReader: false
+      recipientError: null
     }
+    this.onAddress = this.onAddress.bind(this)
     this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.props.onBuy())
   }
 
   componentWillUnmount() {
     this.boughtAwardSubscriber.stop()
+  }
+
+  onAddress (address) {
+    address = address.slice(address.indexOf('0x'))
+    this.setState({recipient: address })
   }
 
   onClickBuy () {
@@ -60,16 +67,8 @@ export default class extends Component {
 
     }
 
-    if (this.state.showReader) {
-      var qrReader =
-        <QrReader onAddress={(address) => {
-            address = address.slice(address.indexOf('0x'))
-            this.setState({recipient: address, showReader: false})
-        }}/>
-    } else {
-      qrReader =
-        <button className='button is-primary' onClick={() => this.setState({showReader: true})}><FontAwesome name='camera' /></button>
-    }
+    var qrReader =
+      <QrReader onAddress={this.onAddress} />
 
     if (this.state.address) {
       var address = <div>{this.state.address}</div>
@@ -132,6 +131,10 @@ export default class extends Component {
                         onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
                     </div>
                     {recipientError}
+
+                    <div className='control'>
+                      {qrReader}
+                    </div>
                   </div>
 
                   <br />
@@ -141,10 +144,6 @@ export default class extends Component {
                     onClick={(e) => this.onClickBuy()}>
                     Buy Award
                   </button>
-                </div>
-                {recipientError}
-                <div className='control'>
-                  {qrReader}
                 </div>
               </div>
             </div>
