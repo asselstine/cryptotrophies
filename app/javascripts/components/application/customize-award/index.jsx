@@ -114,7 +114,7 @@ export default class extends Component {
                   <br />
                   <button
                     disabled={this.state.selectedTrophy === null}
-                    className='button is-primary'
+                    className='button is-primary is-medium'
                     onClick={(e) => this.onClickBuy()}>
                     Buy Award
                   </button>

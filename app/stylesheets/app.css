@@ -22,6 +22,10 @@ h6 {
   padding: 1rem 1.5rem !important;
 }
 
+.button {
+  font-family: "futura-pt";
+}
+
 .label {
   font-family: "futura-pt";
   letter-spacing: 1px;
