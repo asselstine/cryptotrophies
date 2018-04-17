@@ -16,6 +16,7 @@ export default class extends Component {
   }
 
   onChangeFile (event) {
+    this.setState({ errorMessage: '' })
     var input = event.target
     if (input.files && input.files[0]) {
       var reader = new FileReader()
@@ -65,7 +66,7 @@ export default class extends Component {
             this.canvasElement = null
             this.canvas = null
           }
-        }} hidden></canvas>
+        }}></canvas>
       </div>
     )
   }
