@@ -31,7 +31,7 @@ export default class extends Component {
                 <span>Purchase History</span>
               </Link>
               <div className="navbar-item">
-                <Link to="/awards/new" className="button is-dark navbar-item">
+                <Link to="/awards/new" className="button is-dark">
                   <span>Purchase Award</span>
                 </Link>
               </div>
