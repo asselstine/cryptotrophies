@@ -1,5 +1,5 @@
 {
-  "migrationVersion": 1521830457,
+  "migrationVersion": 1521830458,
   "contracts": [
     {
       "contractName": "Migrations",
@@ -12,6 +12,10 @@
     {
       "contractName": "CryptoTrophies",
       "address": "0x9a9816a70e1612d54723cb805bae134f266a1b30"
+    },
+    {
+      "contractName": "CryptoTrophies",
+      "address": "0xdefb0f0f541653403f3d08eb9fa1b4fa3ba709d0"
     }
   ]
 }
