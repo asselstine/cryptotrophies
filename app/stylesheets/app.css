@@ -1,15 +1,32 @@
-h1,
+h1 {
+  font-family: 'Josefin Sans', sans-serif !important;
+}
+
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-family: 'Josefin Sans', sans-serif !important;
+  font-family: "futura-pt", sans-serif !important;
 }
 
 /* Need to find a way to override Bulma properly (ie no !importanté) */
 .navbar-item img {
   max-height: 4rem !important;
+}
+
+a.navbar-item:hover,
+a.navbar-item.is-active,
+a.navbar-link:hover,
+a.navbar-link.is-active {
+  background: transparent !important;
+  color: #00b1c2 !important;
+}
+
+.button.is-dark:hover,
+.button.is-dark.is-hovered {
+  background: #111 !important;
+  color: white !important;
 }
 
 /* Need to find a way to override Bulma properly (ie no !importanté) */
@@ -22,17 +39,18 @@ h6 {
   padding: 1rem 1.5rem !important;
 }
 
-.button {
-  font-family: "futura-pt";
+.button,
+.label,
+.input,
+.navbar-item {
+  font-family: "futura-pt", sans-serif !important;
 }
 
 .label {
-  font-family: "futura-pt";
   letter-spacing: 1px;
 }
 
 .input {
-  font-family: "futura-pt";
   letter-spacing: 1px;
 }
 
@@ -68,4 +86,15 @@ h6 {
 
 .table__wrapper {
   overflow-x: auto;
+}
+
+.title {
+  line-height: 2 !important;
+}
+.subtitle {
+  font-size: 1.75rem !important;
+  line-height: 1.5 !important;
+}
+.hero.is-dark .subtitle {
+  color: #888 !important;
 }
