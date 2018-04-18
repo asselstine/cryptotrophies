@@ -7,24 +7,39 @@ import AwardListItem from './award-list-item'
 
 export default class extends Component {
   render () {
-    return (
-      <section className='section'>
-        <div className='container'>
-          <div className="columns is-multiline">
-              {
-                this.props.awards.map(
-                  award => {
-                    return (
-                      <div key={award} className="column is-one-quarter-desktop">
-                        <AwardListItem awardId={award} />
-                      </div>
-                    )
-                  }
-                )
-              }
+    var content
+    if (this.props.awards.length) {
+      content =
+        <section className='section'>
+          <div className='container'>
+            <div className="columns is-multiline">
+                {
+                  this.props.awards.map(
+                    award => {
+                      return (
+                        <div key={award} className="column is-one-quarter-desktop">
+                          <AwardListItem awardId={award} />
+                        </div>
+                      )
+                    }
+                  )
+                }
+            </div>
           </div>
-        </div>
-      </section>
-    )
+        </section>
+    } else {
+      content =
+        <section className='hero is-medium'>
+          <div className='hero-body'>
+            <div className='container'>
+              <h1 className='title has-text-grey-light has-text-centered'>
+                You haven't received any awards yet.
+              </h1>
+            </div>
+          </div>
+        </section>
+    }
+
+    return content;
   }
 }
