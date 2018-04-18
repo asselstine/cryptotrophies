@@ -40,7 +40,7 @@ export default class extends Component {
 
                   <div className="column is-two-thirds">
                     <h2 className="subtitle">
-                      <strong>Ivy</strong> is one of the first platforms for awarding and permanently storing that recognition on the Ethereum blockchain.
+                      <strong>Ivy</strong> is one of the first platforms for awarding individuals and permanently storing those acts of recognitions on the Ethereum blockchain.
                     </h2>
 
                     <Link to="/awards/new" className="button is-primary is-large">
