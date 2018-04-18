@@ -36,6 +36,10 @@ module.exports = {
        use: [ 'style-loader', 'css-loader' ]
       },
       {
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/, // /node_modules\/(?!(instascan)\/).*/,
         use: 'babel-loader'
@@ -47,7 +51,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.css', '.js', '.jsx', '.json'],
+    extensions: ['.scss', '.css', '.js', '.jsx', '.json'],
   },
   devServer: {
     historyApiFallback: true

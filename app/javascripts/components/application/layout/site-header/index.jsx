@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 import { Link } from 'react-router-dom'
 
-import '@/../stylesheets/app.css';
+import '@/../stylesheets/app';
 import './site-header.css';
 
 export default class extends Component {
