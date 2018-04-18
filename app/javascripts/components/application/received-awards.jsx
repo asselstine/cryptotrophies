@@ -26,8 +26,8 @@ export default class extends Component {
     })
   }
 
-  componentWillUnmount (){
-    this.boughtAward.stopWatching()
+  componentWillUnmount () {
+    if (this.boughtAward) this.boughtAward.stopWatching()
   }
 
   render () {
