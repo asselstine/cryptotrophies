@@ -1,13 +1,15 @@
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
 export default function (awardType, title, inscription, recipient) {
-  CryptoTrophies().then((instance) => {
-    instance.buyAward(awardType, title, inscription, recipient).then((result) => {
-      console.log(result)
+  return new Promise((resolve, reject) => {
+    CryptoTrophies().then((instance) => {
+      instance.buyAward(awardType, title, inscription, recipient).then((result) => {
+        resolve(result)
+      }).catch((error) => {
+        reject(error)
+      })
     }).catch((error) => {
-      console.error(error)
+      reject(error)
     })
-  }).catch((error) => {
-    console.error(error)
   })
 }

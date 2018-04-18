@@ -6,8 +6,7 @@ export default class {
       this.boughtTrophyEvent = instance.BoughtAward({ buyer: web3.eth.accounts[0] })
       this.boughtTrophyEvent.watch((error, result) => {
         if (!error) {
-          onBuyCallback()
-          console.log(result)
+          onBuyCallback(result)
         } else {
           console.error(error)
         }

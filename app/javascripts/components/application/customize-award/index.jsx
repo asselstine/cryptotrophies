@@ -26,10 +26,12 @@ class CustomizeAward extends Component {
       recipientError: null,
       canUseVideo: null,
       showVideo: false,
-      showQrDropdown: false
+      showQrDropdown: false,
+      waitingForPurchase: false,
+      errorMessage: ''
     }
     this.onCode = this.onCode.bind(this)
-    this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.props.onBuy())
+    this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForPurchase: false}))
   }
 
   componentDidMount () {
@@ -54,6 +56,12 @@ class CustomizeAward extends Component {
       this.setState({ recipientError: 'Please enter a valid address' })
     } else {
       buyAward(this.state.selectedAwardType, this.state.title, this.state.inscription, this.state.recipient)
+        .then((transaction) => {
+          this.setState({waitingForPurchase: true})
+        })
+        .catch((error) => {
+          this.setState({errorMessage: error})
+        })
     }
   }
 
@@ -133,6 +141,10 @@ class CustomizeAward extends Component {
         </div>
     }
 
+    if (this.state.errorMessage) {
+      var errorMessage = <p className='help is-danger'>{this.state.errorMessage}</p>
+    }
+
     return (
       <section className='section'>
         <div className='container'>
@@ -202,12 +214,15 @@ class CustomizeAward extends Component {
                   {qrReaderWebrtc}
 
                   <br />
-                  <button
-                    disabled={this.state.selectedTrophy === null}
-                    className='button is-primary is-medium'
-                    onClick={(e) => this.onClickBuy()}>
-                    Buy Award
-                  </button>
+                  <p>
+                    <button
+                      disabled={this.state.selectedTrophy === null && !this.state.waitingForPurchase}
+                      className={classnames('button is-primary is-medium', { 'is-loading': this.state.waitingForPurchase })}
+                      onClick={(e) => this.onClickBuy()}>
+                      Buy Award
+                    </button>
+                  </p>
+                  {errorMessage}
                 </div>
               </div>
             </div>

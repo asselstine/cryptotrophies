@@ -15,24 +15,29 @@ export default class extends Component {
     }
   }
 
+  awardId () {
+    return this.props.match.params.awardId
+  }
+
   componentDidMount () {
+    var awardId = this.awardId()
     CryptoTrophies().then((instance) => {
-      instance.getAwardType(this.props.awardId).then((response) => {
+      instance.getAwardType(awardId).then((response) => {
         var awardType = parseInt(response.toString())
         this.setState({type: awardType})
       })
 
-      instance.getAwardTitle(this.props.awardId).then((response) => {
+      instance.getAwardTitle(awardId).then((response) => {
         var awardTitle = response.toString()
         this.setState({title: awardTitle})
       })
 
-      instance.getAwardInscription(this.props.awardId).then((response) => {
+      instance.getAwardInscription(awardId).then((response) => {
         var awardInscription = response.toString()
         this.setState({inscription: awardInscription})
       })
 
-      instance.getAwardRecipient(this.props.awardId).then((response) => {
+      instance.getAwardRecipient(awardId).then((response) => {
         var awardRecipient = response.toString()
         this.setState({recipient: awardRecipient})
       })
@@ -40,18 +45,11 @@ export default class extends Component {
   }
 
   render () {
-    var img
+    var content
     if (this.state.type !== null) {
-      img = (
-        <div className="card">
-          <div className="card-image">
-            <figure className="image">
-              <Link to={`/awards/${this.props.awardId}`}>
-                <img src={awardUrl(this.state.type)} />
-              </Link>
-            </figure>
-          </div>
-          <div className="card-content">
+      content = (
+        <div className="columns">
+          <div className="column is-three-quarter-desktop">
             <div className="media">
               <div className="media-content">
                 <p className="title is-4">{this.state.title}</p>
@@ -67,15 +65,23 @@ export default class extends Component {
               </p>
             </div>
           </div>
+          <div className='column is-one-quarter-desktop'>
+            <figure className="image">
+              <Link to={`/awards/${this.awardId()}`}>
+                <img src={awardUrl(this.state.type)} />
+              </Link>
+            </figure>
+          </div>
         </div>
       )
-
-    } else {
-      img = <span></span>
     }
 
     return (
-      <span>{img}</span>
+      <section className='section'>
+        <div className='container'>
+          {content}
+        </div>
+      </section>
     )
   }
 }

@@ -2,6 +2,8 @@ import React, {
   Component
 } from 'react'
 
+import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+
 export default class extends Component {
 
   render () {

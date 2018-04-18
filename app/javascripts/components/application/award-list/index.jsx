@@ -10,12 +10,12 @@ export default class extends Component {
     return (
       <section className='section'>
         <div className='container'>
-          <div className="columns">
+          <div className="columns is-multiline">
               {
                 this.props.awards.map(
                   award => {
                     return (
-                      <div key={award} className="column is-half-desktop">
+                      <div key={award} className="column is-one-quarter-desktop">
                         <AwardListItem awardId={award} />
                       </div>
                     )

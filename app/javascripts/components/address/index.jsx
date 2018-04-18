@@ -38,7 +38,8 @@ export const Address = class extends Component {
 }
 
 Address.propTypes = {
-  toggleFull: PropTypes.bool
+  toggleFull: PropTypes.bool,
+  address: PropTypes.any
 }
 
 Address.defaultProps = {

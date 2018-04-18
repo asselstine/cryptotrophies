@@ -24,7 +24,7 @@ contract CryptoTrophies {
   address[] awardOwners;
 
   /// The event emitted when an award is purchased
-  event BoughtAward(address indexed buyer, uint256 indexed awardId);
+  event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
 
   /**
    * @dev Creates an award
@@ -54,7 +54,7 @@ contract CryptoTrophies {
     awardInscription[index] = _inscription;
     awardRecipient[index] = _recipient;
 
-    BoughtAward(msg.sender, index);
+    BoughtAward(msg.sender, index, _recipient);
   }
 
   /**
