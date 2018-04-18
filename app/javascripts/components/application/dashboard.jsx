@@ -1,6 +1,7 @@
 import React, {
   Component
 } from 'react'
+import { Link } from 'react-router-dom'
 
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
@@ -21,14 +22,54 @@ export default class extends Component {
                 Ivy helps you provide recognition to your
                 <br /> colleagues, participants, friends, &amp; others.
               </h2>
+
+              <Link to="/awards/new" className="button is-primary is-large">
+                <span>Award Somebody Right Now</span>
+              </Link>
             </div>
           </div>
         </section>
 
-        <section className='section'>
-          <div className='container'>
+        <section className="hero">
+          <div className="hero-body">
+            <div className="container">
+              <div className="content has-text-centered">
+
+                <div className="columns">
+                  <div className="column"></div>
+
+                  <div className="column is-two-thirds">
+                    <h2 className="subtitle">
+                      <strong>Ivy</strong> is one of the first platforms for awarding individuals and permanently storing those acts of recognitions on the Ethereum blockchain.
+                    </h2>
+
+                    <Link to="/awards/new" className="button is-primary is-large">
+                      <span>Honor Somebody Now</span>
+                    </Link>
+                  </div>
+
+                  <div className="column"></div>
+                </div>
+
+
+              </div>
+            </div>
           </div>
         </section>
+
+        <footer className="footer">
+          <div className="container">
+            <div className="content has-text-centered">
+              <p>
+                <strong>Ivy</strong> is a project by&nbsp;
+                <a href="https://medium.com/@asselstine">Brendan Asselstine</a> &amp;&nbsp;
+                <a href="https://chuckbergeron.io">Chuck Bergeron</a> circa 2018.
+                <br />Built in Vancouver.
+              </p>
+            </div>
+          </div>
+        </footer>
+
       </div>
     )
   }
