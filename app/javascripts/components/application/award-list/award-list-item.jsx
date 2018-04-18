@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { Address } from '@/components/address'
 import awardUrl from '@/services/award-url'
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import getAward from '@/services/get-award'
 
 export default class extends Component {
   constructor (props) {
@@ -16,25 +16,12 @@ export default class extends Component {
   }
 
   componentDidMount () {
-    CryptoTrophies().then((instance) => {
-      instance.getAwardType(this.props.awardId).then((response) => {
-        var awardType = parseInt(response.toString())
-        this.setState({type: awardType})
-      })
-
-      instance.getAwardTitle(this.props.awardId).then((response) => {
-        var awardTitle = response.toString()
-        this.setState({title: awardTitle})
-      })
-
-      instance.getAwardInscription(this.props.awardId).then((response) => {
-        var awardInscription = response.toString()
-        this.setState({inscription: awardInscription})
-      })
-
-      instance.getAwardRecipient(this.props.awardId).then((response) => {
-        var awardRecipient = response.toString()
-        this.setState({recipient: awardRecipient})
+    getAward(this.props.awardId).then((values) => {
+      this.setState({
+        type: values[0],
+        title: values[1],
+        inscription: values[2],
+        recipient: values[3]
       })
     })
   }

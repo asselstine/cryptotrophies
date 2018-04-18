@@ -65,3 +65,7 @@ h6 {
   padding: 2rem 0;
   width: 90%;
 }
+
+.table__wrapper {
+  overflow-x: auto;
+}

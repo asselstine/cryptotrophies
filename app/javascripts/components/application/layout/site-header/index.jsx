@@ -32,7 +32,7 @@ export default class extends Component {
               </Link>
               <div className="navbar-item">
                 <Link to="/awards/new" className="button is-dark navbar-item">
-                  <span>Create a new Award</span>
+                  <span>Purchase Award</span>
                 </Link>
               </div>
             </div>
