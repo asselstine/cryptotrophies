@@ -9,69 +9,41 @@ import {
 
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
+import web3Wrap from '@/components/web3Wrap'
+
 import SiteHeader from './layout/site-header'
 
 import Dashboard from './dashboard'
+
+
 import CustomizeAward from './customize-award'
+const web3CustomizeAward = web3Wrap(CustomizeAward)
+
 import PurchaseHistory from './purchase-history'
+const web3PurchaseHistory = web3Wrap(PurchaseHistory)
+
 import ReceivedAwards from './received-awards'
+const web3ReceivedAwards = web3Wrap(ReceivedAwards)
+
 import Award from './award'
+const web3Award = web3Wrap(Award)
 
 export class Application extends Component {
 
   render (){
-    var contents
+    return (
+      <div>
+        <SiteHeader />
 
-    if (window.web3 && web3.eth.accounts.length) {
+        <Switch>
+          <Route path='/awards/received' component={web3ReceivedAwards} />
+          <Route path='/awards/purchased' component={web3PurchaseHistory} />
+          <Route path='/awards/new' component={web3CustomizeAward} />
+          <Route path='/awards/:awardId' component={web3Award} />
 
-      contents =
-        <div>
-          <SiteHeader />
-          <Switch>
-            <Route path='/awards/received' component={ReceivedAwards} />
-            <Route path='/awards/purchased' component={PurchaseHistory} />
-            <Route path='/awards/new' component={CustomizeAward} />
-            <Route path='/awards/:awardId' component={Award} />
-            <Route exact={true} path='/' component={Dashboard} />
-          </Switch>
-        </div>
-
-    } else if (window.web3) {
-      contents =
-        <div>
-          <SiteHeader />
-          <section className="hero is-fullheight">
-            <div className="hero-body">
-              <div className="container has-text-centered">
-                <h1 className="title">
-                  Whoops!
-                </h1>
-                <h2 className="subtitle">
-                  The MetaMask browser extension is installed, but you need to create an account! Please create an account then refresh the page.
-                </h2>
-              </div>
-            </div>
-          </section>
-        </div>
-    } else {
-      contents =
-        <div>
-          <SiteHeader />
-          <section className="hero is-fullheight">
-            <div className="hero-body">
-              <div className="container has-text-centered">
-                <h1 className="title">
-                  Whoops!
-                </h1>
-                <h2 className="subtitle">
-                  You need to install the <a href='https://metamask.io/' title='MetaMask' target='_blank'>MetaMask</a> extension for your browser.
-                </h2>
-              </div>
-            </div>
-          </section>
-        </div>
-    }
-
-    return contents
+          <Route exact={true} path='/' component={Dashboard} />
+        </Switch>
+      </div>
+    )
   }
 }
