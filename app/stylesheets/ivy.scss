@@ -2,6 +2,13 @@ h1 {
   font-family: 'Josefin Sans', sans-serif;
 }
 
+.navbar-brand img {
+  @media all and (max-device-width: 720px) {
+    max-width: 240px;
+  }
+}
+
+
 .button.is-pink {
   background-color: $pink;
   border: 0;
