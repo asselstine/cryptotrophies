@@ -23,14 +23,14 @@ export default class extends Component {
                 <br /> colleagues, participants, friends, &amp; others.
               </h2>
 
-              <Link to="/awards/new" className="button is-primary is-large">
+              <Link to="/awards/new" className="button is-pink is-large">
                 <span>Award Somebody Right Now</span>
               </Link>
             </div>
           </div>
         </section>
 
-        <section className="hero">
+        <section className="hero is-medium">
           <div className="hero-body">
             <div className="container">
               <div className="content has-text-centered">
@@ -39,8 +39,11 @@ export default class extends Component {
                   <div className="column"></div>
 
                   <div className="column is-two-thirds">
+                    <h1 className="title">
+                      What is Ivy?
+                    </h1>
                     <h2 className="subtitle">
-                      <strong>Ivy</strong> is one of the first platforms for awarding individuals and permanently storing those acts of recognitions on the Ethereum blockchain.
+                      <strong>Ivy</strong> is one of the first platforms for awarding individuals and permanently storing those acts of recognitions on the Ethereum blockchain. But instead of awarding a currency (like Bitcoin), you're awarding a public digital asset with permanence.
                     </h2>
 
                     <Link to="/awards/new" className="button is-primary is-large">

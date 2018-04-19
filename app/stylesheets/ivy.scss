@@ -2,15 +2,16 @@ h1 {
   font-family: 'Josefin Sans', sans-serif;
 }
 
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "futura-pt", sans-serif;
+.button.is-pink {
+  background-color: $pink;
+  border: 0;
+  color: white;
 }
 
-/* Need to find a way to override Bulma properly (ie noé) */
+.button.is-pink:hover {
+  background-color: $pink-two;
+}
+
 .navbar-item img {
   max-height: 4rem;
 }
@@ -20,7 +21,7 @@ a.navbar-item.is-active,
 a.navbar-link:hover,
 a.navbar-link.is-active {
   background: transparent;
-  color: #00b1c2;
+  color: $primary;
 }
 
 .button.is-dark:hover,
@@ -29,21 +30,8 @@ a.navbar-link.is-active {
   color: white;
 }
 
-/* Need to find a way to override Bulma properly (ie noé) */
-.button.is-primary {
-  background-color: #00b1c2;
-}
-
-/* Need to find a way to override Bulma properly (ie noé) */
 .section {
   padding: 1rem 1.5rem;
-}
-
-.button,
-.label,
-.input,
-.navbar-item {
-  font-family: "futura-pt", sans-serif;
 }
 
 .label {
@@ -58,7 +46,6 @@ a.navbar-link.is-active {
   border-radius: 0;
 }
 
-/* Need to find a way to override Bulma properly (ie noé) */
 .textarea:not([rows]) {
   max-height: 600px;
   min-height: 70px;
@@ -88,13 +75,21 @@ a.navbar-link.is-active {
   overflow-x: auto;
 }
 
-.title {
+.title,
+.content .title {
   line-height: 2;
 }
-.subtitle {
+
+.subtitle,
+.content .subtitle {
   font-size: 1.75rem;
   line-height: 1.5;
 }
+
 .hero.is-dark .subtitle {
   color: #888;
+}
+
+.ivy-description {
+  margin: 4rem 0;
 }

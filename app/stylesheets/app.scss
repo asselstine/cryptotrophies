@@ -1,5 +1,12 @@
-// sass vars / bulma vars
+// 1. Import the initial variables
+$primary: #00b1c2;
 
+$pink: #e45a98;
+$pink-two: #ff6aa8;
+
+$family-primary: "futura-pt", sans-serif;
+
+// 6. Import the rest of Bulma
 @import '~bulma/bulma';
 
 @import 'ivy';
