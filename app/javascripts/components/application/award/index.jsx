@@ -16,8 +16,8 @@ export default class extends Component {
     this.state = {
       // type: null
       type: 1,
-      title: 'Yes',
-      inscription: 'Sure',
+      title: 'Vancity Hackathon 2018 - 1st Place Winner',
+      inscription: 'Awarded to Chuck Bergeron & Brendan Asselstine',
       recipient: '0x5B874D76f92332e9a5e805df931Dd2BC14c3e1A4'
     }
   }

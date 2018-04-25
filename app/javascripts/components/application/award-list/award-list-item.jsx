@@ -38,22 +38,17 @@ export default class extends Component {
               </Link>
             </figure>
           </div>
-          <div className="card-content">
-            <div className="media">
-              <div className="media-content">
-                <p className="title is-4">{this.state.title}</p>
-              </div>
-            </div>
 
-            <div className="content">
-              <p>
-                {this.state.inscription}
-              </p>
-              <p>
-                Recipient: <small><Address address={this.state.recipient} /></small>
-              </p>
-            </div>
-          </div>
+          <p className="title is-4">
+            {this.state.title}
+          </p>
+
+          <p>
+            {this.state.inscription}
+          </p>
+          <p>
+            Recipient: <Address address={this.state.recipient} />
+          </p>
         </div>
       )
 

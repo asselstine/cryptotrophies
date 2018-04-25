@@ -19,6 +19,11 @@ h1 {
   background-color: $pink-two;
 }
 
+.navbar-item {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
 .navbar-item img {
   max-height: 4rem;
 }
@@ -99,4 +104,9 @@ a.navbar-link.is-active {
 
 .ivy-description {
   margin: 4rem 0;
+}
+
+.title,
+.content .title {
+  line-height: 1.5;
 }

@@ -25,13 +25,18 @@ export const Address = class extends Component {
       address = ''
     }
     if (this.state.showFull) {
-      var full =
-        <span onClick={() => this.toggleFull()} className='tag address_full'>{address}</span>
+      var displayed =
+        <span className='tag address_full'>{address}</span>
+    }
+    else
+    {
+      displayed = <span onClick={() => this.toggleFull()}>
+        {address.substring(0, 6)}...
+      </span>
     }
     return (
-      <span onClick={() => this.toggleFull()} title={address} className='address'>
-        {full}
-        {address.substring(0, 6)}...
+      <span title={address} className='address'>
+        {displayed}
       </span>
     )
   }
