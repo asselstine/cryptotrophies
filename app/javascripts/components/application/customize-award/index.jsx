@@ -101,7 +101,7 @@ class CustomizeAward extends Component {
           <div className="dropdown-menu" id="dropdown-menu" role="menu">
             <div className="dropdown-content">
               <a href="#" className="dropdown-item" onClick={() => this.setState({ showVideo: true, showQrDropdown: false, recipientError: '' })}>
-                <FontAwesome name='video' /> Video
+                <FontAwesome name='video' /> Camera
               </a>
               <QrReaderImage
                 onStart={() => this.setState({ showQrDropdown: false, recipientError: '' })}
@@ -157,7 +157,7 @@ class CustomizeAward extends Component {
                     {range(2).map(index => {
                       var selected = this.state.selectedAwardType === index
                       return (
-                        <div key={index} className="column rotate-in-center is-one-third-mobile is-one-third-tablet is-one-quarter-desktop">
+                        <div key={index} className="column rotate-in-center is-one-fifth-mobile is-one-fifth-tablet is-one-fifth-desktop">
                           <AwardType
                             url={awardUrl(index, 'small')}
                             onClick={() => this.onClickAwardType(index)}
