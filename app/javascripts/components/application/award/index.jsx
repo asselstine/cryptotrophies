@@ -14,7 +14,11 @@ export default class extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      type: null
+      // type: null
+      type: 1,
+      title: 'Yes',
+      inscription: 'Sure',
+      recipient: '0x5B874D76f92332e9a5e805df931Dd2BC14c3e1A4'
     }
   }
 
@@ -22,17 +26,17 @@ export default class extends Component {
     return this.props.match.params.awardId
   }
 
-  componentDidMount () {
-    var awardId = this.awardId()
-    getAward(awardId).then((values) => {
-      this.setState({
-        type: values[0],
-        title: values[1],
-        inscription: values[2],
-        recipient: values[3]
-      })
-    })
-  }
+  // componentDidMount () {
+  //   var awardId = this.awardId()
+  //   getAward(awardId).then((values) => {
+  //     this.setState({
+  //       type: values[0],
+  //       title: values[1],
+  //       inscription: values[2],
+  //       recipient: values[3]
+  //     })
+  //   })
+  // }
 
   render () {
     var content
