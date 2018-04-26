@@ -15,7 +15,7 @@ export default function web3Wrap(WrappedComponent) {
 
       if (window.web3 && web3.eth.accounts.length) {
 
-        return <WrappedComponent />
+        return <WrappedComponent {...this.props} />
 
       } else if (window.web3) {
         return (
