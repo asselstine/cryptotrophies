@@ -16,11 +16,9 @@ export default class extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      // type: null
-      type: 1,
-      title: 'Vancouver\'s Vancity Hackathon 2018 - 1st Place Winner',
-      inscription: 'Awarded to Chuck Bergeron & Brendan Asselstine',
-      recipient: '0x5B874D76f92332e9a5e805df931Dd2BC14c3e1A4'
+      type: null,
+      animateAward: false,
+      animateSheen: false
     }
   }
 
@@ -28,17 +26,23 @@ export default class extends Component {
     return this.props.match.params.awardId
   }
 
-  // componentDidMount () {
-  //   var awardId = this.awardId()
-  //   getAward(awardId).then((values) => {
-  //     this.setState({
-  //       type: values[0],
-  //       title: values[1],
-  //       inscription: values[2],
-  //       recipient: values[3]
-  //     })
-  //   })
-  // }
+  componentDidMount () {
+    var awardId = this.awardId()
+
+    getAward(awardId).then((values) => {
+      this.setState({
+        type: values[0],
+        title: values[1],
+        inscription: values[2],
+        recipient: values[3]
+      })
+    })
+
+    this.setState({
+      animateAward: true,
+      animateSheen: true
+    })
+  }
 
   render () {
     var content
@@ -50,11 +54,20 @@ export default class extends Component {
               <div className='border--thick'>
                 <div className='border--thin'>
 
-                  <IvyTilt>
-                    <figure className="award__image">
-                      <img src={awardUrl(this.state.type)} />
-                    </figure>
-                  </IvyTilt>
+                  <a className="award__share-link" href="#"><i className="fas fa-lg fa-share-alt"></i></a>
+
+                  <div className="award__shiny">
+                    <div
+                      className={this.state.animateSheen ? 'award__show-off is-animating' : 'award__show-off' } />
+
+                    <IvyTilt>
+                      <figure
+                        className={this.state.animateAward ? 'award__image is-animating' : 'award__image' }>
+                        <img src={awardUrl(this.state.type)} />
+                      </figure>
+                    </IvyTilt>
+                  </div>
+
 
                   <p className="award__title title has-text-grey">
                     {this.state.title}
@@ -70,25 +83,16 @@ export default class extends Component {
             </div>
           </div>
 
+
           <div className="content">
             <div className="award-metadata columns is-centered">
               <div className='column is-three-quarters-tablet is-three-quarters-desktop is-one-half-widescreen is-one-half-fullhd has-text-centered'>
+                <h5 className='title is-5'>
+                  Award Details:
+                </h5>
                 <p className="has-text-grey border--thick">
                   Recipient: <Address address={this.state.recipient} />
                 </p>
-
-                <h5 className="title is-5">
-                  <i className="fab fa-sm fa-twitter"></i> <a href="#">Tweet</a>
-                </h5>
-                <h5 className="title is-5">
-                  <i className="fab fa-sm fa-facebook"></i> <a href="#">Facebook</a>
-                </h5>
-                <h5 className="title is-5">
-                  <i className="fab fa-sm fa-linkedin"></i> <a href="#">LinkedIn</a>
-                </h5>
-                <h5 className="title is-5">
-                  <i className="fas fa-sm fa-envelope"></i> <a href="#">Email This</a>
-                </h5>
               </div>
             </div>
           </div>

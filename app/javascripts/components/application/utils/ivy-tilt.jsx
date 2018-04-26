@@ -8,7 +8,6 @@ export default class extends Component {
 
   componentDidMount() {
     VanillaTilt.init(this.rootNode)
-    console.log(this.rootNode)
   }
 
   render () {
