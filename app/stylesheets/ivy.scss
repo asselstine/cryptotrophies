@@ -110,3 +110,19 @@ a.navbar-link.is-active {
 .content .title {
   line-height: 1.5;
 }
+
+
+.tilt-root {
+  // background: red;
+  // height: 700px;
+  // width: 700px;
+  transform-style: preserve3d;
+}
+
+.tilt-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}

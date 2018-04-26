@@ -50,6 +50,7 @@
     "truffle": "^4.0.6",
     "truffle-contract": "^1.1.11",
     "uglifyjs-webpack-plugin": "^1.2.4",
+    "vanilla-tilt": "^1.4.1",
     "web3": "^0.20.0",
     "webpack": "^4.3.0",
     "webpack-bundle-analyzer": "^2.11.1",

@@ -2,7 +2,8 @@ import React, {
   Component
 } from 'react'
 import PropTypes from 'prop-types'
-require('./address.css')
+
+require('./address.scss')
 
 export const Address = class extends Component {
   constructor (props) {
@@ -26,11 +27,11 @@ export const Address = class extends Component {
     }
     if (this.state.showFull) {
       var displayed =
-        <span className='tag address_full'>{address}</span>
+        <span className='tag address__full'>{address}</span>
     }
     else
     {
-      displayed = <span onClick={() => this.toggleFull()}>
+      displayed = <span onClick={() => this.toggleFull()} className="address__short">
         {address.substring(0, 6)}...
       </span>
     }

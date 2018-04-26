@@ -4,6 +4,8 @@ import React, {
 import { Link } from 'react-router-dom'
 
 import { Address } from '@/components/address'
+import IvyTilt from '@/components/application/utils/ivy-tilt'
+
 import awardUrl from '@/services/award-url'
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 import getAward from '@/services/get-award'
@@ -45,20 +47,23 @@ export default class extends Component {
 
         <div className="columns is-centered">
           <div className='column is-half-desktop has-text-centered'>
-            <figure className="award__image">
-              <img src={awardUrl(this.state.type)} />
-            </figure>
+            <IvyTilt>
+              <figure className="award__image">
+                <img src={awardUrl(this.state.type)} />
+              </figure>
+            </IvyTilt>
 
-            <p className="title is-4">{this.state.title}</p>
-
-            <div className="content">
-              <p>
-                {this.state.inscription}
-              </p>
-              <p>
-                Recipient: <small><Address address={this.state.recipient} /></small>
-              </p>
-            </div>
+            <p className="title is-4">
+              {this.state.title}
+            </p>
+            <p>
+              {this.state.inscription}
+            </p>
+            <br />
+            <br />
+            <p>
+              Recipient: <Address address={this.state.recipient} />
+            </p>
           </div>
         </div>
       )
