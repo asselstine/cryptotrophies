@@ -15,7 +15,7 @@ import SiteHeader from './layout/site-header'
 
 import Dashboard from './dashboard'
 
-
+// Routes Components
 import CustomizeAward from './customize-award'
 const web3CustomizeAward = web3Wrap(CustomizeAward)
 
@@ -26,7 +26,6 @@ import ReceivedAwards from './received-awards'
 const web3ReceivedAwards = web3Wrap(ReceivedAwards)
 
 import Award from './award'
-const web3Award = web3Wrap(Award)
 
 export class Application extends Component {
 
@@ -39,7 +38,7 @@ export class Application extends Component {
           <Route path='/awards/received' component={web3ReceivedAwards} />
           <Route path='/awards/purchased' component={web3PurchaseHistory} />
           <Route path='/awards/new' component={web3CustomizeAward} />
-          <Route path='/awards/:awardId' component={web3Award} />
+          <Route path='/awards/:awardId' component={Award} />
 
           <Route exact={true} path='/' component={Dashboard} />
         </Switch>
