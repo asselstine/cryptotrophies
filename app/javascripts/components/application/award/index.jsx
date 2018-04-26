@@ -4,17 +4,21 @@ import React, {
 import { Link } from 'react-router-dom'
 
 import { Address } from '@/components/address'
+import IvyTilt from '@/components/application/utils/ivy-tilt'
+
 import awardUrl from '@/services/award-url'
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 import getAward from '@/services/get-award'
 
-require('./style')
+require('./style.scss')
 
 export default class extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      type: null
+      type: null,
+      animateAward: false,
+      animateSheen: false
     }
   }
 
@@ -24,6 +28,7 @@ export default class extends Component {
 
   componentDidMount () {
     var awardId = this.awardId()
+
     getAward(awardId).then((values) => {
       this.setState({
         type: values[0],
@@ -32,28 +37,63 @@ export default class extends Component {
         recipient: values[3]
       })
     })
+
+    this.setState({
+      animateAward: true,
+      animateSheen: true
+    })
   }
 
   render () {
     var content
     if (this.state.type !== null) {
       content = (
+        <div>
+          <div className="award columns is-centered">
+            <div className='column is-three-quarters-tablet is-three-quarters-desktop is-one-half-widescreen is-one-half-fullhd has-text-centered'>
+              <div className='border--thick'>
+                <div className='border--thin'>
 
-        <div className="columns is-centered">
-          <div className='column is-half-desktop has-text-centered'>
-            <figure className="award__image">
-              <img src={awardUrl(this.state.type)} />
-            </figure>
+                  <a className="award__share-link" href="#"><i className="fas fa-lg fa-share-alt"></i></a>
 
-            <p className="title is-4">{this.state.title}</p>
+                  <div className="award__shiny">
+                    <div
+                      className={this.state.animateSheen ? 'award__show-off is-animating' : 'award__show-off' } />
 
-            <div className="content">
-              <p>
-                {this.state.inscription}
-              </p>
-              <p>
-                Recipient: <small><Address address={this.state.recipient} /></small>
-              </p>
+                    <IvyTilt>
+                      <figure
+                        className={this.state.animateAward ? 'award__image is-animating' : 'award__image' }>
+                        <img src={awardUrl(this.state.type)} />
+                      </figure>
+                    </IvyTilt>
+                  </div>
+
+
+                  <p className="award__title title has-text-grey">
+                    {this.state.title}
+                  </p>
+
+                  <hr className="award__title_and_subtitle_ruler" />
+
+                  <p className="award__subtitle subtitle">
+                    {this.state.inscription}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div className="content">
+            <div className="award-metadata columns is-centered">
+              <div className='column is-three-quarters-tablet is-three-quarters-desktop is-one-half-widescreen is-one-half-fullhd has-text-centered'>
+                <h5 className='title is-5'>
+                  Award Details:
+                </h5>
+                <p className="has-text-grey border--thick">
+                  Recipient: <Address address={this.state.recipient} />
+                </p>
+              </div>
             </div>
           </div>
         </div>

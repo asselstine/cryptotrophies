@@ -38,10 +38,13 @@ export default class extends Component {
               </Link>
             </figure>
           </div>
+
           <div className="card-content">
             <div className="media">
               <div className="media-content">
-                <p className="title is-4">{this.state.title}</p>
+                <p className="title is-4">
+                  {this.state.title}
+                </p>
               </div>
             </div>
 
@@ -50,7 +53,7 @@ export default class extends Component {
                 {this.state.inscription}
               </p>
               <p>
-                Recipient: <small><Address address={this.state.recipient} /></small>
+                Recipient: <Address address={this.state.recipient} />
               </p>
             </div>
           </div>
