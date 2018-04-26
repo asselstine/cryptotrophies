@@ -1,0 +1,42 @@
+$award--border-color: #eaeaea;
+
+.award {
+  padding-bottom: 2rem;
+}
+
+.award__image {
+  margin: 0 0 2rem 0;
+  max-width: 300px;
+  display: inline-block;
+}
+
+.award__title {
+  font-size: 4vmin;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.award__subtitle {
+  font-size: 3.25vmin;
+  letter-spacing: 1px;
+}
+
+.award__title_and_subtitle_ruler {
+  background-image: linear-gradient(to right, #eee 33%, white 0%);
+  background-position: bottom;
+  background-size: 25px 5px;
+  background-repeat: repeat-x;
+
+  height: 5px;
+}
+
+.border--thick {
+  border: 5px solid lighten($award--border-color, 5%);
+  // box-shadow: 8px 8px 0 0 $award--border-color;
+  padding: 0.5rem;
+}
+
+.border--thin {
+  border: 3px solid $award--border-color;
+  padding: 5vmax;
+}

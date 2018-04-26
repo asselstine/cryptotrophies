@@ -32,25 +32,31 @@ export default class extends Component {
       img = (
         <div className="card">
           <div className="card-image">
-            <Tilt>
-              <figure className="image">
-                <Link to={`/awards/${this.props.awardId}`}>
-                  <img src={awardUrl(this.state.type)} />
-                </Link>
-              </figure>
-            </Tilt>
+            <figure className="image">
+              <Link to={`/awards/${this.props.awardId}`}>
+                <img src={awardUrl(this.state.type)} />
+              </Link>
+            </figure>
           </div>
 
-          <p className="title is-4">
-            {this.state.title}
-          </p>
+          <div className="card-content">
+            <div className="media">
+              <div className="media-content">
+                <p className="title is-4">
+                  {this.state.title}
+                </p>
+              </div>
+            </div>
 
-          <p>
-            {this.state.inscription}
-          </p>
-          <p>
-            Recipient: <Address address={this.state.recipient} />
-          </p>
+            <div className="content">
+              <p>
+                {this.state.inscription}
+              </p>
+              <p>
+                Recipient: <Address address={this.state.recipient} />
+              </p>
+            </div>
+          </div>
         </div>
       )
 
