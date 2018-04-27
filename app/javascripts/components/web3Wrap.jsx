@@ -27,12 +27,18 @@ export default function web3Wrap(WrappedComponent) {
             <section className="hero">
               <div className="hero-body">
                 <div className="container has-text-centered">
-                  <h1 className="title">
-                    One second ...
-                  </h1>
-                  <h2 className="subtitle">
-                    The MetaMask browser extension is installed, but you need to create an account! Please create an account then refresh the page.
-                  </h2>
+                  <div className="columns">
+                    <div className="column" />
+                    <div className="column is-two-thirds">
+                      <h1 className="title">
+                        Hoo-ray! <strong>MetaMask</strong> is installed!
+                      </h1>
+                      <h2 className="subtitle">
+                        However, you need to unlock your account or create a new one. Click the Fox in the top-right corner of your browser, then refresh the page.
+                      </h2>
+                    </div>
+                    <div className="column" />
+                  </div>
                 </div>
               </div>
             </section>
