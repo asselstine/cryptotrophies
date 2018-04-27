@@ -14,6 +14,7 @@ export default async function () {
   ICryptoTrophies.web3.eth.defaultAccount = web3.eth.accounts[0]
 
   let registry = await Registry.deployed()
-  let address = registry.lookup(stringTo32Bytes('CryptoTrophies'))
+  let address = await registry.lookup(stringTo32Bytes('CryptoTrophies'))
+
   return ICryptoTrophies.at(address)
 }

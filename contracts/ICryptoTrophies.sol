@@ -1,6 +1,9 @@
 pragma solidity ^0.4.18;
 
 contract ICryptoTrophies {
+  /// The event emitted when an award is purchased
+  event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
+
   function buyAward (
     uint256 _awardGenes,
     string _title,
