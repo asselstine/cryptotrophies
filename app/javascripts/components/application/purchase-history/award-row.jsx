@@ -25,6 +25,7 @@ export default class extends Component {
 
   render () {
     let awardLinkUrl = `/awards/${this.props.awardId}`
+    let claimLinkUrl = `${location.origin}/awards/${this.props.awardId}?claimToken=ASDF1234`
 
     return (
       <tr>
@@ -36,6 +37,7 @@ export default class extends Component {
         <td><Link to={awardLinkUrl}>{this.state.title}</Link></td>
         <td><Link to={awardLinkUrl}>{this.state.inscription}</Link></td>
         <td><Link to={awardLinkUrl}>{this.state.recipient}</Link></td>
+        <td>{claimLinkUrl}</td>
       </tr>
     )
   }

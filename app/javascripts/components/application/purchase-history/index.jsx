@@ -53,6 +53,9 @@ export default class extends Component {
                     <th>
                       Recipient
                     </th>
+                    <th>
+                      Claim Link
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
