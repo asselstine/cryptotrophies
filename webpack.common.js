@@ -17,6 +17,7 @@ module.exports = {
     filename: 'app.js'
   },
   plugins: [
+
     // Copy our app's index.html to the build folder.
     new CopyWebpackPlugin([
       { from: './app/_redirects' },
@@ -32,8 +33,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|jpg|jpeg|gif)$/,
-        use: [ 'file-loader' ]
+        test: /\.jpe?g$|\.ico$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/,
+        use: [ 'file-loader?name=[name].[ext]' ]
       },
       {
        test: /\.css$/,

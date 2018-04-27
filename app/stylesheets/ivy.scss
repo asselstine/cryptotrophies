@@ -2,6 +2,14 @@ h1 {
   font-family: 'Josefin Sans', sans-serif;
 }
 
+.navbar > .container .navbar-brand,
+.container > .navbar .navbar-brand {
+  @media screen and (min-width: 1024px) {
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+}
+
 .navbar-brand img {
   @media all and (max-device-width: 720px) {
     max-width: 240px;
@@ -24,7 +32,7 @@ h1 {
 }
 
 .navbar-item img {
-  max-height: 4rem;
+  max-height: 3rem;
 }
 
 a.navbar-item:hover,

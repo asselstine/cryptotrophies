@@ -40,17 +40,27 @@ export default class extends Component {
 
         <div className="container">
           <div className="navbar-brand">
-            <Link to="/">
-              <div className="navbar-item">
-                <img src="/images/logos/ivy--logo-and-wordmark-small.png" />
-              </div>
-            </Link>
+            <div className="navbar-item">
+              <Link to="/">
+                <img src="/images/logos/ivy--logo.png" />
+              </Link>
+            </div>
 
             <a role="button" className="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
               <span aria-hidden="true"></span>
               <span aria-hidden="true"></span>
               <span aria-hidden="true"></span>
             </a>
+          </div>
+
+          <div className="navbar-menu">
+            <div className="navbar-start">
+              <div className="navbar-item">
+                <Link to="/">
+                  <h1 className="ivy--wordmark title is-4">Ivy</h1>
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div className="navbar-menu" id="navMenu">
