@@ -38,6 +38,7 @@ export class Application extends Component {
           <Route path='/awards/received' component={web3ReceivedAwards} />
           <Route path='/awards/purchased' component={web3PurchaseHistory} />
           <Route path='/awards/new' component={web3CustomizeAward} />
+          <Route path='/awards/:awardId/edit' component={web3CustomizeAward} />
           <Route path='/awards/:awardId' component={Award} />
 
           <Route exact={true} path='/' component={Dashboard} />

@@ -2,6 +2,16 @@ h1 {
   font-family: 'Josefin Sans', sans-serif;
 }
 
+.ivy-button {
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.0);
+}
+
+.ivy-button:hover {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 0 0 rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
 .navbar > .container .navbar-brand,
 .container > .navbar .navbar-brand {
   @media screen and (min-width: 1024px) {
@@ -121,6 +131,8 @@ a.navbar-link.is-active {
 
 // Might not need any of this:
 .tilt-root {
+  margin: 0 auto;
+  max-width: 500px;
   transform-style: preserve3d;
 }
 

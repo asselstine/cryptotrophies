@@ -38,13 +38,18 @@ export default class extends Component {
       })
     })
 
-    this.setState({
-      animateAward: true,
-      animateSheen: true
-    })
+    setTimeout(() => {
+      this.setState({
+        animateAward: true,
+        animateSheen: true
+      })
+    }, 800)
   }
 
   render () {
+    var awardId = this.awardId()
+    let editAwardLinkUrl = `/awards/${awardId}/edit`
+
     var content
     if (this.state.type !== null) {
       content = (
@@ -54,7 +59,12 @@ export default class extends Component {
               <div className='border--thick'>
                 <div className='border--thin'>
 
-                  <a className="award__share-link" href="#"><i className="fas fa-lg fa-share-alt"></i></a>
+                  <a className="ivy-button award__share-link" href="#"><i className="fas fa-lg fa-share-alt"></i></a>
+                  <Link to={editAwardLinkUrl} className="ivy-button award__edit-link">
+                    <i className="fas fa-lg fa-pencil-alt"></i>
+                  </Link>
+
+
 
                   <div className="award__shiny">
                     <div

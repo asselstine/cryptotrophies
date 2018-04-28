@@ -6,18 +6,24 @@ import TimerMixin from 'react-timer-mixin'
 import range from 'lodash.range'
 import classnames from 'classnames'
 import FontAwesome from 'react-fontawesome'
-import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
-import buyAward from '@/services/buy-award'
-import AwardType from '../award-type'
-import awardUrl from '@/services/award-url'
-import style from './style'
+
 import QrReaderWebrtc from './qr-reader-webrtc'
 import QrReaderImage from './qr-reader-image'
+
+import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
+import awardUrl from '@/services/award-url'
+import buyAward from '@/services/buy-award'
+import getAward from '@/services/get-award'
 import canUseVideo from '@/services/can-use-video'
+
+import AwardType from '../award-type'
+
+import style from './style'
 
 class CustomizeAward extends Component {
   constructor (props) {
     super(props)
+
     this.state = {
       selectedAwardType: 0,
       title: '',
@@ -28,16 +34,39 @@ class CustomizeAward extends Component {
       showVideo: false,
       showQrDropdown: false,
       waitingForPurchase: false,
-      errorMessage: ''
+      errorMessage: '',
+      recipientFrozen: false
     }
     this.onCode = this.onCode.bind(this)
     this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForPurchase: false}))
   }
 
+  awardId () {
+    return this.props.match.params.awardId
+  }
+
   componentDidMount () {
+    this.initializeEdit()
+
     canUseVideo().then((result) => {
       this.setState({ canUseVideo: result })
     })
+  }
+
+  initializeEdit() {
+    var awardId = this.awardId()
+
+    if (awardId.length > 0) {
+      getAward(awardId).then((values) => {
+        this.setState({
+          type: values[0],
+          title: values[1],
+          inscription: values[2],
+          recipient: values[3],
+          recipientFrozen: (values[3].length > 0) ? true : false
+        })
+      })
+    }
   }
 
   componentWillUnmount() {
@@ -125,6 +154,11 @@ class CustomizeAward extends Component {
           isError={!!this.state.recipientError} />
     }
 
+    if (this.state.recipientFrozen) {
+      qrReaderButton = <span />
+    }
+
+
     if (this.state.showVideo === true) {
       var qrReaderWebrtc =
         <div className="card">
@@ -171,7 +205,7 @@ class CustomizeAward extends Component {
                     <label className="label">Title</label>
                     <div className="control">
                       <input
-                        placeholder="What this award's for (ie. Vancity Hackathon 2018)"
+                        placeholder="What this award's for (ie. 2018 Award for Excellence)"
                         className="input"
                         value={this.state.title}
                         onChange={(e) => this.setState({ title: e.target.value })} />
@@ -195,6 +229,7 @@ class CustomizeAward extends Component {
                       <div className="field has-addons">
                         <div className='control is-expanded'>
                           <input
+                            disabled={this.state.recipientFrozen}
                             placeholder="0xffffffffffffffffffffffffffffffff"
                             type='text'
                             maxLength='42'
