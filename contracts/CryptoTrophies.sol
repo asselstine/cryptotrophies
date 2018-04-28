@@ -20,6 +20,10 @@ contract CryptoTrophies {
   /// The recipient of the award
   mapping(uint256 => address) awardRecipient;
 
+  /// The password necessary to claim this award and set the awardRecipient in
+  /// claimAward()
+  mapping(uint256 => string) awardHashedClaimPassword;
+
   /// The owner / issuer of the award
   address[] awardOwners;
 
@@ -37,6 +41,7 @@ contract CryptoTrophies {
     uint256 _awardGenes,
     string _title,
     string _inscription,
+    string _hashedClaimPassword,
     address _recipient
   ) external payable {
     bytes memory _titleBytes = bytes(_title);
@@ -53,6 +58,8 @@ contract CryptoTrophies {
     awardTitle[index] = _title;
     awardInscription[index] = _inscription;
     awardRecipient[index] = _recipient;
+
+    awardHashedClaimPassword[index] = _hashedClaimPassword;
 
     BoughtAward(msg.sender, index, _recipient);
   }

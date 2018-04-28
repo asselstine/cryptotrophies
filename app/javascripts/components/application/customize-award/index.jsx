@@ -171,7 +171,7 @@ class CustomizeAward extends Component {
                     <label className="label">Title</label>
                     <div className="control">
                       <input
-                        placeholder="What this award's for (ie. Vancity Hackathon 2018)"
+                        placeholder="What this award's for (ie. 2018 Award for Excellence)"
                         className="input"
                         value={this.state.title}
                         onChange={(e) => this.setState({ title: e.target.value })} />
