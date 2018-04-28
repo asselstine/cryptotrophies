@@ -26,6 +26,9 @@ contract CryptoTrophies {
   /// The event emitted when an award is purchased
   event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
 
+  /// The event emitted when a pre-existing award is updated
+  event UpdatedAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
+
   /**
    * @dev Creates an award
    * @param _awardGenes The customization of the award
@@ -55,6 +58,40 @@ contract CryptoTrophies {
     awardRecipient[index] = _recipient;
 
     BoughtAward(msg.sender, index, _recipient);
+  }
+
+  /**
+   * @dev Updates a previously bought award
+   * @param _title The updated short title of the award
+   * @param _inscription The updated long inscription of the award, intended to reflect the recipient
+   * @param _recipient The new recipient of the award
+   */
+  function updateAward (
+    uint256 _awardId,
+    string _title,
+    string _inscription,
+    address _recipient
+  ) external payable {
+    bytes memory _titleBytes = bytes(_title);
+    bytes memory _inscriptionBytes = bytes(_inscription);
+    require(awardOwners[_awardId] == msg.sender);
+    require(_titleBytes.length > TITLE_MIN_LENGTH);
+    require(_titleBytes.length <= TITLE_MAX_LENGTH);
+    require(_inscriptionBytes.length <= INSCRIPTION_MAX_LENGTH);
+
+    var index = _awardId;
+
+    if (keccak256(awardTitle[index]) != keccak256(_title)) {
+      awardTitle[index] = _title;
+    }
+    if (keccak256(awardInscription[index]) != keccak256(_inscription)) {
+      awardInscription[index] = _inscription;
+    }
+    if (_recipient != address(0)) {
+      awardRecipient[index] = _recipient;
+    }
+
+    UpdatedAward(msg.sender, index, _recipient);
   }
 
   /**

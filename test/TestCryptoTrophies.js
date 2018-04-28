@@ -18,6 +18,37 @@ contract('CryptoTrophies', function (accounts) {
     })
   })
 
+  describe('updateAward', () => {
+
+    let newAwardId;
+
+    beforeEach(async function () {
+      // pull recipient out here after we edit buyAward to accept optional recipient
+      let newAwardTx = await ct.buyAward(2, title, inscription, recipient)
+      newAwardId = newAwardTx.logs[0].args.awardId.toString()
+    })
+
+    it('should fail when the title is bigger than the max size', () => {
+      assertRevert(ct.updateAward(newAwardId, range(65).join(''), inscription, recipient))
+    })
+
+    it('should fail when the title is smaller than the min size', () => {
+      assertRevert(ct.updateAward(newAwardId, 'a', inscription, recipient))
+    })
+
+    it('should fail when the inscription is bigger than the max size', () => {
+      assertRevert(ct.updateAward(newAwardId, 'sasldk', range(257).join(''), recipient))
+    })
+
+    it('should emit the updated event', async () => {
+      var transaction = await ct.updateAward(newAwardId, title, inscription, recipient)
+
+      assert.equal(transaction.logs.length, 1)
+      assert.equal(transaction.logs[0].event, 'UpdatedAward')
+      assert.equal(transaction.logs[0].args.awardId.toString(), '0')
+    })
+  })
+
   describe('buyAward', () => {
     it('should fail when the title is bigger than the max size', () => {
       assertRevert(ct.buyAward(2, range(65).join(''), inscription, recipient))
@@ -56,6 +87,9 @@ contract('CryptoTrophies', function (accounts) {
       assert.equal((await ct.myAwards()).length, 2)
     })
   })
+
+
+
 
   describe('getAwardType', () => {
     it('should return the type of the trophy', async () => {
