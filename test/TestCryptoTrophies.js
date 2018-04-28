@@ -28,6 +28,11 @@ contract('CryptoTrophies', function (accounts) {
       newAwardId = newAwardTx.logs[0].args.awardId.toString()
     })
 
+    // Check this out ... Seems bizarre that we need an async & await here:
+    it('should fail when the owner of the award differs from the person editing', async () => {
+      assertRevert(await ct.updateAward(newAwardId, title, inscription, recipient, { from: user }))
+    })
+
     it('should fail when the title is bigger than the max size', () => {
       assertRevert(ct.updateAward(newAwardId, range(65).join(''), inscription, recipient))
     })
@@ -40,7 +45,7 @@ contract('CryptoTrophies', function (accounts) {
       assertRevert(ct.updateAward(newAwardId, 'sasldk', range(257).join(''), recipient))
     })
 
-    it('should emit the updated event', async () => {
+    it('should emit the updated event on success', async () => {
       var transaction = await ct.updateAward(newAwardId, title, inscription, recipient)
 
       assert.equal(transaction.logs.length, 1)
@@ -70,7 +75,7 @@ contract('CryptoTrophies', function (accounts) {
       assert.equal((await ct.myAwards()).length, 0)
     })
 
-    it('should emit the bought event', async () => {
+    it('should emit the bought event on success', async () => {
       var transaction = await ct.buyAward(2, title, inscription, recipient)
 
       assert.equal(transaction.logs.length, 1)
