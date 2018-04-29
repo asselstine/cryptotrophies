@@ -1,5 +1,6 @@
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
+// TODO: Patch this so if getAwardTitle returns 0 then we err out
 export default function (awardId) {
   var contract = CryptoTrophies()
 
