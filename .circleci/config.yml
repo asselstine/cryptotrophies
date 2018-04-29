@@ -36,13 +36,15 @@ jobs:
 
       # run tests!
 
-      - run:
-          name: Run Ganache
-          shell: /bin/sh
-          command: ./ganache.sh
-          background: true
+      # - run:
+      #     name: Run Ganache
+      #     shell: /bin/sh
+      #     command: ./ganache.sh
+      #     background: true
 
       - run:
-          name: Run tests
+          name: Run Tests
           shell: /bin/sh
-          command: $(npm bin)/truffle test
+          command: |
+            ./ganache.sh &
+            $(npm bin)/truffle test
