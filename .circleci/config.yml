@@ -44,4 +44,4 @@ jobs:
       - run:
           name: Running Truffle Tests
           shell: /bin/sh
-          command: node node_modules/truffle/build/cli.bundled.js test
+          command: $(npm bin)/truffle test
