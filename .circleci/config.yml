@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:7.10
+      - image: circleci/node:9.11
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -34,9 +34,14 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
+
+      - run:
+          name: start ganache
+          shell: /bin/sh
+          command: ./ganache.sh
+          background: true
+
       - run:
           name: Run tests
           shell: /bin/sh
-          command: |
-            ./ganache.sh > /dev/null &
-            $(npm bin)/truffle test
+          command: $(npm bin)/truffle test
