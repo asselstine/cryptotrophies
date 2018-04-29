@@ -35,12 +35,12 @@ jobs:
 
       # run tests!
       - run:
-        name: Starting Ganache
-        shell: /bin/sh
-        command: ./ganache.sh
-        background: true
+          name: Starting Ganache
+          shell: /bin/sh
+          command: ./ganache.sh
+          background: true
 
       - run:
-        name: Running Truffle Tests
-        shell: /bin/sh
-        command: truffle test
+          name: Running Truffle Tests
+          shell: /bin/sh
+          command: truffle test
