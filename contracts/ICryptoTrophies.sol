@@ -1,6 +1,8 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
-contract ICryptoTrophies {
+import 'zeppelin-solidity/contracts/token/ERC721/ERC721.sol';
+
+contract ICryptoTrophies is ERC721 {
   /// The event emitted when an award is purchased
   event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
 
@@ -10,9 +12,9 @@ contract ICryptoTrophies {
     string _inscription,
     address _recipient
   ) external payable;
-  function myAwards () external view returns (uint256[]);
-  function getAwardType (uint256 _awardId) external view returns (uint256);
-  function getAwardTitle (uint256 _awardId) external view returns (string);
-  function getAwardInscription (uint256 _awardId) external view returns (string);
-  function getAwardRecipient (uint256 _awardId) external view returns (address);
+  function issuedAwards () external view returns (uint256[]);
+  function awardType (uint256 _awardId) external view returns (uint256);
+  function awardTitle (uint256 _awardId) external view returns (string);
+  function awardInscription (uint256 _awardId) external view returns (string);
+  function awardRecipient (uint256 _awardId) external view returns (address);
 }

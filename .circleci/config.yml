@@ -36,8 +36,8 @@ jobs:
       # run tests!
       - run:
               - ./ganache.sh &
-              - truffle test && kill %-
-              - yarn test
+              - truffle test
+              - kill %-
 
 
 

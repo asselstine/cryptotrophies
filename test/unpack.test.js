@@ -1,4 +1,4 @@
-import unpack from '@/unpack'
+import unpack from '#/unpack'
 
 describe('unpack', () => {
   it('should unpack stuff', () => {
@@ -21,7 +21,8 @@ describe('unpack', () => {
       '0000'
     ].join('')
 
-    expect(unpack(input)).toEqual({ type: 2 })
+    var unpacked = unpack(input)
+    assert.equal(unpacked.type, 2)
 
     input = '0x' + [
       'a1', '00',
@@ -42,6 +43,6 @@ describe('unpack', () => {
       '0000'
     ].join('')
 
-    expect(unpack(input)).toEqual({ type: 161 })
+    assert.equal(unpack(input).type, 161)
   })
 })
