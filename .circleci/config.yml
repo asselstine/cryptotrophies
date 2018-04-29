@@ -37,4 +37,6 @@ jobs:
       - run:
           name: Run tests
           shell: /bin/sh
-          command: $(npm bin)/truffle test
+          command: |
+            ./ganache.sh > /dev/null &
+            $(npm bin)/truffle test
