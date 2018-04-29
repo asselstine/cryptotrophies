@@ -49,6 +49,7 @@
     "raw-loader": "^0.5.1",
     "sass-loader": "^7.0.1",
     "schema-utils": "^0.4.5",
+    "scrypt": "^6.0.3",
     "style-loader": "^0.13.1",
     "truffle": "^4.1.7",
     "truffle-contract": "^1.1.11",
