@@ -1,6 +1,8 @@
 pragma solidity ^0.4.18;
 
-contract CryptoTrophies {
+import './ICryptoTrophies.sol';
+
+contract CryptoTrophies is ICryptoTrophies {
   uint256 constant TITLE_MIN_LENGTH = 8;
   uint256 constant TITLE_MAX_LENGTH = 64;
   uint256 constant INSCRIPTION_MAX_LENGTH = 256;
