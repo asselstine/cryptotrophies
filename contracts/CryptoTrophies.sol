@@ -77,6 +77,7 @@ contract CryptoTrophies {
   ) external payable {
     bytes memory _titleBytes = bytes(_title);
     bytes memory _inscriptionBytes = bytes(_inscription);
+
     require(awardOwners[_awardId] == msg.sender);
     require(_titleBytes.length > TITLE_MIN_LENGTH);
     require(_titleBytes.length <= TITLE_MAX_LENGTH);

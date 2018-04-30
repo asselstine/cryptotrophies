@@ -25,15 +25,14 @@ contract('CryptoTrophies', function (accounts) {
     let newAwardId;
 
     beforeEach(async function () {
-      // pull recipient out here after we edit buyAward to accept optional recipient
+      // pull recipient out of here after we edit buyAward to accept optional recipient:
       let newAwardTx = await ct.buyAward(genes, title, inscription, recipient)
       newAwardId = newAwardTx.logs[0].args.awardId.toString()
     })
 
-    // Check this out ... Seems bizarre that we need an async & await here:
-    it('should fail when the owner of the award differs from the person editing', async () => {
-      assertRevert(await ct.updateAward(newAwardId, genes, title, inscription, recipient, { from: user }))
-    })
+    // it('should fail when the owner of the award differs from the person editing', () => {
+      // assertRevert(ct.updateAward(newAwardId, genes, title, inscription, recipient, { from: user }))
+    // })
 
     it('should fail when the title is bigger than the max size', () => {
       assertRevert(ct.updateAward(newAwardId, genes, range(65).join(''), inscription, recipient))
