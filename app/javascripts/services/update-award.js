@@ -1,9 +1,9 @@
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
-export default function (awardType, title, inscription, recipient) {
+export default function (awardId, awardType, title, inscription, recipient) {
   return new Promise((resolve, reject) => {
     CryptoTrophies().then((instance) => {
-      instance.updateAward(awardType, title, inscription, recipient).then((result) => {
+      instance.updateAward(awardId, awardType, title, inscription, recipient).then((result) => {
         resolve(result)
       }).catch((error) => {
         reject(error)

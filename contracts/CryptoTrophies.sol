@@ -84,6 +84,9 @@ contract CryptoTrophies {
 
     var index = _awardId;
 
+    if (awardGenes[index] != _awardGenes) {
+      awardGenes[index] = _awardGenes;
+    }
     if (keccak256(awardTitle[index]) != keccak256(_title)) {
       awardTitle[index] = _title;
     }

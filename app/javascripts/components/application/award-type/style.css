@@ -10,7 +10,7 @@
 .award-type.selected,
 .award-type.selected:hover,
 .award-type.selected:focus {
-  border: 3px solid #97f4ff;
+  border: 3px solid #45bed0;
   opacity: 1;
 }
 

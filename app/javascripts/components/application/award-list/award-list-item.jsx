@@ -42,19 +42,12 @@ export default class extends Component {
           <div className="card-content">
             <div className="media">
               <div className="media-content">
-                <p className="title is-4">
-                  {this.state.title}
+                <p className="subtitle is-5">
+                  <Link to={`/awards/${this.props.awardId}`}>
+                    {this.state.title}
+                  </Link>
                 </p>
               </div>
-            </div>
-
-            <div className="content">
-              <p>
-                {this.state.inscription}
-              </p>
-              <p>
-                Recipient: <Address address={this.state.recipient} />
-              </p>
             </div>
           </div>
         </div>

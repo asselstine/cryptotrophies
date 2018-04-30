@@ -34,6 +34,7 @@ class CustomizeAward extends Component {
 
     this.state = {
       isEditing: false,
+      awardId: -1,
       type: 0,
       title: '',
       inscription: '',
@@ -62,13 +63,15 @@ class CustomizeAward extends Component {
         isEditing: true
       }, this.initializeEdit());
 
-      // this.updatedAwardSubscriber = new UpdatedAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
+      this.updatedAwardSubscriber = new UpdatedAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
+      console.log('subscribing updatedAwardSubscriber')
     }
     else {
-      // this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
-    }
       this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
+      console.log('subscribing boughtAwardSubscriber')
+    }
 
+    // this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
 
     canUseVideoService().then((result) => {
       this.setState({ canUseVideo: result })
@@ -80,7 +83,7 @@ class CustomizeAward extends Component {
       console.log(values)
 
       this.setState({
-        isEditing: true,
+        awardId: this.awardId(),
         type: values[0],
         title: values[1],
         inscription: values[2],
@@ -95,19 +98,20 @@ class CustomizeAward extends Component {
         recipient: values[3]
       }
     }).catch((error) => {
-      console.error('No award found in Ethereum database w/ that id')
       console.error(error)
-      // return <Redirect to={'/awards/new'} />;
-      // Router.History.back();
-      BrowserRouter.back()
+      this.props.history.goBack();
     })
   }
 
   componentWillUnmount() {
-    // if (this.state.isEditing)
-      // this.updatedAwardSubscriber.stop()
-    // else
+    if (this.state.isEditing) {
+      console.log('stopping updatedAwardSubscriber')
+      this.updatedAwardSubscriber.stop()
+    }
+    else {
+      console.log('stopping boughtAwardSubscriber')
       this.boughtAwardSubscriber.stop()
+    }
   }
 
   onCode (address) {
@@ -123,12 +127,18 @@ class CustomizeAward extends Component {
       return;
     } else {
       if (this.state.isEditing) {
-        updateAwardService(this.state.type, this.state.title, this.state.inscription, this.state.recipient)
+        updateAwardService(
+          this.state.awardId,
+          this.state.type,
+          this.state.title,
+          this.state.inscription,
+          this.state.recipient
+        )
           .then((transaction) => {
             this.setState({ waitingForEthNetwork: true })
           })
           .catch((error) => {
-            this.setState({ errorMessage: error })
+            this.setState({ errorMessage: error.message })
           })
       }
       else
@@ -138,7 +148,7 @@ class CustomizeAward extends Component {
             this.setState({ waitingForEthNetwork: true })
           })
           .catch((error) => {
-            this.setState({ errorMessage: error })
+            this.setState({ errorMessage: error.message })
           })
       }
     }
@@ -261,7 +271,7 @@ class CustomizeAward extends Component {
                     {range(2).map(index => {
                       var selected = this.state.type === index
                       return (
-                        <div key={index} className="column rotate-in-center is-one-fifth-mobile is-one-fifth-tablet is-one-fifth-desktop">
+                        <div key={index} className="column flip-in-diag-2-br is-one-fifth-mobile is-one-fifth-tablet is-one-fifth-desktop">
                           <AwardType
                             url={awardTypeImageUrlService(index, 'small')}
                             onClick={() => this.onClickAwardType(index)}
