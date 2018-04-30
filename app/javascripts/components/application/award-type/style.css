@@ -10,13 +10,13 @@
 .award-type.selected,
 .award-type.selected:hover,
 .award-type.selected:focus {
-  border: 3px solid #e7f4ff;
+  border: 3px solid #97f4ff;
   opacity: 1;
 }
 
 .award-type:hover,
 .award-type:focus {
-  border: 3px solid #e7e7e7;
+  border: 3px solid #c7e7ff;
   opacity: 1;
 }
 

@@ -4,8 +4,8 @@ import React, {
 import { Link } from 'react-router-dom'
 
 import { Address } from '@/components/address'
-import awardUrl from '@/services/award-url'
-import getAward from '@/services/get-award'
+import awardTypeImageUrlService from '@/services/award-type-image-url'
+import getAwardService from '@/services/get-award'
 
 export default class extends Component {
   constructor (props) {
@@ -16,7 +16,7 @@ export default class extends Component {
   }
 
   componentDidMount () {
-    getAward(this.props.awardId).then((values) => {
+    getAwardService(this.props.awardId).then((values) => {
       this.setState({
         type: values[0],
         title: values[1],
@@ -34,7 +34,7 @@ export default class extends Component {
           <div className="card-image">
             <figure className="image">
               <Link to={`/awards/${this.props.awardId}`}>
-                <img src={awardUrl(this.state.type)} />
+                <img src={awardTypeImageUrlService(this.state.type)} />
               </Link>
             </figure>
           </div>

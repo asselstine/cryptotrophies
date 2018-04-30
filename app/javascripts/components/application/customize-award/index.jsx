@@ -17,10 +17,11 @@ import QrReaderImage from './qr-reader-image'
 import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
 import UpdatedAwardSubscriber from '@/subscribers/updated-award-subscriber'
 
-import awardUrl from '@/services/award-url'
-import buyAward from '@/services/buy-award'
-import getAward from '@/services/get-award'
-import canUseVideo from '@/services/can-use-video'
+import awardTypeImageUrlService from '@/services/award-type-image-url'
+import canUseVideoService from '@/services/can-use-video'
+import buyAwardService from '@/services/buy-award'
+import getAwardService from '@/services/get-award'
+import updateAwardService from '@/services/update-award'
 
 import AwardType from '../award-type'
 
@@ -33,7 +34,7 @@ class CustomizeAward extends Component {
 
     this.state = {
       isEditing: false,
-      selectedAwardType: 0,
+      type: 0,
       title: '',
       inscription: '',
       recipient: '',
@@ -49,8 +50,6 @@ class CustomizeAward extends Component {
     this.initialAwardState = {}
 
     this.onCode = this.onCode.bind(this)
-    this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
-    this.updatedAwardSubscriber = new UpdatedAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
   }
 
   awardId () {
@@ -62,15 +61,22 @@ class CustomizeAward extends Component {
       this.setState({
         isEditing: true
       }, this.initializeEdit());
-    }
 
-    canUseVideo().then((result) => {
+      // this.updatedAwardSubscriber = new UpdatedAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
+    }
+    else {
+      // this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
+    }
+      this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
+
+
+    canUseVideoService().then((result) => {
       this.setState({ canUseVideo: result })
     })
   }
 
   initializeEdit() {
-    getAward(this.awardId()).then((values) => {
+    getAwardService(this.awardId()).then((values) => {
       console.log(values)
 
       this.setState({
@@ -98,8 +104,10 @@ class CustomizeAward extends Component {
   }
 
   componentWillUnmount() {
-    this.boughtAwardSubscriber.stop()
-    this.updatedAwardSubscriber.stop()
+    // if (this.state.isEditing)
+      // this.updatedAwardSubscriber.stop()
+    // else
+      this.boughtAwardSubscriber.stop()
   }
 
   onCode (address) {
@@ -109,48 +117,62 @@ class CustomizeAward extends Component {
     }
   }
 
-  onClickBuy () {
+  onClickSave () {
     if (!web3.isAddress(this.state.recipient)) {
       this.setState({ recipientError: 'Please enter a valid address' })
+      return;
     } else {
-      buyAward(this.state.selectedAwardType, this.state.title, this.state.inscription, this.state.recipient)
-        .then((transaction) => {
-          this.setState({waitingForEthNetwork: true})
-        })
-        .catch((error) => {
-          this.setState({errorMessage: error})
-        })
+      if (this.state.isEditing) {
+        updateAwardService(this.state.type, this.state.title, this.state.inscription, this.state.recipient)
+          .then((transaction) => {
+            this.setState({ waitingForEthNetwork: true })
+          })
+          .catch((error) => {
+            this.setState({ errorMessage: error })
+          })
+      }
+      else
+      {
+        buyAwardService(this.state.type, this.state.title, this.state.inscription, this.state.recipient)
+          .then((transaction) => {
+            this.setState({ waitingForEthNetwork: true })
+          })
+          .catch((error) => {
+            this.setState({ errorMessage: error })
+          })
+      }
     }
   }
 
   onClickAwardType (index) {
-    this.setState({ selectedAwardType: index })
+    this.setState({ type: index })
   }
 
-  awardChanged() {
+  sameAsInitialState() {
     return (
-      this.initialAwardState.type !== this.state.selectedAwardType
-        || this.initialAwardState.title !== this.state.title
-        || this.initialAwardState.inscription !== this.state.inscription
-        || this.initialAwardState.recipient !== this.state.recipient
+      this.initialAwardState.type == this.state.type
+        && this.initialAwardState.title == this.state.title
+        && this.initialAwardState.inscription == this.state.inscription
+        && this.initialAwardState.recipient == this.state.recipient
     )
   }
 
   saveFormButtonDisabled () {
     if (this.state.isEditing) {
-      this.awardChanged()
-        || (this.state.selectedTrophy === null && !this.state.waitingForEthNetwork)
+      return (
+        this.sameAsInitialState() || this.state.waitingForEthNetwork
+      )
     }
     else {
-      this.state.selectedTrophy === null && !this.state.waitingForEthNetwork
+      return (this.state.waitingForEthNetwork)
     }
   }
 
   render () {
-    if (this.state.selectedAwardType !== null) {
-      var selectedAwardType =
+    if (this.state.type !== null) {
+      var type =
         <img
-          src={awardUrl(this.state.selectedAwardType)}
+          src={awardTypeImageUrlService(this.state.type)}
           className='customize-award__img' />
     }
 
@@ -237,11 +259,11 @@ class CustomizeAward extends Component {
                 <div className="ivy-form--wrapper">
                   <div className="columns is-mobile">
                     {range(2).map(index => {
-                      var selected = this.state.selectedAwardType === index
+                      var selected = this.state.type === index
                       return (
                         <div key={index} className="column rotate-in-center is-one-fifth-mobile is-one-fifth-tablet is-one-fifth-desktop">
                           <AwardType
-                            url={awardUrl(index, 'small')}
+                            url={awardTypeImageUrlService(index, 'small')}
                             onClick={() => this.onClickAwardType(index)}
                             selected={selected} />
                         </div>
@@ -301,7 +323,7 @@ class CustomizeAward extends Component {
                     <button
                       disabled={this.saveFormButtonDisabled()}
                       className={classnames('button is-primary is-medium', { 'is-loading': this.state.waitingForEthNetwork })}
-                      onClick={(e) => this.onClickBuy()}>
+                      onClick={(e) => this.onClickSave()}>
                       {this.state.isEditing ? 'Update Award' : 'Buy Award'}
                     </button>
                   </p>
@@ -311,7 +333,7 @@ class CustomizeAward extends Component {
             </div>
 
             <div className='column is-one-third'>
-              {selectedAwardType}
+              {type}
             </div>
           </div>
         </div>

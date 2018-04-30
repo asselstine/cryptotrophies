@@ -62,12 +62,15 @@ contract CryptoTrophies {
 
   /**
    * @dev Updates a previously bought award
+   * @param _awardId The index previously set when purchased
+   * @param _awardGenes The customization of the award
    * @param _title The updated short title of the award
    * @param _inscription The updated long inscription of the award, intended to reflect the recipient
    * @param _recipient The new recipient of the award
    */
   function updateAward (
     uint256 _awardId,
+    uint256 _awardGenes,
     string _title,
     string _inscription,
     address _recipient

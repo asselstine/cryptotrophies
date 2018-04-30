@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom'
 import { Address } from '@/components/address'
 import IvyTilt from '@/components/application/utils/ivy-tilt'
 
-import awardUrl from '@/services/award-url'
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
-import getAward from '@/services/get-award'
+
+import awardTypeImageUrlService from '@/services/award-type-image-url'
+import getAwardService from '@/services/get-award'
 
 require('./style.scss')
 
@@ -29,7 +30,7 @@ export default class extends Component {
   componentDidMount () {
     var awardId = this.awardId()
 
-    getAward(awardId).then((values) => {
+    getAwardService(awardId).then((values) => {
       this.setState({
         type: values[0],
         title: values[1],
@@ -73,7 +74,7 @@ export default class extends Component {
                     <IvyTilt>
                       <figure
                         className={this.state.animateAward ? 'award__image is-animating' : 'award__image' }>
-                        <img src={awardUrl(this.state.type)} />
+                        <img src={awardTypeImageUrlService(this.state.type)} />
                       </figure>
                     </IvyTilt>
                   </div>
