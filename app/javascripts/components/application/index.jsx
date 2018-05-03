@@ -7,7 +7,7 @@ import {
   Switch
 } from 'react-router-dom'
 
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 
 import web3Wrap from '@/components/web3Wrap'
 

@@ -4,7 +4,7 @@ import range from 'lodash.range'
 import stringTo32Bytes from '../app/javascripts/string-to-32bytes'
 
 const Registry = artifacts.require('Registry')
-const CryptoTrophies = artifacts.require('CryptoTrophies')
+const IvyAward = artifacts.require('IvyAward')
 
 contract('Registry', function (accounts) {
   let registry
@@ -15,8 +15,8 @@ contract('Registry', function (accounts) {
 
   describe('register', () => {
     it('should register the contract correctly', async () => {
-      let instance = await CryptoTrophies.new()
-      let key = stringTo32Bytes('CryptoTrophiesTarget')
+      let instance = await IvyAward.new()
+      let key = stringTo32Bytes('IvyAwardTarget')
       await registry.register(key, instance.address)
       assert.equal((await registry.lookup(key)), instance.address)
     })

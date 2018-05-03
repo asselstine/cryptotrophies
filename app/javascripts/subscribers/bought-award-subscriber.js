@@ -1,8 +1,8 @@
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 
 export default class {
   constructor (onBuyCallback) {
-    CryptoTrophies().then((instance) => {
+    IvyAward().then((instance) => {
       this.boughtAwardEvent = instance.BoughtAward({ buyer: web3.eth.accounts[0] })
       this.boughtAwardEvent.watch((error, result) => {
         if (!error) {

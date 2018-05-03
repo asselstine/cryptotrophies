@@ -5,8 +5,8 @@ import stringTo32Bytes from '../app/javascripts/string-to-32bytes'
 
 const Registry = artifacts.require('Registry')
 const Delegate = artifacts.require('Delegate')
-const CryptoTrophies = artifacts.require('CryptoTrophies')
-const ICryptoTrophies = artifacts.require('ICryptoTrophies')
+const IvyAward = artifacts.require('IvyAward')
+const IIvyAward = artifacts.require('IIvyAward')
 
 contract('Delegate', function (accounts) {
   let registry
@@ -19,13 +19,15 @@ contract('Delegate', function (accounts) {
 
   describe('register', () => {
     it('should register the contract correctly', async () => {
-      let instance = await CryptoTrophies.new()
-      let key = stringTo32Bytes('CryptoTrophiesTarget')
+      let instance = await IvyAward.new()
+      let key = stringTo32Bytes('IvyAwardTarget')
       await registry.register(key, instance.address)
+
       let delegate = await Delegate.new(registry.address, key)
-      let icryptoTrophies = await ICryptoTrophies.at(delegate.address)
-      assert.equal((await icryptoTrophies.issuedAwards()).length, 0)
-      await icryptoTrophies.buyAward(1, "Titleasdf", "Descriptionasdfasdf", accounts[1])
+      let iIvyAward = await IIvyAward.at(delegate.address)
+      assert.equal((await iIvyAward.issuedAwards()).length, 0)
+
+      await iIvyAward.buyAward(1, "Titleasdf", "Descriptionasdfasdf", accounts[1])
     })
   })
 })

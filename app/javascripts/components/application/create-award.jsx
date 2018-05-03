@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react'
 
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 import CustomizeAward from './customize-award'
 import AwardList from './award-list'
 

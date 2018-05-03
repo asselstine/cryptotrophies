@@ -3,7 +3,7 @@ import React, {
 } from 'react'
 import { Link } from 'react-router-dom'
 
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 
 export default class extends Component {
 

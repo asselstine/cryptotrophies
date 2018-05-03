@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react'
 
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 import AwardListItem from './award-list-item'
 
 export default class extends Component {

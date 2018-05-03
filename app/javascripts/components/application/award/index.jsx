@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { Address } from '@/components/address'
 import IvyTilt from '@/components/application/utils/ivy-tilt'
 
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 
 import awardTypeImageUrlService from '@/services/award-type-image-url'
 import getAwardService from '@/services/get-award'

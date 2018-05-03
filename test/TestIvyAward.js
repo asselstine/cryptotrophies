@@ -1,9 +1,9 @@
 import assertRevert from './support/assert-revert'
 import BigNumber from 'bignumber.js'
 import range from 'lodash.range'
-const CryptoTrophies = artifacts.require('CryptoTrophies')
+const IvyAward = artifacts.require('IvyAward')
 
-contract('CryptoTrophies', function (accounts) {
+contract('IvyAward', function (accounts) {
   var ct
 
   var user = accounts[0]
@@ -15,7 +15,7 @@ contract('CryptoTrophies', function (accounts) {
   var inscription = 'i Mamm ni inscip'
 
   beforeEach(async function () {
-    await CryptoTrophies.new().then(function (instance) {
+    await IvyAward.new().then(function (instance) {
       ct = instance
     })
   })

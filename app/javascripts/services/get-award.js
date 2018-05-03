@@ -1,8 +1,8 @@
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 
 // TODO: Patch this so if getAwardTitle returns 0 then we err out
 export default function (awardId) {
-  var contract = CryptoTrophies()
+  var contract = IvyAward()
 
   var awardType = new Promise((resolve, reject) => {
     contract.then((instance) => {

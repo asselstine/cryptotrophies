@@ -2,7 +2,7 @@ pragma solidity ^0.4.23;
 
 import 'zeppelin-solidity/contracts/token/ERC721/ERC721.sol';
 
-contract ICryptoTrophies is ERC721 {
+contract IIvyAward is ERC721 {
   event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
   event UpdatedAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
 

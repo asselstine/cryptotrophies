@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react'
 
-import CryptoTrophies from '@/contracts/cryptotrophies-factory'
+import IvyAward from '@/contracts/ivyaward-factory'
 import AwardRow from './award-row'
 
 require('./style')
@@ -17,7 +17,7 @@ export default class extends Component {
   }
 
   refreshAwardList() {
-    CryptoTrophies().then((instance) => {
+    IvyAward().then((instance) => {
       instance.issuedAwards().then((result) => {
         this.setState({ awards: result })
       }).catch((error) => {

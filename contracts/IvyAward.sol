@@ -1,9 +1,9 @@
 pragma solidity ^0.4.23;
 
-import './ICryptoTrophies.sol';
+import './IIvyAward.sol';
 import 'zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol';
 
-contract CryptoTrophies is ICryptoTrophies, ERC721Token {
+contract IvyAward is IIvyAward, ERC721Token {
   uint256 constant TITLE_MIN_LENGTH = 8;
   uint256 constant TITLE_MAX_LENGTH = 64;
   uint256 constant INSCRIPTION_MAX_LENGTH = 256;
