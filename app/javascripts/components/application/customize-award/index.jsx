@@ -1,9 +1,6 @@
 import React, {
   Component
 } from 'react'
-import {
-  BrowserRouter
-} from 'react-router-dom'
 
 import reactMixin from 'react-mixin'
 import TimerMixin from 'react-timer-mixin'
