@@ -77,8 +77,6 @@ class CustomizeAward extends Component {
 
   initializeEdit() {
     getAwardService(this.awardId()).then((values) => {
-      console.log(values)
-
       this.setState({
         awardId: this.awardId(),
         type: values[0],

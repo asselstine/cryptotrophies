@@ -19,7 +19,8 @@ export default class extends Component {
     this.state = {
       type: null,
       animateAward: false,
-      animateSheen: false
+      animateSheen: false,
+      errorMessage: ''
     }
   }
 
@@ -37,6 +38,8 @@ export default class extends Component {
         inscription: values[2],
         recipient: values[3]
       })
+    }).catch((error) => {
+      this.setState({ errorMessage: error })
     })
 
     setTimeout(() => {
@@ -48,8 +51,13 @@ export default class extends Component {
   }
 
   render () {
+    var errorMessage
     var awardId = this.awardId()
     let editAwardLinkUrl = `/awards/${awardId}/edit`
+
+    if (this.state.errorMessage) {
+      var errorMessage = <p className='help is-danger'>{this.state.errorMessage}</p>
+    }
 
     var content
     if (this.state.type !== null) {
@@ -115,6 +123,7 @@ export default class extends Component {
       <section className='section'>
         <div className='container'>
           {content}
+          {errorMessage}
         </div>
       </section>
     )
