@@ -1,4 +1,5 @@
-import pack from '#/pack'
+import pack from '@/pack'
+import assert from 'assert'
 
 describe('pack', () => {
   it('should pack stuff', () => {

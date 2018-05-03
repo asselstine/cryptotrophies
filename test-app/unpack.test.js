@@ -1,4 +1,5 @@
-import unpack from '#/unpack'
+import unpack from '@/unpack'
+import assert from 'assert'
 
 describe('unpack', () => {
   it('should unpack stuff', () => {
