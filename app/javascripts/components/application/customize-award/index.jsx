@@ -42,7 +42,9 @@ class CustomizeAward extends Component {
       showQrDropdown: false,
       waitingForEthNetwork: false,
       errorMessage: '',
-      recipientFrozen: false
+      recipientFrozen: false,
+      issueToRecipient: false,
+      hasInscription: false
     }
 
     this.initialAwardState = {}
@@ -112,8 +114,26 @@ class CustomizeAward extends Component {
   onCode (address) {
     if (address.indexOf('0x') !== -1) {
       address = address.slice(address.indexOf('0x'))
-      this.setState({recipient: address, recipientError: '', showVideo: false})
+      this.setState({ recipient: address, recipientError: '', showVideo: false })
     }
+  }
+
+  onClickRetainOwnership = (e) => {
+    this.setState({
+      issueToRecipient: false
+    })
+  }
+
+  onClickIssueToRecipient = (e) => {
+    this.setState({
+      issueToRecipient: true
+    })
+  }
+
+  onClickWriteInscription = (e) => {
+    this.setState({
+      hasInscription: true
+    })
   }
 
   onClickSave () {
@@ -287,7 +307,14 @@ class CustomizeAward extends Component {
                     </div>
                   </div>
 
-                  <div className="field">
+                  <button className={classnames("button", {
+                      "is-invisible": this.state.hasInscription
+                    })}
+                    onClick={this.onClickWriteInscription}>Write an Inscription</button>
+
+                  <div className={classnames("field", {
+                    "is-invisible": !this.state.hasInscription
+                  })}>
                     <label className="label">Inscription</label>
                     <div className="control">
                       <textarea
@@ -298,7 +325,28 @@ class CustomizeAward extends Component {
                     </div>
                   </div>
 
-                  <div className="field">
+                  <div className="buttons has-addons">
+                    <button
+                      onClick={this.onClickRetainOwnership}
+                      className={classnames("button", {
+                        'is-selected': !this.state.issueToRecipient,
+                        'is-primary': !this.state.issueToRecipient
+                      })}>
+                      Retain Ownership
+                    </button>
+                    <button
+                      onClick={this.onClickIssueToRecipient}
+                      className={classnames("button", {
+                        'is-selected': this.state.issueToRecipient,
+                        'is-primary': this.state.issueToRecipient
+                      })}>
+                      Issue to Recipient
+                    </button>
+                  </div>
+
+                  <div className={classnames("field", {
+                      "is-invisible": !this.state.issueToRecipient
+                    })}>
                     <label className="label">Recipient</label>
                     <div className="control">
                       <div className="field has-addons">
