@@ -6,7 +6,7 @@ export default function (awardId) {
 
   var awardType = new Promise((resolve, reject) => {
     contract.then((instance) => {
-      instance.getAwardType(awardId).then((response) => {
+      instance.awardType(awardId).then((response) => {
         resolve(parseInt(response.toString()))
       }).catch((error) => reject)
     })
@@ -14,7 +14,7 @@ export default function (awardId) {
 
   var awardTitle = new Promise((resolve, reject) => {
     contract.then((instance) => {
-      instance.getAwardTitle(awardId).then((response) => {
+      instance.awardTitle(awardId).then((response) => {
         // Empty string for title means this award doesn't exist in the Eth DB
         // (since we force a title for our awards)
         if (response.toString() === '') {
@@ -29,7 +29,7 @@ export default function (awardId) {
 
   var awardInscription = new Promise((resolve, reject) => {
     contract.then((instance) => {
-      instance.getAwardInscription(awardId).then((response) => {
+      instance.awardInscription(awardId).then((response) => {
         resolve(response.toString())
       }).catch((error) => reject)
     })
@@ -37,7 +37,7 @@ export default function (awardId) {
 
   var awardRecipient = new Promise((resolve, reject) => {
     contract.then((instance) => {
-      instance.getAwardRecipient(awardId).then((response) => {
+      instance.awardRecipient(awardId).then((response) => {
         resolve(response.toString())
       }).catch((error) => reject)
     })

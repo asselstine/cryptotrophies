@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import "./Owned.sol";
 import "./IRegistry.sol";
@@ -7,7 +7,7 @@ contract Delegate is Owned {
   bytes32 private constant registryPosition = keccak256("org.ivyawards.delegate.registry");
   bytes32 private constant keyPosition = keccak256("org.ivyawards.delegate.key");
 
-  function Delegate(address registry, bytes32 key) public {
+  constructor (address registry, bytes32 key) public {
     require(registry != address(0));
     require(key != 0);
     setOwner(msg.sender);

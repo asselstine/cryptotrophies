@@ -24,9 +24,8 @@ contract('Delegate', function (accounts) {
       await registry.register(key, instance.address)
       let delegate = await Delegate.new(registry.address, key)
       let icryptoTrophies = await ICryptoTrophies.at(delegate.address)
-      assert.equal((await icryptoTrophies.myAwards()).length, 0)
+      assert.equal((await icryptoTrophies.issuedAwards()).length, 0)
       await icryptoTrophies.buyAward(1, "Titleasdf", "Descriptionasdfasdf", accounts[1])
-      
     })
   })
 })

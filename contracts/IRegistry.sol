@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 contract IRegistry {
   function register(bytes32 _key, address _contract) external;

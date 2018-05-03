@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import "./Owned.sol";
 import "./IRegistry.sol";
@@ -6,7 +6,7 @@ import "./IRegistry.sol";
 contract Registry is Owned, IRegistry {
   mapping(bytes32 => address) registry;
 
-  function Registry() public {
+  constructor () public {
     setOwner(msg.sender);
   }
 

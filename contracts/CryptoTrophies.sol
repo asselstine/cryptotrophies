@@ -1,29 +1,29 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 import './ICryptoTrophies.sol';
+import 'zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol';
 
-contract CryptoTrophies is ICryptoTrophies {
+contract CryptoTrophies is ICryptoTrophies, ERC721Token {
   uint256 constant TITLE_MIN_LENGTH = 8;
   uint256 constant TITLE_MAX_LENGTH = 64;
   uint256 constant INSCRIPTION_MAX_LENGTH = 256;
-
-  /// The number of awards each owner holds
-  mapping(address => uint256) awardCount;
 
   /// The award configuration
   mapping(uint256 => uint256) awardGenes;
 
   /// The title of the award
-  mapping(uint256 => string) awardTitle;
+  mapping(uint256 => string) awardTitles;
 
   /// The inscription of the award
-  mapping(uint256 => string) awardInscription;
+  mapping(uint256 => string) awardInscriptions;
 
   /// The recipient of the award
-  mapping(uint256 => address) awardRecipient;
+  mapping(uint256 => address) awardRecipients;
 
-  /// The owner / issuer of the award
-  address[] awardOwners;
+  mapping(uint256 => address) awardIssuers;
+  mapping(address => uint256) issueCounts;
+
+  constructor () ERC721Token("Ivy Award", "IVY") public {}
 
   /// The event emitted when an award is purchased
   event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
@@ -46,20 +46,25 @@ contract CryptoTrophies is ICryptoTrophies {
   ) external payable {
     bytes memory _titleBytes = bytes(_title);
     bytes memory _inscriptionBytes = bytes(_inscription);
-    require(_titleBytes.length > TITLE_MIN_LENGTH);
-    require(_titleBytes.length <= TITLE_MAX_LENGTH);
-    require(_inscriptionBytes.length <= INSCRIPTION_MAX_LENGTH);
-    require(_recipient != address(0));
+    require(_titleBytes.length > TITLE_MIN_LENGTH, "Title is too short");
+    require(_titleBytes.length <= TITLE_MAX_LENGTH, "Title is too long");
+    require(_inscriptionBytes.length <= INSCRIPTION_MAX_LENGTH, "Inscription is too long");
+    require(_recipient != address(0), "Recipient is 0x0");
 
-    awardCount[msg.sender] += 1;
-    var index = (awardOwners.push(msg.sender) - 1);
+    // Start at 1
+    uint256 index = allTokens.length + 1;
+
+    // Mint to recipient
+    _mint(_recipient, index);
 
     awardGenes[index] = _awardGenes;
-    awardTitle[index] = _title;
-    awardInscription[index] = _inscription;
-    awardRecipient[index] = _recipient;
+    awardTitles[index] = _title;
+    awardInscriptions[index] = _inscription;
+    awardRecipients[index] = _recipient;
+    awardIssuers[index] = msg.sender;
+    issueCounts[msg.sender] += 1;
 
-    BoughtAward(msg.sender, index, _recipient);
+    emit BoughtAward(msg.sender, index, _recipient);
   }
 
   /**
@@ -80,57 +85,58 @@ contract CryptoTrophies is ICryptoTrophies {
     bytes memory _titleBytes = bytes(_title);
     bytes memory _inscriptionBytes = bytes(_inscription);
 
-    require(awardOwners[_awardId] == msg.sender);
+    require(awardIssuers[_awardId] == msg.sender);
     require(_titleBytes.length > TITLE_MIN_LENGTH);
     require(_titleBytes.length <= TITLE_MAX_LENGTH);
     require(_inscriptionBytes.length <= INSCRIPTION_MAX_LENGTH);
 
-    var index = _awardId;
+    uint256 index = _awardId;
 
     if (awardGenes[index] != _awardGenes) {
       awardGenes[index] = _awardGenes;
     }
-    if (keccak256(awardTitle[index]) != keccak256(_title)) {
-      awardTitle[index] = _title;
+    if (keccak256(awardTitles[index]) != keccak256(_title)) {
+      awardTitles[index] = _title;
     }
-    if (keccak256(awardInscription[index]) != keccak256(_inscription)) {
-      awardInscription[index] = _inscription;
+    if (keccak256(awardInscriptions[index]) != keccak256(_inscription)) {
+      awardInscriptions[index] = _inscription;
     }
     if (_recipient != address(0)) {
-      awardRecipient[index] = _recipient;
+      awardRecipients[index] = _recipient;
     }
 
-    UpdatedAward(msg.sender, index, _recipient);
+    emit UpdatedAward(msg.sender, index, _recipient);
   }
 
   /**
    * @dev Returns all of the awards that the user owns
    * @return An array of award indices
    */
-  function myAwards () external view returns (uint256[]) {
-    uint256[] memory awards = new uint256[](awardCount[msg.sender]);
+  function issuedAwards () external view returns (uint256[]) {
+    uint256[] memory awards = new uint256[](issueCounts[msg.sender]);
     uint256 currentIndex = 0;
-    for (uint256 i = 0; i < awardOwners.length; i++) {
-      if (awardOwners[i] == msg.sender) {
-        awards[currentIndex++] = i;
+    for (uint256 i = 0; i < allTokens.length; i++) {
+      uint256 tokenId = allTokens[i];
+      if (awardIssuers[tokenId] == msg.sender) {
+        awards[currentIndex++] = tokenId;
       }
     }
     return awards;
   }
 
-  function getAwardType (uint256 _awardId) external view returns (uint256) {
+  function awardType (uint256 _awardId) external view returns (uint256) {
     return awardGenes[_awardId];
   }
 
-  function getAwardTitle (uint256 _awardId) external view returns (string) {
-    return awardTitle[_awardId];
+  function awardTitle (uint256 _awardId) external view returns (string) {
+    return awardTitles[_awardId];
   }
 
-  function getAwardInscription (uint256 _awardId) external view returns (string) {
-    return awardInscription[_awardId];
+  function awardInscription (uint256 _awardId) external view returns (string) {
+    return awardInscriptions[_awardId];
   }
 
-  function getAwardRecipient (uint256 _awardId) external view returns (address) {
-    return awardRecipient[_awardId];
+  function awardRecipient (uint256 _awardId) external view returns (address) {
+    return awardRecipients[_awardId];
   }
 }
