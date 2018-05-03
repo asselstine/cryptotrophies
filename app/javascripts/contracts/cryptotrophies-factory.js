@@ -15,6 +15,7 @@ export default async function () {
 
   let registry = await Registry.deployed()
   let address = await registry.lookup(stringTo32Bytes('CryptoTrophies'))
+  console.log(address)
 
   return ICryptoTrophies.at(address)
 }

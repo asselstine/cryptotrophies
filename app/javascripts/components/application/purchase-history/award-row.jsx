@@ -3,8 +3,8 @@ import React, {
 } from 'react'
 import { Link } from 'react-router-dom'
 
-import getAward from '@/services/get-award'
-import awardUrl from '@/services/award-url'
+import getAwardService from '@/services/get-award'
+import awardTypeImageUrlService from '@/services/award-type-image-url'
 
 export default class extends Component {
   constructor (props) {
@@ -13,7 +13,7 @@ export default class extends Component {
   }
 
   componentDidMount () {
-    getAward(this.props.awardId).then((values) => {
+    getAwardService(this.props.awardId).then((values) => {
       this.setState({
         type: values[0],
         title: values[1],
@@ -30,7 +30,7 @@ export default class extends Component {
       <tr>
         <td>
           <Link to={awardLinkUrl}>
-            <img src={awardUrl(this.state.type, 'small')} className='award-row__award-img' />
+            <img src={awardTypeImageUrlService(this.state.type, 'small')} className='award-row__award-img' />
           </Link>
         </td>
         <td><Link to={awardLinkUrl}>{this.state.title}</Link></td>

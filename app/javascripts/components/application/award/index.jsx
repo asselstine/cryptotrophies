@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom'
 import { Address } from '@/components/address'
 import IvyTilt from '@/components/application/utils/ivy-tilt'
 
-import awardUrl from '@/services/award-url'
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
-import getAward from '@/services/get-award'
+
+import awardTypeImageUrlService from '@/services/award-type-image-url'
+import getAwardService from '@/services/get-award'
 
 require('./style.scss')
 
@@ -18,7 +19,8 @@ export default class extends Component {
     this.state = {
       type: null,
       animateAward: false,
-      animateSheen: false
+      animateSheen: false,
+      errorMessage: ''
     }
   }
 
@@ -29,22 +31,34 @@ export default class extends Component {
   componentDidMount () {
     var awardId = this.awardId()
 
-    getAward(awardId).then((values) => {
+    getAwardService(awardId).then((values) => {
       this.setState({
         type: values[0],
         title: values[1],
         inscription: values[2],
         recipient: values[3]
       })
+    }).catch((error) => {
+      this.setState({ errorMessage: error })
     })
 
-    this.setState({
-      animateAward: true,
-      animateSheen: true
-    })
+    setTimeout(() => {
+      this.setState({
+        animateAward: true,
+        animateSheen: true
+      })
+    }, 800)
   }
 
   render () {
+    var errorMessage
+    var awardId = this.awardId()
+    let editAwardLinkUrl = `/awards/${awardId}/edit`
+
+    if (this.state.errorMessage) {
+      var errorMessage = <p className='help is-danger'>{this.state.errorMessage}</p>
+    }
+
     var content
     if (this.state.type !== null) {
       content = (
@@ -54,7 +68,12 @@ export default class extends Component {
               <div className='border--thick'>
                 <div className='border--thin'>
 
-                  <a className="award__share-link" href="#"><i className="fas fa-lg fa-share-alt"></i></a>
+                  <a className="ivy-button award__share-link" href="#"><i className="fas fa-lg fa-share-alt"></i></a>
+                  <Link to={editAwardLinkUrl} className="ivy-button award__edit-link">
+                    <i className="fas fa-lg fa-pencil-alt"></i>
+                  </Link>
+
+
 
                   <div className="award__shiny">
                     <div
@@ -63,7 +82,7 @@ export default class extends Component {
                     <IvyTilt>
                       <figure
                         className={this.state.animateAward ? 'award__image is-animating' : 'award__image' }>
-                        <img src={awardUrl(this.state.type)} />
+                        <img src={awardTypeImageUrlService(this.state.type)} />
                       </figure>
                     </IvyTilt>
                   </div>
@@ -104,6 +123,7 @@ export default class extends Component {
       <section className='section'>
         <div className='container'>
           {content}
+          {errorMessage}
         </div>
       </section>
     )

@@ -1,5 +1,6 @@
 import CryptoTrophies from '@/contracts/cryptotrophies-factory'
 
+// TODO: Patch this so if getAwardTitle returns 0 then we err out
 export default function (awardId) {
   var contract = CryptoTrophies()
 
@@ -14,6 +15,13 @@ export default function (awardId) {
   var awardTitle = new Promise((resolve, reject) => {
     contract.then((instance) => {
       instance.awardTitle(awardId).then((response) => {
+        // Empty string for title means this award doesn't exist in the Eth DB
+        // (since we force a title for our awards)
+        if (response.toString() === '') {
+          reject("Title for award was empty (award doesn't exist in Ethereum DB?");
+          return;
+        }
+
         resolve(response.toString())
       }).catch((error) => reject)
     })
