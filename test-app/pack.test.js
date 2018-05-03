@@ -1,4 +1,5 @@
 import pack from '@/pack'
+import assert from 'assert'
 
 describe('pack', () => {
   it('should pack stuff', () => {
@@ -21,6 +22,6 @@ describe('pack', () => {
       '0000'
     ].join('')
 
-    expect(pack(2)).toEqual(output)
+    assert.equal(pack(2), output)
   })
 })

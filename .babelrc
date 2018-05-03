@@ -7,9 +7,17 @@
     [
       "babel-plugin-root-import",
       {
-        "rootPathSuffix": "app/javascripts",
-        "rootPathPrefix": "@"
+        "rootPathPrefix": "@",
+        "rootPathSuffix": "app/javascripts"
       }
+    ],
+    [
+      "babel-plugin-root-import",
+      {
+        "rootPathPrefix": "#",
+        "rootPathSuffix": "../app/javascripts"
+      },
+      "Second Breakfast!"
     ]
   ]
 }

@@ -18,7 +18,7 @@ export default class extends Component {
 
   refreshAwardList() {
     CryptoTrophies().then((instance) => {
-      instance.myAwards().then((result) => {
+      instance.issuedAwards().then((result) => {
         this.setState({ awards: result })
       }).catch((error) => {
         console.error(error)

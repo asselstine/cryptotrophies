@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity ^0.4.23;
 
 contract Owned {
   bytes32 private constant ownerPosition = keccak256("org.ivyawards.owned.owner");
@@ -14,7 +14,7 @@ contract Owned {
     address owner = getOwner();
     require(_newOwner != address(0));
     require(_newOwner != owner);
-    TransferredOwnership(owner, _newOwner);
+    emit TransferredOwnership(owner, _newOwner);
     setOwner(_newOwner);
   }
 
