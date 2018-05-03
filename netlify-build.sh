@@ -2,11 +2,8 @@
 
 ./lambda-build.sh && \
 truffle compile && \
-if [ -n "$BRANCH" ]
+if [ "$BRANCH" == "master" ]
 then
-  if [ "$BRANCH" == "master" ]
-  then
-    truffle-migrate-off-chain --network ropsten && \
-  fi
+  truffle-migrate-off-chain --network ropsten
 fi
 npm run build
