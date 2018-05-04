@@ -51,9 +51,9 @@ class CustomizeAward extends Component {
       showQrDropdown: false,
       waitingForEthNetwork: false,
       errorMessage: '',
-      hasRecipient: false,
+      animateRecipient: false,
       animateInscription: false,
-      hasInscription: false
+      showInscription: false
     }
 
     this.initialAwardState = {}
@@ -84,21 +84,22 @@ class CustomizeAward extends Component {
 
   initializeEdit() {
     getAwardService(this.awardId()).then((values) => {
+      let recipientAddress = (web3.toBigNumber(values[3]).isZero()) ? '' : values[3]
       this.setState({
         awardId: this.awardId(),
         type: values[0],
         title: values[1],
         inscription: values[2],
-        recipient: values[3],
-        animateInscription: (values[2].length > 0) ? true : false,
-        hasRecipient: (values[3].length > 0) ? true : false
+        recipient: recipientAddress,
+        animateRecipient: (recipientAddress.length > 0) ? true : false,
+        animateInscription: (values[2].length > 0) ? true : false
       })
 
       this.initialAwardState = {
         type: values[0],
         title: values[1],
         inscription: values[2],
-        recipient: values[3]
+        recipient: recipientAddress
       }
     }).catch((error) => {
       console.error(error)
@@ -108,11 +109,9 @@ class CustomizeAward extends Component {
 
   componentWillUnmount() {
     if (this.state.isEditing) {
-      console.log('stopping updatedAwardSubscriber')
       this.updatedAwardSubscriber.stop()
     }
     else {
-      console.log('stopping boughtAwardSubscriber')
       this.boughtAwardSubscriber.stop()
     }
   }
@@ -126,13 +125,13 @@ class CustomizeAward extends Component {
 
   onClickRetainOwnership = (e) => {
     this.setState({
-      hasRecipient: false
+      animateRecipient: false
     })
   }
 
   onClickIssueToRecipient = (e) => {
     this.setState({
-      hasRecipient: true
+      animateRecipient: true
     })
   }
 
@@ -261,10 +260,9 @@ class CustomizeAward extends Component {
           isError={!!this.state.recipientError} />
     }
 
-    if (this.state.isEditing && this.state.hasRecipient) {
+    if (this.state.isEditing && this.state.recipient.length > 0) {
       qrReaderButton = <span />
     }
-
 
     if (this.state.showVideo === true) {
       var qrReaderWebrtc =
@@ -327,7 +325,7 @@ class CustomizeAward extends Component {
                       classNames="scale-top"
                       unmountOnExit
                       in={!this.state.animateInscription}
-                      onExited={() => { this.setState({ hasInscription: true }); }}
+                      onExited={() => { this.setState({ showInscription: true }); }}
                     >
                       <div>
                         <button
@@ -351,7 +349,7 @@ class CustomizeAward extends Component {
                       timeout={500}
                       classNames="fade-bottom"
                       unmountOnExit
-                      in={this.state.hasInscription}
+                      in={this.state.showInscription}
                       onEntered={() => {
                         if (!this.state.isEditing) this.inscriptionTextarea.focus()
                       }}
@@ -375,18 +373,18 @@ class CustomizeAward extends Component {
                   <div className="buttons has-addons">
                     <button
                       onClick={this.onClickRetainOwnership}
-                      disabled={this.state.isEditing && this.state.hasRecipient}
+                      disabled={this.state.isEditing && this.state.recipient.length > 0}
                       className={classnames("button", {
-                        'is-selected': !this.state.hasRecipient,
-                        'is-primary': !this.state.hasRecipient
+                        'is-selected': !this.state.animateRecipient,
+                        'is-primary': !this.state.animateRecipient
                       })}>
                       Retain Ownership
                     </button>
                     <button
                       onClick={this.onClickIssueToRecipient}
                       className={classnames("button", {
-                        'is-selected': this.state.hasRecipient,
-                        'is-primary': this.state.hasRecipient
+                        'is-selected': this.state.animateRecipient,
+                        'is-primary': this.state.animateRecipient
                       })}>
                       Issue to Recipient
                     </button>
@@ -396,7 +394,7 @@ class CustomizeAward extends Component {
                     timeout={500}
                     classNames="fade-bottom"
                     unmountOnExit
-                    in={this.state.hasRecipient}
+                    in={this.state.animateRecipient}
                     onEntered={() => {
                       if (!this.state.isEditing) this.recipientInput.focus()
                     }}
@@ -406,7 +404,7 @@ class CustomizeAward extends Component {
                         <div className='control is-expanded'>
                           <input
                             ref={(input) => { this.recipientInput = input; }}
-                            disabled={this.state.isEditing && this.state.hasRecipient}
+                            disabled={this.state.isEditing && this.state.recipient.length > 0}
                             placeholder="0xffffffffffffffffffffffffffffffff"
                             type='text'
                             maxLength='42'
