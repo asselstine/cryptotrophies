@@ -51,8 +51,7 @@ class CustomizeAward extends Component {
       showQrDropdown: false,
       waitingForEthNetwork: false,
       errorMessage: '',
-      recipientFrozen: false,
-      issueToRecipient: false,
+      hasRecipient: false,
       animateInscription: false,
       hasInscription: false
     }
@@ -91,8 +90,8 @@ class CustomizeAward extends Component {
         title: values[1],
         inscription: values[2],
         recipient: values[3],
-        recipientFrozen: (values[3].length > 0) ? true : false,
-        animateInscription: (values[2].length > 0) ? true : false
+        animateInscription: (values[2].length > 0) ? true : false,
+        hasRecipient: (values[3].length > 0) ? true : false
       })
 
       this.initialAwardState = {
@@ -127,13 +126,13 @@ class CustomizeAward extends Component {
 
   onClickRetainOwnership = (e) => {
     this.setState({
-      issueToRecipient: false
+      hasRecipient: false
     })
   }
 
   onClickIssueToRecipient = (e) => {
     this.setState({
-      issueToRecipient: true
+      hasRecipient: true
     })
   }
 
@@ -256,7 +255,7 @@ class CustomizeAward extends Component {
           isError={!!this.state.recipientError} />
     }
 
-    if (this.state.recipientFrozen) {
+    if (this.state.hasRecipient) {
       qrReaderButton = <span />
     }
 
@@ -367,17 +366,18 @@ class CustomizeAward extends Component {
                   <div className="buttons has-addons">
                     <button
                       onClick={this.onClickRetainOwnership}
+                      disabled={this.state.hasRecipient}
                       className={classnames("button", {
-                        'is-selected': !this.state.issueToRecipient,
-                        'is-primary': !this.state.issueToRecipient
+                        'is-selected': !this.state.hasRecipient,
+                        'is-primary': !this.state.hasRecipient
                       })}>
                       Retain Ownership
                     </button>
                     <button
                       onClick={this.onClickIssueToRecipient}
                       className={classnames("button", {
-                        'is-selected': this.state.issueToRecipient,
-                        'is-primary': this.state.issueToRecipient
+                        'is-selected': this.state.hasRecipient,
+                        'is-primary': this.state.hasRecipient
                       })}>
                       Issue to Recipient
                     </button>
@@ -387,7 +387,7 @@ class CustomizeAward extends Component {
                     timeout={500}
                     classNames="fade-bottom"
                     unmountOnExit
-                    in={this.state.issueToRecipient}
+                    in={this.state.hasRecipient}
                     onEntered={() => {
                       if (!this.state.isEditing) this.recipientInput.focus()
                     }}
@@ -399,7 +399,7 @@ class CustomizeAward extends Component {
                           <div className='control is-expanded'>
                             <input
                               ref={(input) => { this.recipientInput = input; }}
-                              disabled={this.state.recipientFrozen}
+                              disabled={this.state.hasRecipient}
                               placeholder="0xffffffffffffffffffffffffffffffff"
                               type='text'
                               maxLength='42'
@@ -413,6 +413,7 @@ class CustomizeAward extends Component {
                           </div>
                         </div>
                       </div>
+
                       {recipientError}
                     </div>
                   </CSSTransition>
