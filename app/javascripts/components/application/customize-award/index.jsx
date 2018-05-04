@@ -2,6 +2,12 @@ import React, {
   Component
 } from 'react'
 
+import {
+  Transition
+  TransitionGroup,
+} from 'react-transition-group'
+import anime from "animejs"
+
 import reactMixin from 'react-mixin'
 import TimerMixin from 'react-timer-mixin'
 import range from 'lodash.range'
@@ -307,23 +313,36 @@ class CustomizeAward extends Component {
                     </div>
                   </div>
 
-                  <button className={classnames("button", {
-                      "is-invisible": this.state.hasInscription
-                    })}
-                    onClick={this.onClickWriteInscription}>Write an Inscription</button>
+                  <TransitionGroup>
+                    <Transition
+                      appear
+                      timeout={200}
+                      in={!this.state.hasInscription}
+                    >
+                      <button
+                        className="button"
+                        onClick={this.onClickWriteInscription}>
+                          Write an Inscription
+                      </button>
+                    </Transition>
 
-                  <div className={classnames("field", {
-                    "is-invisible": !this.state.hasInscription
-                  })}>
-                    <label className="label">Inscription</label>
-                    <div className="control">
-                      <textarea
-                        placeholder="If you know the winner(s), write their name and pertinent info here"
-                        className="textarea"
-                        value={this.state.inscription}
-                        onChange={(e) => this.setState({ inscription: e.target.value })} />
-                    </div>
-                  </div>
+                    <Transition
+                      appear
+                      timeout={200}
+                      in={this.state.hasInscription}
+                    >
+                      <div>
+                        <label className="label">Inscription</label>
+                        <div className="control">
+                          <textarea
+                            placeholder="If you know the winner(s), write their name and pertinent info here"
+                            className="textarea"
+                            value={this.state.inscription}
+                            onChange={(e) => this.setState({ inscription: e.target.value })} />
+                        </div>
+                      </div>
+                    </Transition>
+                  </TransitionGroup>
 
                   <div className="buttons has-addons">
                     <button
