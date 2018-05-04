@@ -3,10 +3,9 @@ import React, {
 } from 'react'
 
 import {
-  Transition
-  TransitionGroup,
+  CSSTransition,
+  TransitionGroup
 } from 'react-transition-group'
-import anime from "animejs"
 
 import reactMixin from 'react-mixin'
 import TimerMixin from 'react-timer-mixin'
@@ -50,6 +49,7 @@ class CustomizeAward extends Component {
       errorMessage: '',
       recipientFrozen: false,
       issueToRecipient: false,
+      animateInscription: false,
       hasInscription: false
     }
 
@@ -69,14 +69,10 @@ class CustomizeAward extends Component {
       }, this.initializeEdit());
 
       this.updatedAwardSubscriber = new UpdatedAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
-      console.log('subscribing updatedAwardSubscriber')
     }
     else {
       this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
-      console.log('subscribing boughtAwardSubscriber')
     }
-
-    // this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
 
     canUseVideoService().then((result) => {
       this.setState({ canUseVideo: result })
@@ -91,7 +87,8 @@ class CustomizeAward extends Component {
         title: values[1],
         inscription: values[2],
         recipient: values[3],
-        recipientFrozen: (values[3].length > 0) ? true : false
+        recipientFrozen: (values[3].length > 0) ? true : false,
+        animateInscription: (values[2].length > 0) ? true : false
       })
 
       this.initialAwardState = {
@@ -138,7 +135,7 @@ class CustomizeAward extends Component {
 
   onClickWriteInscription = (e) => {
     this.setState({
-      hasInscription: true
+      animateInscription: true
     })
   }
 
@@ -313,36 +310,49 @@ class CustomizeAward extends Component {
                     </div>
                   </div>
 
-                  <TransitionGroup>
-                    <Transition
-                      appear
-                      timeout={200}
-                      in={!this.state.hasInscription}
-                    >
+                  <div className="field">
+                    <label className="label">Inscription</label>
+                  </div>
+
+                  <CSSTransition
+                    timeout={250}
+                    classNames="scale-top"
+                    unmountOnExit
+                    in={!this.state.animateInscription}
+                    onExited={() => { this.setState({ hasInscription: true }); }}
+                  >
+                    <div>
+                      <p>
+                        <small>You can also write an optional inscription with the winner's name and any other info at a later date.</small>
+                      </p>
                       <button
                         className="button"
                         onClick={this.onClickWriteInscription}>
                           Write an Inscription
                       </button>
-                    </Transition>
+                    </div>
+                  </CSSTransition>
 
-                    <Transition
-                      appear
-                      timeout={200}
-                      in={this.state.hasInscription}
-                    >
-                      <div>
-                        <label className="label">Inscription</label>
-                        <div className="control">
-                          <textarea
-                            placeholder="If you know the winner(s), write their name and pertinent info here"
-                            className="textarea"
-                            value={this.state.inscription}
-                            onChange={(e) => this.setState({ inscription: e.target.value })} />
-                        </div>
-                      </div>
-                    </Transition>
-                  </TransitionGroup>
+                  <CSSTransition
+                    timeout={500}
+                    classNames="fade-bottom"
+                    unmountOnExit
+                    in={this.state.hasInscription}
+                    onEntered={() => {
+                      if (!this.state.isEditing) this.inscriptionTextarea.focus()
+                    }}
+                  >
+                    <div className="control">
+                      <textarea
+                        ref={(textarea) => { this.inscriptionTextarea = textarea; }}
+                        placeholder="If you know the winner(s), write their name and pertinent info here"
+                        className="textarea"
+                        value={this.state.inscription}
+                        onChange={(e) => this.setState({ inscription: e.target.value })} />
+                    </div>
+                  </CSSTransition>
+
+                  <hr />
 
                   <div className="buttons has-addons">
                     <button
