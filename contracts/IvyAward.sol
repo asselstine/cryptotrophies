@@ -20,8 +20,11 @@ contract IvyAward is IIvyAward, ERC721Token {
   /// The recipient of the award
   mapping(uint256 => address) awardRecipients;
 
+  // A mapping to retain the history of who first purchased this award
   mapping(uint256 => address) awardIssuers;
-  mapping(address => uint256) issueCounts;
+
+  // And the number of tokens they own
+  mapping(address => uint256) issuedCount;
 
   constructor () ERC721Token("Ivy Award", "IVY") public {}
 
@@ -49,22 +52,30 @@ contract IvyAward is IIvyAward, ERC721Token {
     require(_titleBytes.length > TITLE_MIN_LENGTH, "Title is too short");
     require(_titleBytes.length <= TITLE_MAX_LENGTH, "Title is too long");
     require(_inscriptionBytes.length <= INSCRIPTION_MAX_LENGTH, "Inscription is too long");
-    require(_recipient != address(0), "Recipient is 0x0");
+
+    address recipientsAddress = _recipient;
 
     // Start at 1
     uint256 index = allTokens.length + 1;
 
-    // Mint to recipient
-    _mint(_recipient, index);
+    // Mint to purchaser or an optionally entered recipient
+    if (recipientsAddress == address(0)) {
+      recipientsAddress = msg.sender;
+    }
+    else
+    {
+      awardRecipients[index] = recipientsAddress;
+    }
+
+    _mint(recipientsAddress, index);
 
     awardGenes[index] = _awardGenes;
     awardTitles[index] = _title;
     awardInscriptions[index] = _inscription;
-    awardRecipients[index] = _recipient;
     awardIssuers[index] = msg.sender;
-    issueCounts[msg.sender] += 1;
+    issuedCount[msg.sender] += 1;
 
-    emit BoughtAward(msg.sender, index, _recipient);
+    emit BoughtAward(msg.sender, index, recipientsAddress);
   }
 
   /**
@@ -101,7 +112,10 @@ contract IvyAward is IIvyAward, ERC721Token {
     if (keccak256(awardInscriptions[index]) != keccak256(_inscription)) {
       awardInscriptions[index] = _inscription;
     }
-    if (_recipient != address(0)) {
+
+    // Check to see if the recipient has already been set, and if
+    // the _recipient has been passed in correctly
+    if (awardRecipients[index] != address(0) && _recipient != address(0)) {
       awardRecipients[index] = _recipient;
     }
 
@@ -109,15 +123,31 @@ contract IvyAward is IIvyAward, ERC721Token {
   }
 
   /**
-   * @dev Returns all of the awards that the user owns
+   * @dev Returns all of the awards that the address has issued
    * @return An array of award indices
    */
   function issuedAwards () external view returns (uint256[]) {
-    uint256[] memory awards = new uint256[](issueCounts[msg.sender]);
+    uint256[] memory awards = new uint256[](issuedCount[msg.sender]);
     uint256 currentIndex = 0;
     for (uint256 i = 0; i < allTokens.length; i++) {
       uint256 tokenId = allTokens[i];
       if (awardIssuers[tokenId] == msg.sender) {
+        awards[currentIndex++] = tokenId;
+      }
+    }
+    return awards;
+  }
+
+  /**
+   * @dev Returns all of the awards that the address owns
+   * @return An array of award indices
+   */
+  function ownedAwards () external view returns (uint256[]) {
+    uint256[] memory awards = new uint256[](ownedTokensCount[msg.sender]);
+    uint256 currentIndex = 0;
+    for (uint256 i = 0; i < allTokens.length; i++) {
+      uint256 tokenId = allTokens[i];
+      if (tokenOwner[tokenId] == msg.sender) {
         awards[currentIndex++] = tokenId;
       }
     }

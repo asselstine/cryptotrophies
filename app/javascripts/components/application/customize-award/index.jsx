@@ -143,17 +143,18 @@ class CustomizeAward extends Component {
   }
 
   onClickSave () {
-    if (!web3.isAddress(this.state.recipient)) {
-      this.setState({ recipientError: 'Please enter a valid address' })
+    if (this.state.recipient.length > 0 && !web3.isAddress(this.state.recipient)) {
+      this.setState({ recipientError: 'Please enter a valid Ethereum wallet address' })
       return;
     } else {
       if (this.state.isEditing) {
+        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient.length : 0
         updateAwardService(
           this.state.awardId,
           this.state.type,
           this.state.title,
           this.state.inscription,
-          this.state.recipient
+          recipientAddress
         )
           .then((transaction) => {
             this.setState({ waitingForEthNetwork: true })
@@ -164,13 +165,18 @@ class CustomizeAward extends Component {
       }
       else
       {
-        buyAwardService(this.state.type, this.state.title, this.state.inscription, this.state.recipient)
-          .then((transaction) => {
+        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient.length : 0
+        buyAwardService(
+          this.state.type,
+          this.state.title,
+          this.state.inscription,
+          recipientAddress
+        ).then((transaction) => {
             this.setState({ waitingForEthNetwork: true })
           })
-          .catch((error) => {
-            this.setState({ errorMessage: error.message })
-          })
+         .catch((error) => {
+           this.setState({ errorMessage: error.message })
+         })
       }
     }
   }
@@ -255,7 +261,7 @@ class CustomizeAward extends Component {
           isError={!!this.state.recipientError} />
     }
 
-    if (this.state.hasRecipient) {
+    if (this.state.isEditing && this.state.hasRecipient) {
       qrReaderButton = <span />
     }
 
@@ -315,58 +321,61 @@ class CustomizeAward extends Component {
 
                   <div className="field">
                     <label className="label">Inscription</label>
+
+                    <CSSTransition
+                      timeout={250}
+                      classNames="scale-top"
+                      unmountOnExit
+                      in={!this.state.animateInscription}
+                      onExited={() => { this.setState({ hasInscription: true }); }}
+                    >
+                      <div>
+                        <button
+                          className="button"
+                          onClick={this.onClickWriteInscription}>
+                            Write an Inscription
+                        </button>
+                        <Tooltip
+                          title="You can write an optional inscription with the award recipients name and any other info at a later date"
+                          position="right"
+                          trigger="mouseenter"
+                        >
+                          <p className="ivy-tooltip">
+                            <i className="fas fa-xs fa-question"></i>
+                          </p>
+                        </Tooltip>
+                      </div>
+                    </CSSTransition>
+
+                    <CSSTransition
+                      timeout={500}
+                      classNames="fade-bottom"
+                      unmountOnExit
+                      in={this.state.hasInscription}
+                      onEntered={() => {
+                        if (!this.state.isEditing) this.inscriptionTextarea.focus()
+                      }}
+                    >
+                      <div className="control">
+                        <textarea
+                          ref={(textarea) => { this.inscriptionTextarea = textarea; }}
+                          placeholder="If you know the award recipient you can write their name and any other info here"
+                          className="textarea"
+                          value={this.state.inscription}
+                          onChange={(e) => this.setState({ inscription: e.target.value })} />
+                      </div>
+                    </CSSTransition>
                   </div>
 
-                  <CSSTransition
-                    timeout={250}
-                    classNames="scale-top"
-                    unmountOnExit
-                    in={!this.state.animateInscription}
-                    onExited={() => { this.setState({ hasInscription: true }); }}
-                  >
-                    <div>
-                      <button
-                        className="button"
-                        onClick={this.onClickWriteInscription}>
-                          Write an Inscription
-                      </button>
-                      <Tooltip
-                        title="You can write an optional inscription with the award recipients name and any other info at a later date"
-                        position="right"
-                        trigger="mouseenter"
-                      >
-                        <p className="ivy-tooltip">
-                          <i className="fas fa-xs fa-question"></i>
-                        </p>
-                      </Tooltip>
-                    </div>
-                  </CSSTransition>
 
-                  <CSSTransition
-                    timeout={500}
-                    classNames="fade-bottom"
-                    unmountOnExit
-                    in={this.state.hasInscription}
-                    onEntered={() => {
-                      if (!this.state.isEditing) this.inscriptionTextarea.focus()
-                    }}
-                  >
-                    <div className="control">
-                      <textarea
-                        ref={(textarea) => { this.inscriptionTextarea = textarea; }}
-                        placeholder="If you know the award recipient you can write their name and any other info here"
-                        className="textarea"
-                        value={this.state.inscription}
-                        onChange={(e) => this.setState({ inscription: e.target.value })} />
-                    </div>
-                  </CSSTransition>
-
-                  <hr />
+                  <div className="field">
+                    <label className="label">Recipient</label>
+                  </div>
 
                   <div className="buttons has-addons">
                     <button
                       onClick={this.onClickRetainOwnership}
-                      disabled={this.state.hasRecipient}
+                      disabled={this.state.isEditing && this.state.hasRecipient}
                       className={classnames("button", {
                         'is-selected': !this.state.hasRecipient,
                         'is-primary': !this.state.hasRecipient
@@ -392,25 +401,22 @@ class CustomizeAward extends Component {
                       if (!this.state.isEditing) this.recipientInput.focus()
                     }}
                   >
-                    <div>
-                      <label className="label">Recipient</label>
-                      <div className="control">
-                        <div className="field has-addons">
-                          <div className='control is-expanded'>
-                            <input
-                              ref={(input) => { this.recipientInput = input; }}
-                              disabled={this.state.hasRecipient}
-                              placeholder="0xffffffffffffffffffffffffffffffff"
-                              type='text'
-                              maxLength='42'
-                              size='64'
-                              className={classnames("input", { 'is-danger': !!recipientError })}
-                              value={this.state.recipient}
-                              onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
-                          </div>
-                          <div className='control'>
-                            {qrReaderButton}
-                          </div>
+                    <div className="control">
+                      <div className="field has-addons">
+                        <div className='control is-expanded'>
+                          <input
+                            ref={(input) => { this.recipientInput = input; }}
+                            disabled={this.state.isEditing && this.state.hasRecipient}
+                            placeholder="0xffffffffffffffffffffffffffffffff"
+                            type='text'
+                            maxLength='42'
+                            size='64'
+                            className={classnames("input", { 'is-danger': !!recipientError })}
+                            value={this.state.recipient}
+                            onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
+                        </div>
+                        <div className='control'>
+                          {qrReaderButton}
                         </div>
                       </div>
 
