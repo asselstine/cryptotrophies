@@ -383,30 +383,39 @@ class CustomizeAward extends Component {
                     </button>
                   </div>
 
-                  <div className={classnames("field", {
-                      "is-invisible": !this.state.issueToRecipient
-                    })}>
-                    <label className="label">Recipient</label>
-                    <div className="control">
-                      <div className="field has-addons">
-                        <div className='control is-expanded'>
-                          <input
-                            disabled={this.state.recipientFrozen}
-                            placeholder="0xffffffffffffffffffffffffffffffff"
-                            type='text'
-                            maxLength='42'
-                            size='64'
-                            className={classnames("input", { 'is-danger': !!recipientError })}
-                            value={this.state.recipient}
-                            onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
-                        </div>
-                        <div className='control'>
-                          {qrReaderButton}
+                  <CSSTransition
+                    timeout={500}
+                    classNames="fade-bottom"
+                    unmountOnExit
+                    in={this.state.issueToRecipient}
+                    onEntered={() => {
+                      if (!this.state.isEditing) this.recipientInput.focus()
+                    }}
+                  >
+                    <div>
+                      <label className="label">Recipient</label>
+                      <div className="control">
+                        <div className="field has-addons">
+                          <div className='control is-expanded'>
+                            <input
+                              ref={(input) => { this.recipientInput = input; }}
+                              disabled={this.state.recipientFrozen}
+                              placeholder="0xffffffffffffffffffffffffffffffff"
+                              type='text'
+                              maxLength='42'
+                              size='64'
+                              className={classnames("input", { 'is-danger': !!recipientError })}
+                              value={this.state.recipient}
+                              onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
+                          </div>
+                          <div className='control'>
+                            {qrReaderButton}
+                          </div>
                         </div>
                       </div>
+                      {recipientError}
                     </div>
-                    {recipientError}
-                  </div>
+                  </CSSTransition>
 
                   {qrReaderWebrtc}
 
