@@ -8,6 +8,8 @@ $pink-two: #ff6aa8;
 
 $family-primary: "futura-pt", sans-serif;
 
+@import '~react-tippy/dist/tippy.css';
+
 // 6. Import the rest of Bulma
 @import '~bulma/bulma';
 

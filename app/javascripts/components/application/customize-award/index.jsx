@@ -7,6 +7,10 @@ import {
   TransitionGroup
 } from 'react-transition-group'
 
+import {
+  Tooltip,
+} from 'react-tippy';
+
 import reactMixin from 'react-mixin'
 import TimerMixin from 'react-timer-mixin'
 import range from 'lodash.range'
@@ -322,14 +326,20 @@ class CustomizeAward extends Component {
                     onExited={() => { this.setState({ hasInscription: true }); }}
                   >
                     <div>
-                      <p>
-                        <small>You can also write an optional inscription with the winner's name and any other info at a later date.</small>
-                      </p>
                       <button
                         className="button"
                         onClick={this.onClickWriteInscription}>
                           Write an Inscription
                       </button>
+                      <Tooltip
+                        title="You can write an optional inscription with the award recipients name and any other info at a later date"
+                        position="right"
+                        trigger="mouseenter"
+                      >
+                        <p className="ivy-tooltip">
+                          <i className="fas fa-xs fa-question"></i>
+                        </p>
+                      </Tooltip>
                     </div>
                   </CSSTransition>
 
@@ -345,7 +355,7 @@ class CustomizeAward extends Component {
                     <div className="control">
                       <textarea
                         ref={(textarea) => { this.inscriptionTextarea = textarea; }}
-                        placeholder="If you know the winner(s), write their name and pertinent info here"
+                        placeholder="If you know the award recipient you can write their name and any other info here"
                         className="textarea"
                         value={this.state.inscription}
                         onChange={(e) => this.setState({ inscription: e.target.value })} />

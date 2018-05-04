@@ -79,6 +79,7 @@
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "react-timer-mixin": "^0.13.3",
+    "react-tippy": "^1.2.2",
     "react-transition-group": "^2.3.1",
     "redux": "^3.7.2",
     "request": "^2.85.0",
