@@ -1,6 +1,9 @@
 import React, {
   Component
 } from 'react'
+import {
+  addressOrBlankString
+} from '@/helpers/address-helpers'
 import PropTypes from 'prop-types'
 
 require('./address.scss')
@@ -20,10 +23,7 @@ export const Address = class extends Component {
   }
 
   render () {
-    let address = 'n/a'
-
-    if (this.props.address && !web3.toBigNumber(this.props.address).isZero())
-      address = this.props.address.toString()
+    let address = addressOrBlankString(this.props.address)
 
     if (this.state.showFull) {
       var displayed =

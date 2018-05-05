@@ -1,6 +1,9 @@
 import React, {
   Component
 } from 'react'
+import {
+  addressOrBlankString
+} from '@/helpers/address-helpers'
 import { Link } from 'react-router-dom'
 
 import getAwardService from '@/services/get-award'
@@ -25,10 +28,7 @@ export default class extends Component {
 
   render () {
     let awardLinkUrl = `/awards/${this.props.awardId}`
-    let recipientAddress = 'n/a'
-
-    if (this.state.recipient && !web3.toBigNumber(this.state.recipient).isZero())
-      recipientAddress = this.state.recipient
+    let recipientAddress = addressOrBlankString(this.state.recipient)
 
     return (
       <tr>
