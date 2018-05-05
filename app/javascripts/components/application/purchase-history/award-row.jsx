@@ -25,6 +25,10 @@ export default class extends Component {
 
   render () {
     let awardLinkUrl = `/awards/${this.props.awardId}`
+    let recipientAddress = 'n/a'
+
+    if (this.state.recipient && !web3.toBigNumber(this.state.recipient).isZero())
+      recipientAddress = this.state.recipient
 
     return (
       <tr>
@@ -35,7 +39,7 @@ export default class extends Component {
         </td>
         <td><Link to={awardLinkUrl}>{this.state.title}</Link></td>
         <td><Link to={awardLinkUrl}>{this.state.inscription}</Link></td>
-        <td><Link to={awardLinkUrl}>{this.state.recipient}</Link></td>
+        <td><Link to={awardLinkUrl}>{recipientAddress}</Link></td>
       </tr>
     )
   }

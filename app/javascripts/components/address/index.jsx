@@ -20,11 +20,11 @@ export const Address = class extends Component {
   }
 
   render () {
-    if (this.props.address) {
-      var address = this.props.address.toString()
-    } else {
-      address = ''
-    }
+    let address = 'n/a'
+
+    if (this.props.address && !web3.toBigNumber(this.props.address).isZero())
+      address = this.props.address.toString()
+
     if (this.state.showFull) {
       var displayed =
         <span className='tag address__full'>{address}</span>

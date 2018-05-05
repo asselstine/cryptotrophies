@@ -310,7 +310,7 @@ class CustomizeAward extends Component {
                     <label className="label">Title</label>
                     <div className="control">
                       <input
-                        placeholder="What this award's for (ie. 2018 Award for Excellence)"
+                        placeholder="Purpose of award (eg. 2018 Innitech Award for Excellence)"
                         className="input"
                         value={this.state.title}
                         onChange={(e) => this.setState({ title: e.target.value })} />
@@ -346,7 +346,7 @@ class CustomizeAward extends Component {
                     </CSSTransition>
 
                     <CSSTransition
-                      timeout={500}
+                      timeout={250}
                       classNames="fade-bottom"
                       unmountOnExit
                       in={this.state.showInscription}
@@ -391,7 +391,7 @@ class CustomizeAward extends Component {
                   </div>
 
                   <CSSTransition
-                    timeout={500}
+                    timeout={250}
                     classNames="fade-bottom"
                     unmountOnExit
                     in={this.state.animateRecipient}
