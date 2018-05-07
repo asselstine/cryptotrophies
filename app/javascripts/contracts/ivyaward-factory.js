@@ -15,7 +15,6 @@ export default async function () {
 
   let registry = await Registry.deployed()
   let address = await registry.lookup(stringTo32Bytes('IvyAward'))
-  console.log(address)
 
   return IIvyAward.at(address)
 }

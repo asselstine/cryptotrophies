@@ -20,6 +20,7 @@ contract IIvyAward is ERC721 {
     address _recipient
   ) external payable;
   function issuedAwards () external view returns (uint256[]);
+  function ownedAwards () external view returns (uint256[]);
   function awardType (uint256 _awardId) external view returns (uint256);
   function awardTitle (uint256 _awardId) external view returns (string);
   function awardInscription (uint256 _awardId) external view returns (string);

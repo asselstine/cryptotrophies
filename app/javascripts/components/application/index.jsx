@@ -30,6 +30,11 @@ import Award from './award'
 export class Application extends Component {
 
   render (){
+    /*
+      Why key={} ?
+      A unique key on the route will force a remount and reset the state when
+      2 unique paths point to the same component
+    */
     return (
       <div>
         <SiteHeader />
@@ -37,8 +42,8 @@ export class Application extends Component {
         <Switch>
           <Route path='/awards/received' component={web3ReceivedAwards} />
           <Route path='/awards/purchased' component={web3PurchaseHistory} />
-          <Route path='/awards/new' component={web3CustomizeAward} />
-          <Route path='/awards/:awardId/edit' component={web3CustomizeAward} />
+          <Route key={1} exact={true} path='/awards/new' component={web3CustomizeAward} />
+          <Route key={2} exact={true} path='/awards/:awardId/edit' component={web3CustomizeAward} />
           <Route path='/awards/:awardId' component={Award} />
 
           <Route exact={true} path='/' component={Dashboard} />

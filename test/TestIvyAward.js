@@ -86,13 +86,29 @@ contract('IvyAward', function (accounts) {
       assert.equal(transaction.logs[1].args.awardId.toString(), '1')
     })
 
-    it('should count trophies properly!', async () => {
+    it('should succeed even if no recipient supplied', async () => {
+      var transaction = await ct.buyAward(genes, title, inscription, 0)
+      assert.equal(transaction.logs[1].event, 'BoughtAward')
+    })
+
+    it('should count issuedAwards (purchase history) properly!', async () => {
       await ct.buyAward(3, title, inscription, recipient)
       var trophies = await ct.issuedAwards()
       assert.equal(trophies.length, 1)
 
       await ct.buyAward(1, title, inscription, recipient)
       assert.equal((await ct.issuedAwards()).length, 2)
+    })
+
+    it('should count ownedAwards (actual ownership) properly!', async () => {
+      var emptyRecipient = 0
+      await ct.buyAward(3, title, inscription, emptyRecipient)
+      var trophies = await ct.ownedAwards()
+      assert.equal(trophies.length, 1)
+
+      // still only 1 owned by this purchaser
+      await ct.buyAward(1, title, inscription, recipient)
+      assert.equal((await ct.ownedAwards()).length, 1)
     })
   })
 

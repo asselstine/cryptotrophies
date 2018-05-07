@@ -1,6 +1,9 @@
 import React, {
   Component
 } from 'react'
+import {
+  addressOrBlankString
+} from '@/helpers/address-helpers'
 import { Link } from 'react-router-dom'
 
 import getAwardService from '@/services/get-award'
@@ -25,6 +28,7 @@ export default class extends Component {
 
   render () {
     let awardLinkUrl = `/awards/${this.props.awardId}`
+    let recipientAddress = addressOrBlankString(this.state.recipient)
 
     return (
       <tr>
@@ -35,7 +39,7 @@ export default class extends Component {
         </td>
         <td><Link to={awardLinkUrl}>{this.state.title}</Link></td>
         <td><Link to={awardLinkUrl}>{this.state.inscription}</Link></td>
-        <td><Link to={awardLinkUrl}>{this.state.recipient}</Link></td>
+        <td><Link to={awardLinkUrl}>{recipientAddress}</Link></td>
       </tr>
     )
   }

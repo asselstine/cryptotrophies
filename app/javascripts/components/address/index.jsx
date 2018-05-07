@@ -1,6 +1,9 @@
 import React, {
   Component
 } from 'react'
+import {
+  addressOrBlankString
+} from '@/helpers/address-helpers'
 import PropTypes from 'prop-types'
 
 require('./address.scss')
@@ -20,11 +23,8 @@ export const Address = class extends Component {
   }
 
   render () {
-    if (this.props.address) {
-      var address = this.props.address.toString()
-    } else {
-      address = ''
-    }
+    let address = addressOrBlankString(this.props.address)
+
     if (this.state.showFull) {
       var displayed =
         <span className='tag address__full'>{address}</span>
