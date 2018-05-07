@@ -2,6 +2,15 @@ import React, {
   Component
 } from 'react'
 
+import {
+  CSSTransition,
+  TransitionGroup
+} from 'react-transition-group'
+
+import {
+  Tooltip,
+} from 'react-tippy';
+
 import reactMixin from 'react-mixin'
 import TimerMixin from 'react-timer-mixin'
 import range from 'lodash.range'
@@ -42,7 +51,9 @@ class CustomizeAward extends Component {
       showQrDropdown: false,
       waitingForEthNetwork: false,
       errorMessage: '',
-      recipientFrozen: false
+      hasRecipient: false,
+      animateInscription: false,
+      hasInscription: false
     }
 
     this.initialAwardState = {}
@@ -61,14 +72,10 @@ class CustomizeAward extends Component {
       }, this.initializeEdit());
 
       this.updatedAwardSubscriber = new UpdatedAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
-      console.log('subscribing updatedAwardSubscriber')
     }
     else {
       this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
-      console.log('subscribing boughtAwardSubscriber')
     }
-
-    // this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
 
     canUseVideoService().then((result) => {
       this.setState({ canUseVideo: result })
@@ -83,7 +90,8 @@ class CustomizeAward extends Component {
         title: values[1],
         inscription: values[2],
         recipient: values[3],
-        recipientFrozen: (values[3].length > 0) ? true : false
+        animateInscription: (values[2].length > 0) ? true : false,
+        hasRecipient: (values[3].length > 0) ? true : false
       })
 
       this.initialAwardState = {
@@ -112,8 +120,26 @@ class CustomizeAward extends Component {
   onCode (address) {
     if (address.indexOf('0x') !== -1) {
       address = address.slice(address.indexOf('0x'))
-      this.setState({recipient: address, recipientError: '', showVideo: false})
+      this.setState({ recipient: address, recipientError: '', showVideo: false })
     }
+  }
+
+  onClickRetainOwnership = (e) => {
+    this.setState({
+      hasRecipient: false
+    })
+  }
+
+  onClickIssueToRecipient = (e) => {
+    this.setState({
+      hasRecipient: true
+    })
+  }
+
+  onClickWriteInscription = (e) => {
+    this.setState({
+      animateInscription: true
+    })
   }
 
   onClickSave () {
@@ -229,7 +255,7 @@ class CustomizeAward extends Component {
           isError={!!this.state.recipientError} />
     }
 
-    if (this.state.recipientFrozen) {
+    if (this.state.hasRecipient) {
       qrReaderButton = <span />
     }
 
@@ -289,37 +315,108 @@ class CustomizeAward extends Component {
 
                   <div className="field">
                     <label className="label">Inscription</label>
+                  </div>
+
+                  <CSSTransition
+                    timeout={250}
+                    classNames="scale-top"
+                    unmountOnExit
+                    in={!this.state.animateInscription}
+                    onExited={() => { this.setState({ hasInscription: true }); }}
+                  >
+                    <div>
+                      <button
+                        className="button"
+                        onClick={this.onClickWriteInscription}>
+                          Write an Inscription
+                      </button>
+                      <Tooltip
+                        title="You can write an optional inscription with the award recipients name and any other info at a later date"
+                        position="right"
+                        trigger="mouseenter"
+                      >
+                        <p className="ivy-tooltip">
+                          <i className="fas fa-xs fa-question"></i>
+                        </p>
+                      </Tooltip>
+                    </div>
+                  </CSSTransition>
+
+                  <CSSTransition
+                    timeout={500}
+                    classNames="fade-bottom"
+                    unmountOnExit
+                    in={this.state.hasInscription}
+                    onEntered={() => {
+                      if (!this.state.isEditing) this.inscriptionTextarea.focus()
+                    }}
+                  >
                     <div className="control">
                       <textarea
-                        placeholder="If you know the winner(s), write their name and pertinent info here"
+                        ref={(textarea) => { this.inscriptionTextarea = textarea; }}
+                        placeholder="If you know the award recipient you can write their name and any other info here"
                         className="textarea"
                         value={this.state.inscription}
                         onChange={(e) => this.setState({ inscription: e.target.value })} />
                     </div>
+                  </CSSTransition>
+
+                  <hr />
+
+                  <div className="buttons has-addons">
+                    <button
+                      onClick={this.onClickRetainOwnership}
+                      disabled={this.state.hasRecipient}
+                      className={classnames("button", {
+                        'is-selected': !this.state.hasRecipient,
+                        'is-primary': !this.state.hasRecipient
+                      })}>
+                      Retain Ownership
+                    </button>
+                    <button
+                      onClick={this.onClickIssueToRecipient}
+                      className={classnames("button", {
+                        'is-selected': this.state.hasRecipient,
+                        'is-primary': this.state.hasRecipient
+                      })}>
+                      Issue to Recipient
+                    </button>
                   </div>
 
-                  <div className="field">
-                    <label className="label">Recipient</label>
-                    <div className="control">
-                      <div className="field has-addons">
-                        <div className='control is-expanded'>
-                          <input
-                            disabled={this.state.recipientFrozen}
-                            placeholder="0xffffffffffffffffffffffffffffffff"
-                            type='text'
-                            maxLength='42'
-                            size='64'
-                            className={classnames("input", { 'is-danger': !!recipientError })}
-                            value={this.state.recipient}
-                            onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
-                        </div>
-                        <div className='control'>
-                          {qrReaderButton}
+                  <CSSTransition
+                    timeout={500}
+                    classNames="fade-bottom"
+                    unmountOnExit
+                    in={this.state.hasRecipient}
+                    onEntered={() => {
+                      if (!this.state.isEditing) this.recipientInput.focus()
+                    }}
+                  >
+                    <div>
+                      <label className="label">Recipient</label>
+                      <div className="control">
+                        <div className="field has-addons">
+                          <div className='control is-expanded'>
+                            <input
+                              ref={(input) => { this.recipientInput = input; }}
+                              disabled={this.state.hasRecipient}
+                              placeholder="0xffffffffffffffffffffffffffffffff"
+                              type='text'
+                              maxLength='42'
+                              size='64'
+                              className={classnames("input", { 'is-danger': !!recipientError })}
+                              value={this.state.recipient}
+                              onChange={(e) => this.setState({ recipient: e.target.value, recipientError: '' })} />
+                          </div>
+                          <div className='control'>
+                            {qrReaderButton}
+                          </div>
                         </div>
                       </div>
+
+                      {recipientError}
                     </div>
-                    {recipientError}
-                  </div>
+                  </CSSTransition>
 
                   {qrReaderWebrtc}
 
