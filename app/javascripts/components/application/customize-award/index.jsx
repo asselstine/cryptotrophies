@@ -147,7 +147,7 @@ class CustomizeAward extends Component {
       return;
     } else {
       if (this.state.isEditing) {
-        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient.length : 0
+        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient : 0
         updateAwardService(
           this.state.awardId,
           this.state.type,
@@ -164,7 +164,7 @@ class CustomizeAward extends Component {
       }
       else
       {
-        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient.length : 0
+        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient : 0
         buyAwardService(
           this.state.type,
           this.state.title,
