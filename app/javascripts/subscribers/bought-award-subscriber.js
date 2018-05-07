@@ -6,6 +6,7 @@ export default class {
       this.boughtAwardEvent = instance.BoughtAward({ buyer: web3.eth.accounts[0] })
       this.boughtAwardEvent.watch((error, result) => {
         if (!error) {
+          alert("why is this firing right away? shouldn't fire til we buy something")
           onBuyCallback(result)
         } else {
           console.error(error)
