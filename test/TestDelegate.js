@@ -27,7 +27,7 @@ contract('Delegate', function (accounts) {
       let iIvyAward = await IIvyAward.at(delegate.address)
       assert.equal((await iIvyAward.issuedAwards()).length, 0)
 
-      await iIvyAward.buyAward(1, "Titleasdf", "Descriptionasdfasdf", accounts[1])
+      await iIvyAward.buyAward(1, "Titleasdf", "Descriptionasdfasdf", accounts[1], { value: web3.toWei(0.003) })
     })
   })
 })

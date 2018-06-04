@@ -1,6 +1,8 @@
-import assertRevert from './support/assert-revert'
+import assertRevert, { tryCatch, errTypes } from './support/assert-revert'
 import BigNumber from 'bignumber.js'
 import range from 'lodash.range'
+import Web3 from 'Web3'
+var web3 = new Web3();
 const IvyAward = artifacts.require('IvyAward')
 
 contract('IvyAward', function (accounts) {
@@ -8,23 +10,21 @@ contract('IvyAward', function (accounts) {
 
   const USER = accounts[0]
   const RECIPIENT = accounts[1]
-
   const OTHER_USER = accounts[2]
 
   const GENES = 2
-
   const TITLE = 'I am a title'
   const INSCRIPTION = 'i Mamm ni inscip'
 
   const PRICE = { value: web3.toWei(0.003) }
 
+  const FIRST_TOKEN_ID = 1
+
   beforeEach(async function () {
-    await IvyAward.new().then(function (instance) {
-      ct = instance
-    })
+    await IvyAward.new().then((instance) => { ct = instance })
   })
 
-  describe('updateAward', () => {
+  describe('updateAward', async () => {
 
     let newAwardId;
 
@@ -75,11 +75,15 @@ contract('IvyAward', function (accounts) {
     })
 
     it('should fail when the price is too low', () => {
-      assertRevert(ct.buyAward(GENES, TITLE, INSCRIPTION, RECIPIENT, { value: web3.toWei(0) }))
+      var tx = ct.buyAward(GENES, TITLE, INSCRIPTION, RECIPIENT, { value: web3.toWei(0) })
+      // assertRevert(ct.buyAward(GENES, TITLE, INSCRIPTION, RECIPIENT, { value: web3.toWei(0) }))
+      tryCatch(tx, errTypes.revert)
     })
 
     it('should fail when the recipient is zero', () => {
-      assertRevert(ct.buyAward(GENES, 'aslfkejafea', range(257).join(''), 0, PRICE))
+      var tx = ct.buyAward(GENES, 'aslfkejafea', range(257).join(''), 0, PRICE)
+      tryCatch(tx, errTypes.revert)
+      // assertRevert(tx)
     })
 
     it('should return 0 when no trophy', async () => {
@@ -121,36 +125,36 @@ contract('IvyAward', function (accounts) {
   })
 
   describe('getAward', () => {
-    it('should return the type and title of the award', async () => {
-      await contract.buyAward(3, TITLE, INSCRIPTION, RECIPIENT, PRICE )
-      let [awardType_, awardTitle_, awardInscription_, awardRecipient_] = await contract.getAward(FIRST_TOKEN_ID)
+    it('should return the details of the award', async () => {
+      await ct.buyAward(3, TITLE, INSCRIPTION, RECIPIENT, PRICE )
+      let [awardType_, awardTitle_, awardInscription_, awardRecipient_] = await ct.getAward(FIRST_TOKEN_ID)
 
       assert.equal(awardType_.toString(), '3')
       assert.equal(awardTitle_, TITLE)
       assert.equal(awardInscription_, INSCRIPTION)
-      assert.equal(awardRecipient_, recipient)
+      assert.equal(awardRecipient_, RECIPIENT)
     })
   })
 
   describe('setCurrentPrice', () => {
     it('sets a new price which each token will cost', async () => {
-      await contract.setCurrentPrice(400000, { from: USER })
-      let price = await contract.getCurrentPrice()
+      await ct.setCurrentPrice(400000, { from: USER })
+      let price = await ct.getCurrentPrice()
       assert.equal('400000', price.toString())
     })
 
     it('fails to set new price when called by non-owner', async () => {
-      assertRevert(contract.setCurrentPrice(400, { from: OTHER_USER }))
+      assertRevert(ct.setCurrentPrice(400, { from: OTHER_USER }))
 
-      let price = await contract.getCurrentPrice()
-      assert.equal('3000000000000000', price.toString())
+      let price = await ct.getCurrentPrice()
+      assert.equal('10000000000000000', price.toString())
     })
   })
 
   describe('getCurrentPrice', () => {
     it('returns the price each token will cost', async () => {
-      let price = await contract.getCurrentPrice()
-      assert.equal('3000000000000000', price.toString())
+      let price = await ct.getCurrentPrice()
+      assert.equal('10000000000000000', price.toString())
     })
   })
 
