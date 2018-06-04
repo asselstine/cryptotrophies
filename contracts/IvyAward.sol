@@ -1,12 +1,30 @@
 pragma solidity ^0.4.23;
 
 import './IIvyAward.sol';
+
+import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol';
 
-contract IvyAward is IIvyAward, ERC721Token {
-  uint256 constant TITLE_MIN_LENGTH = 8;
-  uint256 constant TITLE_MAX_LENGTH = 64;
+contract IvyAward is IIvyAward, ERC721Token, Ownable {
+
+  /*** EVENTS ***/
+  /// The event emitted when an award is purchased
+  event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
+  /// The event emitted when a pre-existing award is updated
+  event UpdatedAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
+
+  /*** CONSTANTS ***/
+  uint8 constant TITLE_MIN_LENGTH = 1;
+  uint8 constant TITLE_MAX_LENGTH = 64;
+
   uint256 constant INSCRIPTION_MAX_LENGTH = 256;
+
+  /*** DATA TYPES ***/
+
+  /// Price set by contract owner for each token in Wei.
+  /// @dev If you'd like a different price for each token type, you will
+  ///   need to use a mapping like: `mapping(uint256 => uint256) tokenTypePrices;`
+  uint256 currentPrice = 10000000000000000;
 
   /// The award configuration
   mapping(uint256 => uint256) awardGenes;
@@ -28,19 +46,12 @@ contract IvyAward is IIvyAward, ERC721Token {
 
   constructor () ERC721Token("Ivy Award", "IVY") public {}
 
-  /// The event emitted when an award is purchased
-  event BoughtAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
-
-  /// The event emitted when a pre-existing award is updated
-  event UpdatedAward(address indexed buyer, uint256 indexed awardId, address indexed recipient);
-
-  /**
-   * @dev Creates an award
-   * @param _awardGenes The customization of the award
-   * @param _title The short title of the award
-   * @param _inscription The long inscription of the award, intended to reflect the recipient
-   * @param _recipient The recipient of the award
-   */
+  /// Requires the amount of Ether be at least or more of the currentPrice
+  /// @dev Creates an instance of an award token and mints it to the purchaser
+  /// @param _awardGenes The customization of the award
+  /// @param _title The short title of the award
+  /// @param _inscription The long inscription of the award, intended to reflect the recipient
+  /// @param _recipient The recipient of the award
   function buyAward (
     uint256 _awardGenes,
     string _title,
@@ -52,6 +63,8 @@ contract IvyAward is IIvyAward, ERC721Token {
     require(_titleBytes.length > TITLE_MIN_LENGTH, "Title is too short");
     require(_titleBytes.length <= TITLE_MAX_LENGTH, "Title is too long");
     require(_inscriptionBytes.length <= INSCRIPTION_MAX_LENGTH, "Inscription is too long");
+
+    require(msg.value >= currentPrice, "Amount of Ether sent too small");
 
     address recipientsAddress = _recipient;
 
@@ -78,14 +91,13 @@ contract IvyAward is IIvyAward, ERC721Token {
     emit BoughtAward(msg.sender, index, recipientsAddress);
   }
 
-  /**
-   * @dev Updates a previously bought award
-   * @param _awardId The index previously set when purchased
-   * @param _awardGenes The customization of the award
-   * @param _title The updated short title of the award
-   * @param _inscription The updated long inscription of the award, intended to reflect the recipient
-   * @param _recipient The new recipient of the award
-   */
+
+  /// @dev Updates a previously bought award
+  /// @param _awardId The index previously set when purchased
+  /// @param _awardGenes The customization of the award
+  /// @param _title The updated short title of the award
+  /// @param _inscription The updated long inscription of the award, intended to reflect the recipient
+  /// @param _recipient The new recipient of the award
   function updateAward (
     uint256 _awardId,
     uint256 _awardGenes,
@@ -122,10 +134,9 @@ contract IvyAward is IIvyAward, ERC721Token {
     emit UpdatedAward(msg.sender, index, _recipient);
   }
 
-  /**
-   * @dev Returns all of the awards that the address has issued
-   * @return An array of award indices
-   */
+
+  /// @dev Returns all of the awards that the address has issued
+  /// @return An array of award indices
   function issuedAwards () external view returns (uint256[]) {
     uint256[] memory awards = new uint256[](issuedCount[msg.sender]);
     uint256 currentIndex = 0;
@@ -138,10 +149,8 @@ contract IvyAward is IIvyAward, ERC721Token {
     return awards;
   }
 
-  /**
-   * @dev Returns all of the awards that the address owns
-   * @return An array of award indices
-   */
+  /// @dev Returns all of the awards that the address owns
+  /// @return An array of award indices
   function ownedAwards () external view returns (uint256[]) {
     uint256[] memory awards = new uint256[](ownedTokensCount[msg.sender]);
     uint256 currentIndex = 0;
@@ -154,19 +163,39 @@ contract IvyAward is IIvyAward, ERC721Token {
     return awards;
   }
 
-  function awardType (uint256 _awardId) external view returns (uint256) {
-    return awardGenes[_awardId];
+  /// @notice Returns all the relevant information about a specific token
+  /// @param _awardId The ID of the award token of interest
+  function getAward(uint256 _awardId)
+    external
+    view
+    returns (
+      uint256 awardType_,
+      string awardTitle_,
+      string awardInscription_,
+      address awardRecipient_
+  ) {
+      awardType_ = awardGenes[_awardId];
+      awardTitle_ = awardTitles[_awardId];
+      awardInscription_ = awardInscriptions[_awardId];
+      awardRecipient_ = awardRecipients[_awardId];
   }
 
-  function awardTitle (uint256 _awardId) external view returns (string) {
-    return awardTitles[_awardId];
+  /// @notice Allows the owner of this contract to set the currentPrice for each token
+  function setCurrentPrice(uint256 newPrice)
+    public
+    onlyOwner
+  {
+      currentPrice = newPrice;
   }
 
-  function awardInscription (uint256 _awardId) external view returns (string) {
-    return awardInscriptions[_awardId];
+  /// @notice Returns the currentPrice for each token
+  function getCurrentPrice()
+    external
+    view
+    returns (
+    uint256 price
+  ) {
+      price = currentPrice;
   }
 
-  function awardRecipient (uint256 _awardId) external view returns (address) {
-    return awardRecipients[_awardId];
-  }
 }

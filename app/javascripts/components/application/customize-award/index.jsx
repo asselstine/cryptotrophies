@@ -1,15 +1,9 @@
-import React, {
-  Component
-} from 'react'
-
-import {
-  CSSTransition,
-  TransitionGroup
-} from 'react-transition-group'
-
-import {
-  Tooltip,
-} from 'react-tippy';
+import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { toastr } from 'react-redux-toastr'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import { Tooltip } from 'react-tippy';
 
 import reactMixin from 'react-mixin'
 import TimerMixin from 'react-timer-mixin'
@@ -20,8 +14,7 @@ import FontAwesome from 'react-fontawesome'
 import QrReaderWebrtc from './qr-reader-webrtc'
 import QrReaderImage from './qr-reader-image'
 
-import BoughtAwardSubscriber from '@/subscribers/bought-award-subscriber'
-import UpdatedAwardSubscriber from '@/subscribers/updated-award-subscriber'
+import { addTokenAction } from '@/redux/actions'
 
 import awardTypeImageUrlService from '@/services/award-type-image-url'
 import canUseVideoService from '@/services/can-use-video'
@@ -30,6 +23,7 @@ import getAwardService from '@/services/get-award'
 import updateAwardService from '@/services/update-award'
 
 import AwardType from '../award-type'
+import Ether from '@/components/ether'
 
 import style from './style'
 
@@ -41,15 +35,16 @@ class CustomizeAward extends Component {
     this.state = {
       isEditing: false,
       awardId: -1,
+      price: '',
       type: 0,
       title: '',
       inscription: '',
       recipient: '',
       recipientError: null,
+      redirectToTokenList: false,
       canUseVideo: null,
       showVideo: false,
       showQrDropdown: false,
-      waitingForEthNetwork: false,
       errorMessage: '',
       animateRecipient: false,
       animateInscription: false,
@@ -65,21 +60,36 @@ class CustomizeAward extends Component {
     return this.props.match.params.awardId
   }
 
-  componentDidMount () {
-    if (this.awardId() && this.awardId().length > 0) {
-      this.setState({
-        isEditing: true
-      }, this.initializeEdit());
+  async componentDidMount() {
+    try {
+      let contractInstance = await nfToken(window.web3);
+      let price = await contractInstance.getCurrentPrice();
 
-      this.updatedAwardSubscriber = new UpdatedAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
+      this.setState({ price: price.toString() })
+    } catch(error) {
+      toastr.error('Error', error.message)
     }
-    else {
-      this.boughtAwardSubscriber = new BoughtAwardSubscriber(() => this.setState({waitingForEthNetwork: false}))
-    }
+  }
 
-    canUseVideoService().then((result) => {
-      this.setState({ canUseVideo: result })
-    })
+  async componentDidMount () {
+    try {
+      let contractInstance = await nfToken(window.web3);
+      let price = await contractInstance.getCurrentPrice();
+
+      this.setState({ price: price.toString() })
+
+      if (this.awardId() && this.awardId().length > 0) {
+        this.setState({
+          isEditing: true
+        }, this.initializeEdit());
+      }
+
+      canUseVideoService().then((result) => {
+        this.setState({ canUseVideo: result })
+      })
+    } catch(error) {
+      toastr.error('Error', error.message)
+    }
   }
 
   initializeEdit() {
@@ -105,15 +115,6 @@ class CustomizeAward extends Component {
       console.error(error)
       this.props.history.goBack();
     })
-  }
-
-  componentWillUnmount() {
-    if (this.state.isEditing) {
-      this.updatedAwardSubscriber.stop()
-    }
-    else {
-      this.boughtAwardSubscriber.stop()
-    }
   }
 
   onCode (address) {
@@ -146,36 +147,47 @@ class CustomizeAward extends Component {
       this.setState({ recipientError: 'Please enter a valid Ethereum wallet address' })
       return;
     } else {
+      let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient : 0
+      let contractInstance = await nfToken(window.web3);
+
       if (this.state.isEditing) {
-        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient : 0
-        updateAwardService(
-          this.state.awardId,
-          this.state.type,
-          this.state.title,
-          this.state.inscription,
-          recipientAddress
-        )
-          .then((transaction) => {
-            this.setState({ waitingForEthNetwork: true })
-          })
-          .catch((error) => {
-            this.setState({ errorMessage: error.message })
-          })
+        try {
+          const txHash = await contractInstance.updateAward.sendTransaction(
+            this.state.awardId,
+            this.state.type,
+            this.state.title,
+            this.state.inscription,
+            recipientAddress
+          )
+
+          // Need to change how we update the Redux store here, or rely on the
+          // blockchain events handler
+          // this.props.updateToken({ transactionHash: txHash })
+          this.setState({ redirectToTokenList: true })
+
+          toastr.success('Success', 'The transaction has been broadcast: ' + txHash)
+        } catch(err) {
+          toastr.error('Error', "The transaction was cancelled, rejected or wasn't sent properly.")
+        }
       }
       else
       {
-        let recipientAddress = (this.state.recipient.length > 0) ? this.state.recipient : 0
-        buyAwardService(
-          this.state.type,
-          this.state.title,
-          this.state.inscription,
-          recipientAddress
-        ).then((transaction) => {
-            this.setState({ waitingForEthNetwork: true })
-          })
-         .catch((error) => {
-           this.setState({ errorMessage: error.message })
-         })
+        try {
+          const txHash = await contractInstance.buyAward.sendTransaction(
+            this.state.type,
+            this.state.title,
+            this.state.inscription,
+            recipientAddress
+            { value: this.state.price }
+          )
+
+          this.props.addToken({ transactionHash: txHash })
+          this.setState({ redirectToTokenList: true })
+
+          toastr.success('Success', 'The transaction has been broadcast: ' + txHash)
+        } catch(err) {
+          toastr.error('Error', "The transaction was cancelled, rejected or wasn't sent properly.")
+        }
       }
     }
   }
@@ -205,6 +217,11 @@ class CustomizeAward extends Component {
   }
 
   render () {
+    let priceField = null
+
+    if (this.state.redirectToTokenList)
+      return <Redirect to={'/awards/received'} />
+
     if (this.state.type !== null) {
       var type =
         <img
@@ -264,6 +281,17 @@ class CustomizeAward extends Component {
       qrReaderButton = <span />
     }
 
+    if (!this.state.isEditing) {
+      priceField = (
+        <div className="field">
+          <label className="label">Price</label>
+          <div className="control">
+            <Ether wei={this.state.price} />
+          </div>
+        </div>
+      )
+    }
+
     if (this.state.showVideo === true) {
       var qrReaderWebrtc =
         <div className="card">
@@ -305,6 +333,8 @@ class CustomizeAward extends Component {
                       )
                     })}
                   </div>
+
+                  {priceField}
 
                   <div className="field">
                     <label className="label">Title</label>

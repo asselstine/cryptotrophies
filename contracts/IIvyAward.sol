@@ -1,5 +1,6 @@
 pragma solidity ^0.4.23;
 
+import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
 import 'zeppelin-solidity/contracts/token/ERC721/ERC721.sol';
 
 contract IIvyAward is ERC721 {
@@ -21,8 +22,7 @@ contract IIvyAward is ERC721 {
   ) external payable;
   function issuedAwards () external view returns (uint256[]);
   function ownedAwards () external view returns (uint256[]);
-  function awardType (uint256 _awardId) external view returns (uint256);
-  function awardTitle (uint256 _awardId) external view returns (string);
-  function awardInscription (uint256 _awardId) external view returns (string);
-  function awardRecipient (uint256 _awardId) external view returns (address);
+  function getAward(uint256 _awardId) external view returns (uint256 awardType_, string awardTitle_, string awardInscription_, address awardRecipient_);
+  function setCurrentPrice(uint256 newPrice) public;
+  function getCurrentPrice() external view returns (uint256 price);
 }
